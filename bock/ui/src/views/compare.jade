@@ -1,0 +1,6 @@
+#compare
+    h1 {{ cc.comparisonDiff.title }}
+
+    diff-to-html#side-compare(text="{{ cc.comparisonDiff.diff }}" type="side-by-side")
+    
+    diff-to-html#line-compare(text="{{ cc.comparisonDiff.diff }}")

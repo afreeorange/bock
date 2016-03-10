@@ -1,0 +1,40 @@
+@mixin article-list-title-properties
+    font-family: $heading-font
+    font-weight: 500
+    font-size: 0.9em
+
+
+#articles
+    #articles-list
+        -webkit-columns: 3
+        -moz-columns: 3
+        columns: 3
+
+    h1
+        @include main-heading
+
+    input
+        @include article-list-title-properties
+        border: 0
+        border-bottom: 1px solid #CCC
+        border-radius: 0
+        width: 100%
+        margin: 0 0 2em 0
+        padding: 0.5em 0
+
+    li
+        i
+            display: inline-block
+            color: red
+            vertical-align: super
+            font-size: 0.75em
+
+    a
+        @include article-list-title-properties
+        text-decoration: none
+        display: inline-block
+        color: #333
+        padding: 0.5em 0
+
+    a:hover
+        color: $link-color

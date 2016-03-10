@@ -1,0 +1,3 @@
+include README.md LICENSE
+
+recursive-include bock/ui/cached_dist *

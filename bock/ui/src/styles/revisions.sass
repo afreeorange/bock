@@ -1,0 +1,56 @@
+#revisions
+    h1
+        @include main-heading
+
+    a
+        text-decoration: none
+        color: $link-color
+
+    button[disabled="disabled"]
+        background: #CCC!important
+
+    button[type="submit"]
+        font-family: $heading-font
+        margin: 1em 0 0 0
+        border: 0
+        background: $link-color
+        color: white
+        border-radius: 5px
+        font-weight: 700
+        font-size: 1.25em
+        cursor: pointer
+        padding: 0.25em 0.5em
+
+    button[type="submit"]:hover
+        background: #FF0000
+
+    #revision-list
+        font-family: $body-font
+
+        i
+            font-style: italic
+
+        .revision-row
+            width: 100%
+            cursor: pointer
+            border-bottom: 1px dotted #CCC
+            position: relative
+            padding: 0.5em 0
+
+            input
+                position: absolute
+                left: -$side-margin/2.5
+                top: $side-margin/5
+
+            .committer
+                font-family: $heading-font
+                font-weight: 100
+                font-size: 0.75em
+                color: #999
+
+            .revision-sha
+                font-family: $monospace-font
+
+        .revision-row:last-child
+            border: 0
+

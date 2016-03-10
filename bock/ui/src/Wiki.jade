@@ -1,0 +1,79 @@
+html(ng-app="Wiki" lang="en-US" direction="ltr")
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+
+        title(ng-bind="($title || 'Wiki')")
+        base(href="/")
+
+        link(rel="stylesheet", href="/Wiki.css")
+
+    body
+
+        #container
+
+            nav
+                ul
+                    li(ng-controller="searchController as sc")
+                        a(ng-href="#" ng-click="sc.showSearchOverlay()")
+                            i.ion-ios-search  
+                            span Search
+
+                    li
+                        a(href='/')
+                            i.ion-ios-home-outline  
+                            span Home
+
+                    li
+                        a(ui-sref='articles')
+                            i.ion-ios-copy-outline 
+                            span Articles
+
+                    li
+                        a(ui-sref='random')
+                            i.ion-ios-shuffle 
+                            span Random Article
+
+                    li(ng-show="$state.includes('article') && !$state.is('article.revisionList')")
+                        a(ui-sref="article.revisionList({articleTitle: $stateParams.articleTitle})")
+                            i.ion-ios-undo-outline 
+                            span Revisions
+
+                    li(ng-show="$state.is('article.revisionList')")
+                        a(ui-sref="article({articleTitle: $stateParams.articleTitle})")
+                            i.ion-ios-paper-outline 
+                            span Original Article
+
+                    li.source-html-link(ng-show="$state.is('article')")
+                        a(ui-sref="article.raw({articleTitle: $stateParams.articleTitle})")
+                            i.ion-social-markdown 
+                            span Raw Article
+
+                    li.source-html-link(ng-show="$state.is('article.raw')")
+                        a(ui-sref="article({articleTitle: $stateParams.articleTitle})")
+                            i.ion-social-html5 
+                            span HTML Article
+
+                    li.source-html-link(ng-show="$state.is('article.revisionList.revision')")
+                        a(ui-sref="article.revisionList.revision.raw({articleTitle: $stateParams.articleTitle, revisionID: $stateParams.revisionID})")
+                            i.ion-social-markdown 
+                            span Raw Revision
+
+                    li.source-html-link(ng-show="$state.is('article.revisionList.revision.raw')")
+                        a(ui-sref="article.revisionList.revision({articleTitle: $stateParams.articleTitle, revisionID: $stateParams.revisionID})")
+                            i.ion-social-html5-outline 
+                            span HTML Revision
+
+            .ui-view.fade(autoscroll="true")
+
+            footer
+                p
+                    span(ui-view="lastModifiedInfo") 
+                    |&nbsp;&copy;&nbsp; 
+                    a(href="https://nikhil.io") Nikhil Anand
+                    |&nbsp;&nbsp;
+                    a(href="https://github.com/afreeorange/bock")
+                        i.ion-social-octocat
+
+        script(type="application/javascript", src="/Wiki.js")

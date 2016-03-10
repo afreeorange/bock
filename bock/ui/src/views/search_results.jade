@@ -1,0 +1,13 @@
+#search-no-results(ng-show="src.searchResults.count == 0")
+    h1 no results for &#8220;#[span {{ src.searchResults.query }}]&#8221;
+    h2 
+        i.ion-sad-outline
+
+#search-results(ng-show="src.searchResults.count >= 1")
+    h1.
+        #[span {{ src.searchResults.count }}] result#[i(ng-if="src.searchResults.count > 1") s] for #[span {{ src.searchResults.query }}]
+
+    ul
+        li(ng-repeat="result in src.searchResults.results")
+            a(ui-sref="article({articleTitle: result.title})") {{ result.title }}
+            div(ng-bind-html="result.content_matches | safeHTML")

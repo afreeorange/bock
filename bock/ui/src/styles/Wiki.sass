@@ -1,0 +1,115 @@
+$body-font: "EC2EE2AE-31E4-43C8-892D-8650448F8AA9"
+$heading-font: "43DF2E01-2014-4E90-8569-9FE01701B376"
+$monospace-font: "Inconsolata"
+$highlight-color: #FFFF88
+$link-color: #FF3300
+$side-margin: 6em
+$modular-heading-ratio: 6/5
+
+$mobile-side-margin: 1.5em
+$mobile-modular-heading-ratio: 9/8
+
+$mid-side-margin: 2em
+
+@function modular-heading($ratio, $iterations)
+    $size: 1
+
+    @for $i from 1 through $iterations
+        $size: $size * $ratio
+
+    @return $size
+
+@mixin typographic-base
+    line-height: 1.45
+    color: #333
+    font-kerning: normal
+    font-size: 125%
+    font-variant-ligatures: discretionary-ligatures
+    font-variant: common-ligatures, small-caps
+    text-align: left
+
+@mixin main-heading
+    font-family: $heading-font
+    font-size: modular-heading($modular-heading-ratio, 4) + em
+    font-weight: 900
+    margin: 0 0 0.75em 0
+    border-bottom: 5px double #CCC
+
+@import 'animations'
+@import 'fonts'
+@import 'search'
+@import 'search_results'
+@import 'article'
+@import 'articles'
+@import 'compare'
+@import 'revisions'
+@import 'raw_article'
+@import 'responsive'
+
+#container
+    margin: 1em $side-margin
+    @include typographic-base
+
+nav
+    position: relative
+    margin-bottom: 1em
+
+    ul
+        li
+            display: inline-block
+            margin: 0 1em 0 0
+            font-size: 1.75em
+
+            a
+                width: 1em
+                color: #CCC
+
+                span
+                    display: none
+
+            a:hover
+                color: #FF3300
+
+    .source-html-link
+        position: absolute
+        right: -1em
+
+        a
+            color: #EEE
+
+footer
+    font-family: $heading-font
+    font-weight: 100
+    line-height: 1.75
+    margin: 1em 0
+
+    p
+        font-size: 0.75em
+        color: #CCC
+
+        a
+            font-weight: 300
+            text-decoration: none
+            color: #999
+
+        a:hover
+            color: $link-color
+
+#loading-bar
+    .bar
+        background: #333
+        height: 5px
+
+
+#error
+    font-family: $heading-font
+    @include typographic-base
+
+    h1
+        font-weight: 900
+        @include main-heading
+        border-bottom: 0
+        margin-bottom: 0
+
+    h2
+        font-weight: 100

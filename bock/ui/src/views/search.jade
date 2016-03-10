@@ -1,0 +1,15 @@
+#search-overlay
+    #search-form
+        h1 Search
+        
+        form(ng-submit="smc.search()")
+            input(type="text" ng-model="smc.query" auto-focus)
+
+        a(ng-click="smc.dismissModal()")
+            i.ion-ios-close-outline 
+            span Close
+
+        ul
+            li Use boolean operators #[span AND], #[span OR], and #[span NOT]
+            li Asterisks for wildcards: #[span term*], #[span *term*], and #[span *term]
+            li Fuzzy searches with a tilde, like #[span term~]

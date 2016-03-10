@@ -1,0 +1,32 @@
+#revisions
+
+    h1 {{ rlc.listOfRevisions.title }}
+
+    #no-revisions(ng-if="rlc.listOfRevisions.revisions.length == 0")
+        h2 This article doesn&#8217;t have any revisions.
+        h3 It&#8217;s not part of the article repository. You might want to add it now.
+
+    h2#single-revisions(ng-if="rlc.listOfRevisions.revisions.length == 1").
+        This article has just one revision.
+
+    #revision-list
+        .revision-row(ng-repeat="revision in rlc.listOfRevisions.revisions")
+
+            input(type="checkbox" ng-model="rlc.listOfSHAs[revision.id]" ng-change="rlc.updateSHAs(revision.id)" id="{{ revision.id }}")
+
+            label(for="{{ revision.id }}")
+                .link
+                    a.revision-sha(ui-sref="article.revisionList.revision({articleTitle: $stateParams.articleTitle, revisionID: revision.id})") 
+                        |{{ revision.id | trimSHA }} 
+                        i.ion-android-open
+
+                .notes
+                    i {{ revision.message }}                    
+
+                .committer.
+                    #[a(href="mailto:{{ revision.email }}") {{ revision.author }}], {{ revision.committed_humanized }}, at {{ revision.committed | readableTimestamp }}
+
+    button(type="Submit"
+            ng-if="rlc.listOfRevisions.revisions.length >= 2"
+            ng-disabled="rlc.shasToCompare.length != 2"
+            ng-click="rlc.compareSHAs()") Compare Revisions

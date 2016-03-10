@@ -1,0 +1,196 @@
+article
+    font-family: $body-font
+    font-weight: 300
+    position: relative
+    word-wrap: break-word
+
+    strong, b
+        font-weight: 900
+
+    em, i
+        font-style: italic
+
+    p
+        margin: 1em 0
+    
+    ul
+        margin: 1em 0
+
+        li
+            margin: 0.5em 0
+            list-style-type: disc
+
+        ul
+            margin-left: 1em
+
+            ul
+                margin-left: 1em
+
+    ol
+        margin: 1em 0
+
+        li
+            margin: 0.5em 0
+            list-style-type: decimal
+
+        ol
+            margin-left: 1em
+
+            li
+                list-style-type: lower-roman
+
+            ol
+                margin-left: 1em
+
+                li
+                    list-style-type: lower-alpha
+
+
+
+    blockquote
+        padding: 0 0 0 1em
+        border-left: 1px solid #CCC
+        font-size: 1.5em
+
+        p
+            br
+                display: none
+
+    a
+        text-decoration: none
+        color: $link-color
+
+    a:hover
+        color: #FF0000
+        border-bottom: 2px solid #DDD
+
+    pre, code
+        font-family: $monospace-font
+
+    pre
+        padding: 0.5em 0
+
+    .code-highlight
+        font-size: 0.9em
+
+    // Headings. h1 is a mixin
+    h2,
+    h3,
+    h4,
+    h5
+        font-family: $heading-font
+        margin: 0.75em 0
+
+        code
+            font-family: $monospace-font
+            font-weight: normal
+            letter-spacing: 0
+
+    h1
+        @include main-heading
+
+        .uncommitted-icon
+            font-size: 0.5em
+            vertical-align: super
+            padding-left: 0.25em
+            color: red
+
+    h2
+        font-size: modular-heading($modular-heading-ratio, 3) + em
+        border-bottom: 1px solid #CCC
+        font-weight: 700
+        color: #666
+    
+    h3
+        font-size: modular-heading($modular-heading-ratio, 2) + em
+        color: #999
+        font-weight: 700
+    
+    h4
+        font-size: modular-heading($modular-heading-ratio, 1) + em
+        font-weight: 500
+        color: #999
+
+    sup
+        vertical-align: super
+
+    // Tables
+    table
+        width: 100%
+
+        thead
+            tr
+                th
+                    font-family: $heading-font
+                    font-weight: 900
+                    border-bottom: 2px solid #CCC
+                    text-align: left
+                    padding: 0.25em
+
+        tbody
+            tr
+                border-bottom: 1px solid #DDD
+                td
+                    padding: 0.25em
+            
+            tr:nth-child(odd)
+                background: #F9F9F9
+
+            tr:last-child
+                border-bottom: 0
+
+
+    // Here be footnotes
+    .footnote-ref
+        display: inline-block
+        font-size: 0.5em
+        background: #EEE
+        border-radius: 10px
+        padding: 2px 5px 0 5px
+        line-height: 1.5
+
+    .footnote-ref:hover
+        background: #333
+        color: white
+
+    h2#footnotes
+        display: none
+
+    .footnote
+        font-size: 0.75em
+        margin: 2em 0 0 0
+
+        hr
+            border: 0
+            height: 0.25em
+            background: repeating-linear-gradient(45deg, #DDD, #DDD 3px, #FFF 3px, #FFF 6px)
+
+    .code-highlight
+        margin: 1em 0
+
+.toc
+    font-family: $heading-font
+    border-bottom: 5px double #CCC
+
+    ul
+        font-size: 0.95em
+
+        li
+            list-style-type: none
+            font-weight: 500
+            margin: 0.35em auto
+
+        ul
+            margin: 0 2em
+
+            li
+                list-style-type: none
+                font-weight: 300
+                margin: 0.35em auto
+
+            ul
+
+                li
+                    list-style-type: none
+                    font-weight: 100
+                    margin: 0.35em auto

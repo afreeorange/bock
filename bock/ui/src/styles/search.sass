@@ -1,0 +1,59 @@
+#search-overlay
+    width: 100%
+    height: 100%
+    position: absolute
+    top: 0
+    left: 0
+    background: white
+    opacity: 0.99
+    z-index: 99
+
+    #search-form
+        margin: $side-margin ($side-margin * 1.5)
+
+        h1
+            @include main-heading
+            font-size: 2.5em!important
+            border-bottom: 0
+            margin-bottom: 0.5em
+
+        input
+            background: $highlight-color
+            border: 0
+            width: 100%
+            font-family: $heading-font
+            font-size: 2.5em
+            font-weight: 100
+            padding: 0.25em
+            border-radius: 5px
+
+        ul
+            font-family: $heading-font
+            margin-top: 2em
+            font-size: 1em
+            font-weight: 100
+            color: #999
+
+            li
+                margin-bottom: 0.75em
+
+                span
+                    background: $highlight-color
+                    padding: 0 0.25em
+                    border-radius: 3px
+                    color: #666
+
+        // Close button
+        a
+            font-size: 2.5em
+            position: absolute
+            top: 0.25em
+            right: 0.5em
+            color: #CCC
+            cursor: pointer
+
+            span
+                display: none
+
+        a:hover
+            color: $link-color
