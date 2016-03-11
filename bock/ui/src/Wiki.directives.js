@@ -4,7 +4,9 @@ angular.module('Wiki')
     return {
         restrict: 'AC',
         link: function($scope, element, attributes) {
-            element[0].focus();
+            $timeout(function () {
+                element[0].focus();
+            });
         }
     };
 })
