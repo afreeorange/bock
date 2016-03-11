@@ -6,6 +6,43 @@ angular.module('Bock')
 
     $stateProvider
 
+    .state('search', {
+        title: 'Search - {{ $stateParams.query }}',
+        url: '/search/:query',
+        views: {
+            '@': {
+                templateUrl: 'search_results.html',
+                controller: 'searchResultsController',
+                controllerAs: 'src',
+                resolve: {
+                    searchResults: function(BockService, $stateParams) {
+                        return BockService.getSearchResults($stateParams.query);
+                    }
+                }
+            }
+        }
+    })
+
+    .state('random', {
+        title: 'Randomizing...',
+        url: '/random'
+    })
+
+    .state('404', {
+        title: 'Couldn\'t find that',
+        templateUrl: '404.html'
+    })
+
+    .state('500', {
+        title: 'Uh oh...',
+        templateUrl: '500.html'
+    })
+
+    .state('noHome', {
+        title: 'No Home',
+        templateUrl: 'no_home.html'
+    })
+
     .state('listOfArticles', {
         title: 'List of Articles',
         url: '/articles',
@@ -25,7 +62,7 @@ angular.module('Bock')
 
     .state('article', {
         title: '{{ $stateParams.articleTitle | formatTitle }}',
-        url: '/{articleTitle:nonEncodedURL}',
+        url: '/{articleTitle}',
         resolve: {
             articleData: function(BockService, $stateParams) {
                 var articleTitle = $stateParams.articleTitle || 'Home';
@@ -132,43 +169,6 @@ angular.module('Bock')
                 }
             }
         }
-    })
-
-    .state('search', {
-        title: 'Search - {{ $stateParams.query }}',
-        url: '/search/:query',
-        views: {
-            '@': {
-                templateUrl: 'search_results.html',
-                controller: 'searchResultsController',
-                controllerAs: 'src',
-                resolve: {
-                    searchResults: function(BockService, $stateParams) {
-                        return BockService.getSearchResults($stateParams.query);
-                    }
-                }
-            }
-        }
-    })
-
-    .state('random', {
-        title: 'Randomizing...',
-        url: '/random'
-    })
-
-    .state('404', {
-        title: 'Couldn\'t find that',
-        templateUrl: '404.html'
-    })
-
-    .state('500', {
-        title: 'Uh oh...',
-        templateUrl: '500.html'
-    })
-
-    .state('noHome', {
-        title: 'No Home',
-        templateUrl: 'no_home.html'
     })
 
     ;

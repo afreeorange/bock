@@ -73,7 +73,7 @@ angular.module('Bock')
 
 })
 
-.controller('searchModalController', function($document, $state, close) {
+.controller('searchModalController', function($state, close) {
     var vm = this;
     vm.query = null;
 
@@ -85,12 +85,6 @@ angular.module('Bock')
         vm.dismissModal();
         $state.go('search', {'query': vm.query});
     };
-
-    $document.find('body').bind('keydown', function (event) {
-        if (event.keyCode === 27) {
-            close();
-        }
-    });
 
 })
 

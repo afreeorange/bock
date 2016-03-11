@@ -23,7 +23,10 @@ angular.module('Bock')
     $urlMatcherFactoryProvider.type('nonEncodedURL', {
         encode: valToString,
         decode: valToString,
-        is: function () { return true; }
+        is: function (val) {
+            console.log(val);
+            return true;
+        }
     });
 
 });
