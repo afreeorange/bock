@@ -1,9 +1,9 @@
 // https://github.com/angular-ui/ui-router/blob/master/sample/app/app.js#L10
-angular.module('Wiki')
+angular.module('Bock')
 
 .run(
 
-    function($rootScope, $state, $stateParams, $timeout, $interpolate, WikiService) {
+    function($rootScope, $state, $stateParams, $timeout, $interpolate, BockService) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
 
@@ -37,7 +37,7 @@ angular.module('Wiki')
             if (toState.name == 'random') {
                 event.preventDefault();
                 
-                WikiService.getListOfArticles()
+                BockService.getListOfArticles()
                 .then(
                     function(response) {
                         randomArticleIndex = Math.floor(Math.random() * response.data.articles.length);

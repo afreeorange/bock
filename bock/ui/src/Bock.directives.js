@@ -1,4 +1,4 @@
-angular.module('Wiki')
+angular.module('Bock')
 
 .directive('autoFocus', function($timeout) {
     return {

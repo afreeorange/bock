@@ -1,4 +1,4 @@
-angular.module('Wiki')
+angular.module('Bock')
 
 .filter('safeHTML', function($sce) {
     return function(val) {

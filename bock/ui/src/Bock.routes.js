@@ -1,4 +1,4 @@
-angular.module('Wiki')
+angular.module('Bock')
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -15,8 +15,8 @@ angular.module('Wiki')
                 controller: 'articlesController',
                 controllerAs: 'asc',
                 resolve: {
-                    listOfArticles: function(WikiService) {
-                        return WikiService.getListOfArticles();
+                    listOfArticles: function(BockService) {
+                        return BockService.getListOfArticles();
                     }
                 }
             }
@@ -28,9 +28,9 @@ angular.module('Wiki')
         url: '/:articleTitle',
         // url: '/{articleTitle:nonEncodedURL}',
         resolve: {
-            articleData: function(WikiService, $stateParams) {
+            articleData: function(BockService, $stateParams) {
                 var articleTitle = $stateParams.articleTitle || 'Home';
-                return WikiService.getArticle(articleTitle);
+                return BockService.getArticle(articleTitle);
             }
         },
         views: {
@@ -68,9 +68,9 @@ angular.module('Wiki')
                 controller: 'revisionListController',
                 controllerAs: 'rlc',
                 resolve: {
-                    listOfRevisions: function(WikiService, $stateParams) {
+                    listOfRevisions: function(BockService, $stateParams) {
                         var articleTitle = $stateParams.articleTitle || 'Home';
-                        return WikiService.getListOfRevisions(articleTitle);
+                        return BockService.getListOfRevisions(articleTitle);
                     }
                 }
             }
@@ -81,9 +81,9 @@ angular.module('Wiki')
         title: '{{ $stateParams.articleTitle | formatTitle }} - Revision {{ $stateParams.revisionID }}',
         url: '/:revisionID',
         resolve: {
-            revision: function(WikiService, $stateParams) {
+            revision: function(BockService, $stateParams) {
                 var articleTitle = $stateParams.articleTitle || 'Home';
-                return WikiService.getRevision(articleTitle, $stateParams.revisionID);
+                return BockService.getRevision(articleTitle, $stateParams.revisionID);
             }
         },
         views: {
@@ -126,9 +126,9 @@ angular.module('Wiki')
                 controller: 'compareController',
                 controllerAs: 'cc',
                 resolve: {
-                    comparisonDiff: function(WikiService, $stateParams) {
+                    comparisonDiff: function(BockService, $stateParams) {
                         var articleTitle = $stateParams.articleTitle || 'Home';
-                        return WikiService.getCompareDiff(articleTitle, $stateParams.a, $stateParams.b);
+                        return BockService.getCompareDiff(articleTitle, $stateParams.a, $stateParams.b);
                     }
                 }
             }
@@ -144,8 +144,8 @@ angular.module('Wiki')
                 controller: 'searchResultsController',
                 controllerAs: 'src',
                 resolve: {
-                    searchResults: function(WikiService, $stateParams) {
-                        return WikiService.getSearchResults($stateParams.query);
+                    searchResults: function(BockService, $stateParams) {
+                        return BockService.getSearchResults($stateParams.query);
                     }
                 }
             }

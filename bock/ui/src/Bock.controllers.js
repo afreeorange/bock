@@ -1,4 +1,4 @@
-angular.module('Wiki')
+angular.module('Bock')
 
 .controller('articleController', function(articleData) {
     var vm = this;

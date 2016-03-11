@@ -1,4 +1,4 @@
-angular.module('Wiki', [
+angular.module('Bock', [
     'ui.router',
     'angular-loading-bar',
     'ngAnimate',

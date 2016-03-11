@@ -1,6 +1,6 @@
-angular.module('Wiki')
+angular.module('Bock')
 
-.service('WikiService', function($http, $state) {
+.service('BockService', function($http, $state) {
     var service = this;
 
     service.getArticle = function(articleTitle) {

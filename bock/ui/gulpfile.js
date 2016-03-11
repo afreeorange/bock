@@ -34,7 +34,7 @@ var gulp = require('gulp'),
 
 var development_host = '127.0.0.1';
 var development_port = 5000;
-var appName = 'Wiki';
+var appName = 'Bock';
 var source = 'src/';
 var destination = 'cached_dist/';
 var SPATemplate = source + appName + '.jade';
@@ -60,7 +60,7 @@ var paths = {
     },
     app: {
         styles: [
-            source + '**/Wiki.sass',
+            source + '**/' + appName + '.sass',
         ],
         scripts: [
             source + '**/' + appName + '.module.js',

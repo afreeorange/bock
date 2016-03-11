@@ -3,14 +3,14 @@ from flask import Blueprint, send_file
 ui_blueprint = Blueprint('ui_blueprint', __name__)
 
 
-@ui_blueprint.route('/Wiki.js')
+@ui_blueprint.route('/Bock.js')
 def scripts():
-    return send_file('ui/cached_dist/Wiki.js')
+    return send_file('ui/cached_dist/Bock.js')
 
 
-@ui_blueprint.route('/Wiki.css')
+@ui_blueprint.route('/Bock.css')
 def styles():
-    return send_file('ui/cached_dist/Wiki.css')
+    return send_file('ui/cached_dist/Bock.css')
 
 
 @ui_blueprint.route('/fonts/<path:route>')

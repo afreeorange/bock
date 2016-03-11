@@ -1,4 +1,4 @@
-angular.module('Wiki')
+angular.module('Bock')
 
 .config(function($locationProvider, $httpProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $uiViewScrollProvider, cfpLoadingBarProvider) {
     $locationProvider.html5Mode(true);
