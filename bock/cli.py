@@ -33,7 +33,7 @@ def start(port, articles_folder, debug):
             )
         ).listen(port)
 
-    print('Starting wiki server on port {}. Ctrl+C to stop.'.format(port))
+    print('Starting wiki on port {}. Ctrl+C will kill it.'.format(port))
 
     ioloop = IOLoop.instance()
 
