@@ -6,6 +6,23 @@ angular.module('Wiki')
 
     $stateProvider
 
+    .state('listOfArticles', {
+        title: 'List of Articles',
+        url: '/articles',
+        views: {
+            '@': {
+                templateUrl: 'articles.html',
+                controller: 'articlesController',
+                controllerAs: 'asc',
+                resolve: {
+                    listOfArticles: function(WikiService) {
+                        return WikiService.getListOfArticles();
+                    }
+                }
+            }
+        }
+    })
+
     .state('article', {
         title: '{{ $stateParams.articleTitle | formatTitle }}',
         url: '/:articleTitle',
@@ -112,23 +129,6 @@ angular.module('Wiki')
                     comparisonDiff: function(WikiService, $stateParams) {
                         var articleTitle = $stateParams.articleTitle || 'Home';
                         return WikiService.getCompareDiff(articleTitle, $stateParams.a, $stateParams.b);
-                    }
-                }
-            }
-        }
-    })
-
-    .state('articles', {
-        title: 'List of Articles',
-        url: '/articles',
-        views: {
-            '@': {
-                templateUrl: 'articles.html',
-                controller: 'articlesController',
-                controllerAs: 'asc',
-                resolve: {
-                    listOfArticles: function(WikiService) {
-                        return WikiService.getListOfArticles();
                     }
                 }
             }
