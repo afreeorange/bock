@@ -6,4 +6,4 @@ __author__ = 'Nikhil Anand'
 __license__ = 'MIT'
 __copyright__ = '(c) 2016 Nikhil Anand'
 
-instance = create_wiki(debug=True)
+# instance = create_wiki(debug=True)

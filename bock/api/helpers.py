@@ -16,7 +16,7 @@ def abort_if_not_found(f):
     def wrapped_function(*args, **kwargs):
         if 'title' in kwargs:
             title = kwargs['title']
-            if not os.path.isfile(article_path(title)):
+            if not os.path.isfile(article_path(title, full_path=True)):
                 return abort(404)
         return f(*args, **kwargs)
     return wrapped_function
@@ -44,7 +44,11 @@ def markdown_to_html(text):
         )
 
 
-def article_path(title, basename=False, extension=True, namespace=True):
+def article_path(title,
+                 basename=False,
+                 extension=True,
+                 namespace=True,
+                 full_path=False):
     extension = '.md' if extension else ''
     article = ''
 
@@ -60,11 +64,17 @@ def article_path(title, basename=False, extension=True, namespace=True):
     if not namespace:
         article = re.search(r'(.*\/)?(.*)$', article).group(2)
 
+    if full_path:
+        article = '{}/{}'.format(
+                        current_app.config['ARTICLES_FOLDER'],
+                        article
+                        )
+
     return article
 
 
 def article_contents(title):
-    return open(article_path(title)).read()
+    return open(article_path(title, full_path=True)).read()
 
 
 def processed_article(title):
@@ -76,11 +86,23 @@ def raw_article(title):
 
 
 def get_last_modified(title):
-    return str(arrow.get(os.stat(article_path(title)).st_mtime))
+    return str(
+            arrow.get(
+                os.stat(
+                    article_path(title, full_path=True)
+                    ).st_mtime
+                )
+            )
 
 
 def get_human_last_modified(title):
-    return str(arrow.get(os.stat(article_path(title)).st_mtime).humanize())
+    return str(
+            arrow.get(
+                os.stat(
+                    article_path(title, full_path=True)
+                    ).st_mtime
+                ).humanize()
+            )
 
 
 def send_a_file(filename, type='file'):

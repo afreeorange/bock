@@ -1,7 +1,9 @@
 import os
+import sys
 
 from flask import Flask
 from git import Repo
+from git.exc import InvalidGitRepositoryError
 from whoosh.fields import Schema, TEXT, ID
 from whoosh.qparser import MultifieldParser, FuzzyTermPlugin
 from .api.helpers import generate_whoosh_index
@@ -17,7 +19,7 @@ def create_wiki(
 
     # Create a Flask server and set up the routes
     app = Flask(__name__, template_folder='ui/cached_dist')
-    app.debug = True
+    app.debug = debug
 
     # Configure Markdown conversion settings
     app.config['MARKDOWN_EXTENSIONS'] = [
@@ -49,8 +51,13 @@ def create_wiki(
     if not articles_folder:
         app.config['ARTICLES_FOLDER'] = os.path.abspath(os.path.curdir)
 
-    # Read from the repo
-    app.config['ARTICLE_REPO'] = Repo(app.config['ARTICLES_FOLDER'])
+    # Read from the repo; quit if not a git repo
+    try:
+        app.config['ARTICLE_REPO'] = Repo(app.config['ARTICLES_FOLDER'])
+    except InvalidGitRepositoryError:
+        print('{} doesn\'t appear to be a valid '
+              'git repository'.format(app.config['ARTICLES_FOLDER']))
+        sys.exit(1)
 
     # Article Refresh
 

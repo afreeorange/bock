@@ -1,18 +1,18 @@
 import signal
 import sys
-import webbrowser
 
 import click
+from tornado import autoreload
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from tornado.wsgi import WSGIContainer
-import bock
+from .factory import create_wiki
 
 
 @click.command()
 @click.option('--port', default=8000, help='Port that will serve the wiki')
 @click.option('--articles-folder', help='Folder with articles')
-@click.option('--debug', is_flag=True)
+@click.option('--debug', is_flag=True, help='Start server in debug and live-reload mode')
 def start(port, articles_folder, debug):
     '''Start a Tornado server with an instance of the wiki. Handle the
     keyboard interrupt to stop the wiki.
@@ -26,7 +26,7 @@ def start(port, articles_folder, debug):
 
     HTTPServer(
         WSGIContainer(
-                bock.create_wiki(
+                create_wiki(
                     articles_folder=articles_folder,
                     debug=debug
                 )
@@ -34,8 +34,12 @@ def start(port, articles_folder, debug):
         ).listen(port)
 
     print('Starting wiki server on port {}. Ctrl+C to stop.'.format(port))
-    webbrowser.open_new('http://localhost:{}'.format(port))
-    IOLoop.instance().start()
+
+    ioloop = IOLoop.instance()
+
+    if debug:
+        autoreload.start(ioloop)
+    ioloop.start()
 
 
 if __name__ == '__main__':

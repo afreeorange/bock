@@ -19,7 +19,7 @@ To push articles from GitHub, set an environment variable called `GITHUB_SECRET_
 Usage
 -----
 
-In a folder full of Markdown articles, run `bock`. This will start a server on port 8000 and attempt to open a browser. To set a different path, 
+In a folder full of Markdown articles, run `bock`. This will start a server on port 8000. To set a different path, 
 
     bock --article-path /path/to/articles
 
