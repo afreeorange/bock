@@ -10,9 +10,9 @@ from .factory import create_wiki
 
 
 @click.command()
-@click.option('--port', default=8000, help='Port that will serve the wiki')
-@click.option('--articles-folder', help='Folder with articles')
-@click.option('--debug', is_flag=True, help='Start server in debug and live-reload mode')
+@click.option('--port', '-p', default=8000, help='Port that will serve the wiki')
+@click.option('--articles-folder', '-a', help='Folder with articles')
+@click.option('--debug', '-d', is_flag=True, help='Start server in debug and live-reload mode')
 def start(port, articles_folder, debug):
     '''Start a Tornado server with an instance of the wiki. Handle the
     keyboard interrupt to stop the wiki.

@@ -22,6 +22,9 @@ Usage
 In a folder full of Markdown articles, run `bock`. This will start a server on port 8000. To set a different path, 
 
     bock --article-path /path/to/articles
+    
+    # This works too
+    bock -a /path/to/articles
 
 Notes
 -----
