@@ -35,6 +35,29 @@ $mid-side-margin: 2em
     margin: 0 0 0.75em 0
     border-bottom: 5px double #CCC
 
+@mixin special-page
+    text-align: center
+    margin: 2em auto
+
+    h1
+        @include main-heading
+        border: 0
+        font-weight: 700
+
+        small
+            display: block
+            font-size: 0.75em
+            font-weight: 100
+
+        i
+            display: block
+            font-size: 2em
+            color: $link-color
+
+        span
+            font-weight: 900
+
+
 @import 'animations'
 @import 'fonts'
 @import 'search'
@@ -45,6 +68,7 @@ $mid-side-margin: 2em
 @import 'revisions'
 @import 'raw_article'
 @import 'responsive'
+@import 'no_home'
 
 #container
     margin: 1em $side-margin
@@ -77,6 +101,9 @@ nav
         a
             color: #EEE
 
+pre, code
+    font-family: $monospace-font
+
 footer
     font-family: $heading-font
     font-weight: 100
@@ -102,17 +129,7 @@ footer
 
 
 #error
-    font-family: $heading-font
-    @include typographic-base
-
-    h1
-        font-weight: 900
-        @include main-heading
-        border-bottom: 0
-        margin-bottom: 0
-
-    h2
-        font-weight: 100
+    @include special-page
 
 // Toastr is used only for error messages
 .toast

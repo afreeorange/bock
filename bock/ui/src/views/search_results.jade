@@ -1,7 +1,8 @@
 #search-no-results(ng-show="src.searchResults.count == 0")
-    h1 no results for &#8220;#[span {{ src.searchResults.query }}]&#8221;
-    h2 
+    h1
         i.ion-sad-outline
+        |Sorry
+        small Didn&#8217;t find anything with &#8220;#[span {{ src.searchResults.query }}]&#8221;
 
 #search-results(ng-show="src.searchResults.count >= 1")
     h1.
