@@ -1,6 +1,6 @@
 angular.module('Bock')
 
-.service('BockService', function($http, $state) {
+.service('BockService', function($http, $state, toastr) {
     var service = this;
 
     service.getArticle = function(articleTitle) {
@@ -21,6 +21,8 @@ angular.module('Bock')
                         } else if (response.status == 500) {
                             $state.go('500');
                         } else {
+                            toastr.error('Got a response I don\'t know how to handle. See the console for more info.', 'Uh oh');
+                            console.log(response);
                             return false;
                         }
                     }
@@ -41,6 +43,8 @@ angular.module('Bock')
                         return response;
                     }, 
                     function(response) {
+                        toastr.error('Could not get the raw article. See the console for more info.', 'Oops');
+                        console.log(response);
                         return false;
                     }
                 );
@@ -56,6 +60,8 @@ angular.module('Bock')
                         return response;
                     }, 
                     function(response) {
+                        toastr.error('Could not fetch list of articles. See the console for more info.', 'Oops');
+                        console.log(response);
                         return false;
                     }
                 );
@@ -71,6 +77,8 @@ angular.module('Bock')
                         return response;
                     }, 
                     function(response) {
+                        toastr.error('Could not get article revision. See the console for more info.', 'Ruh-roh');
+                        console.log(response);
                         return false;
                     }
                 );
@@ -86,6 +94,8 @@ angular.module('Bock')
                         return response;
                     }, 
                     function(response) {
+                        toastr.error('Could not fetch that article\'s revision. See the console for more info.', 'DAGNABBIT');
+                        console.log(response);
                         return false;
                     }
                 );
@@ -105,6 +115,8 @@ angular.module('Bock')
                         return response;
                     }, 
                     function(response) {
+                        toastr.error('Could not fetch that raw revision. See the console for more info.', 'Blistering Barnacles!');
+                        console.log(response);
                         return false;
                     }
                 );
@@ -120,6 +132,8 @@ angular.module('Bock')
                         return response;
                     }, 
                     function(response) {
+                        toastr.error('Could not get that comparision. See the console for more info.', 'Crikey!');
+                        console.log(response);
                         return false;
                     }
                 );
@@ -135,11 +149,11 @@ angular.module('Bock')
                         return response;
                     }, 
                     function(response) {
+                        toastr.error('Could not fetch search results. See the console for more info.', 'Criminy!');
+                        console.log(response);
                         return false;
                     }
                 );
     };
 
-})
-
-;
+});

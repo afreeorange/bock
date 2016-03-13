@@ -3,7 +3,7 @@ angular.module('Bock')
 
 .run(
 
-    function($rootScope, $state, $stateParams, $timeout, $interpolate, BockService) {
+    function($rootScope, $state, $stateParams, $timeout, $interpolate, BockService, $templateCache, toastr) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
 
@@ -44,15 +44,17 @@ angular.module('Bock')
                         $state.go('article', {articleTitle: response.data.articles[randomArticleIndex].title});
                     }, 
                     function(response) {
-                        console.log('Couldn\'t randomize:', response);
+                        toastr.error('Couldn\'t randomize articles :( Check the console.', 'Oh no!');
+                        console.log(response);
                     }
                 );
             }
 
         });
 
-        return;
-    }
-)
+        $templateCache.put('directives/toast/toast.html','<div class="{{toastType}} {{toastClass}}"><strong>{{title}}</strong> <span>{{message}}</span></div>');
 
-;
+        return;
+
+    }
+);

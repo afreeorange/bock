@@ -52,6 +52,7 @@ var paths = {
             'bower_components/angular/angular.min.js',
             'bower_components/angular-animate/angular-animate.min.js',
             'bower_components/angular-modal-service/dst/angular-modal-service.min.js',
+            'bower_components/angular-toastr/dist/angular-toastr.min.js',
             'bower_components/angular-ui-router/release/angular-ui-router.min.js',
             'bower_components/angular-loading-bar/build/loading-bar.min.js',
             'bower_components/moment/min/moment.min.js',

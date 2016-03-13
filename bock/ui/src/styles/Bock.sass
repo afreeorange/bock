@@ -113,3 +113,41 @@ footer
 
     h2
         font-weight: 100
+
+// Toastr is used only for error messages
+.toast
+    opacity: 1 !important
+
+.toast.ng-enter
+    opacity: 0 !important
+    transition: opacity .3s linear
+
+.toast.ng-enter.ng-enter-active
+    opacity: 1 !important
+
+.toast.ng-leave
+    opacity: 1
+    transition: opacity .3s linear
+
+.toast.ng-leave.ng-leave-active
+    opacity: 0 !important
+
+#toast-container
+    position: absolute
+    bottom: 0
+    width: 100%
+    z-index: 999
+
+.toast-error
+    font-family: $heading-font
+    font-weight: 300
+    font-size: 1em
+    line-height: 1.25
+    background: rgba(255, 51, 0, 0.9)
+    color: white
+    padding: 0.5em 2em
+    cursor: pointer
+
+    strong
+        font-weight: 900
+        margin-right: 1em
