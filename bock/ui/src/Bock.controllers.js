@@ -72,7 +72,7 @@ angular.module('Bock')
     };
 
     $document.find('body').bind('keydown', function (event) {
-        if (event.keyCode === 70) {
+        if (event.keyCode === 70 && event.ctrlKey) {
             vm.showSearchOverlay();
         }
     });
