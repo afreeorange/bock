@@ -211,13 +211,6 @@ gulp.task('clean', [], function() {
     del(destination);
 });
 
-gulp.task('watch',[], function() {
-    gulp.watch(paths.app.styles, ['build:styles']);
-    gulp.watch(paths.app.scripts, ['build:scripts']);
-    gulp.watch(paths.app.templates, ['build:scripts']);
-    gulp.watch(SPATemplate, ['build:spa']);
-});
-
 gulp.task('serve', [], function() {
     browserSync.init({
         proxy: "localhost:8000",
