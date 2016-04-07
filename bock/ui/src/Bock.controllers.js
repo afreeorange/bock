@@ -53,7 +53,7 @@ angular.module('Bock')
     vm.comparisonDiff = comparisonDiff.data;
 })
 
-.controller('searchController', function($state, ModalService) {
+.controller('searchController', function($state, ModalService, $document) {
     var vm = this;
     vm.query = null;
 
@@ -70,6 +70,12 @@ angular.module('Bock')
         });
 
     };
+
+    $document.find('body').bind('keydown', function (event) {
+        if (event.keyCode === 70) {
+            vm.showSearchOverlay();
+        }
+    });
 
 })
 
