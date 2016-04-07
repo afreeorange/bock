@@ -41,7 +41,14 @@ angular.module('Bock')
                 .then(
                     function(response) {
                         randomArticleIndex = Math.floor(Math.random() * response.data.articles.length);
-                        $state.go('article', {articleTitle: response.data.articles[randomArticleIndex].title});
+                        randomArticleTitle = response.data.articles[randomArticleIndex].title;
+
+                        // Go to the raw version of the article if the referring state was raw
+                        if (fromState.name == 'article.raw') {
+                            $state.go('article.raw', {articleTitle: randomArticleTitle});
+                        } else {
+                            $state.go('article', {articleTitle: randomArticleTitle});
+                        }
                     }, 
                     function(response) {
                         toastr.error('Couldn\'t randomize articles :( Check the console.', 'Oh no!');
