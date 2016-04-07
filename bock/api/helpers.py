@@ -285,6 +285,7 @@ def search_articles(query_string):
 
     with current_app.config['SEARCH_INDEX'].searcher() as searcher:
         results = searcher.search(query, terms=True, limit=None)
+        print(results)
         results.fragmenter.maxchars = 400
         results.fragmenter.surround = 100
 
@@ -293,6 +294,7 @@ def search_articles(query_string):
             search_results['results'] = []
 
         for hit in results:
+            print(hit)
             full_article_path = '{}/{}'.format(
                                     current_app.config['ARTICLES_FOLDER'],
                                     hit["path"]
@@ -333,10 +335,11 @@ def generate_whoosh_index(app):
         with open(_) as f:
             try:
                 article_path = _.replace(document_path, '').lstrip('/')
+                article_title = re.sub(r'\.md$', r'', article_path)
 
                 # 'update_document' behaves like 'add_document' if fresh index
                 writer.update_document(
-                    title=article_path.rstrip('.md'),
+                    title=article_title,
                     path=article_path,
                     content=f.read()
                     )
