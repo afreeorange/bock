@@ -6,18 +6,6 @@ angular.module('Bock')
     };
 })
 
-.filter('underscore', function() {
-    return function(val) {
-        return val.split(' ').join('_');
-    };
-})
-
-.filter('deUnderscore', function() {
-    return function(val) {
-        return val.split('_').join(' ');
-    };
-})
-
 .filter('formatTitle', function() {
     return function(val) {
         return /(.*\/)?(.*)$/.exec(
