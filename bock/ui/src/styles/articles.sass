@@ -5,10 +5,13 @@
 
 
 #articles
+    display: table
+
     #articles-list
         -webkit-columns: 3
         -moz-columns: 3
         columns: 3
+        column-gap: 1em
 
     h1
         @include main-heading
@@ -23,6 +26,13 @@
         padding: 0.5em 0
 
     li
+        display: inline-table
+        min-height: 3.5em
+        width: 100%
+        border-right: 1px dotted #CCC
+        border-bottom: 1px dotted #CCC
+        padding-right: 0.25em
+
         i
             display: inline-block
             color: red
