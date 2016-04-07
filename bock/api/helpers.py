@@ -285,7 +285,6 @@ def search_articles(query_string):
 
     with current_app.config['SEARCH_INDEX'].searcher() as searcher:
         results = searcher.search(query, terms=True, limit=None)
-        print(results)
         results.fragmenter.maxchars = 400
         results.fragmenter.surround = 100
 
@@ -294,7 +293,6 @@ def search_articles(query_string):
             search_results['results'] = []
 
         for hit in results:
-            print(hit)
             full_article_path = '{}/{}'.format(
                                     current_app.config['ARTICLES_FOLDER'],
                                     hit["path"]
