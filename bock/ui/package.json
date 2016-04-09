@@ -1,6 +1,6 @@
 {
   "name": "wiki.nikhil.io.ui",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Web interface to my wiki",
   "main": "gulpfile.js",
   "homepage": "https://github.com/afreeorange/bock",
