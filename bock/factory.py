@@ -60,7 +60,6 @@ def create_wiki(
         sys.exit(1)
 
     # Article Refresh
-
     app.config['GITHUB_SECRET_KEY'] = os.getenv('GITHUB_SECRET_KEY', 'XXX')
 
     # SEARCH

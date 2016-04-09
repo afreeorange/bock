@@ -11,7 +11,8 @@ def refresh_articles():
     '''Respond to a webook and fetch the latest versions of the articles
     '''
 
-    # Computed signature for 'XXX' is
+    # Computed signature for secret key 'XXX' (set if GITHUB_SECRET_KEY)
+    # is not found is
     # sha1=18f3deaf58be2f57b8b80b3fec2db94f90f5ecac
     computed_signature = 'sha1={}'.format(
             hmac.new(
