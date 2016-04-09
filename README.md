@@ -1,7 +1,7 @@
 bock
 ====
 
-A Python-based attempt at a [quick personal wiki][wiki_link]. [These][realms_wiki] [exist][gollum] but aren't the way I'd like them. I write stuff, push to [this repo][article_repo] which triggers a webhook to pull on my server. This project makes all the Markdown files pretty and searchable.
+A Python-based attempt at a [quick personal wiki][wiki_link]. [These][realms_wiki] wikis [exist][gollum] but aren't the way I'd like them. I write stuff, push to [this repo][article_repo] which triggers a webhook to pull on my server. This project makes my Markdown articles all pretty and searchable.
 
 Installation
 ------------
@@ -25,6 +25,8 @@ In a folder full of Markdown articles, run `bock`. This will start a server on p
     
     # This works too
     bock -a /path/to/articles
+
+As of now, this will regenerate a full index in `/path/to/articles/.search_index` every time you run that command. However, it will update the index selectively whenever you create, move, modify, or remove articles while the server's running.
 
 Notes
 -----
@@ -50,20 +52,6 @@ gulp serve
 
 Now connect to `localhost:3000` for BrowserSync awesomeness.
 
-Tests
------
-
-```bash
-# All tests
-py.test
-
-# Coverage
-py.test --cov=bock
-
-# Flake8
-py.test --flake8
-```
-
 TODO
 ----
 
@@ -72,6 +60,8 @@ TODO
 * [ ] Fix routing with "/" problem in Angular (only works in Chrome, not Safari or FF)
 * [ ] If article path is really a folder, generate list of articles
 * [ ] Fix problem with compare (strange Unicode chars from binary to str conversion)
+* [ ] Use and update an existing search index if found
+* [ ] Redo logging
 
 [realms_wiki]: https://github.com/scragg0x/realms-wiki
 [gollum]: https://github.com/gollum/gollum
