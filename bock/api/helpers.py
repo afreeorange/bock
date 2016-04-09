@@ -210,7 +210,8 @@ def get_revision(title, sha):
     return {
         'committed': str(commit_date),
         'committed_humanized': commit_date.humanize(),
-        'raw':  blob.data_stream.read().decode('UTF-8').replace('\u00a0', '') if blob else raw_article(title)
+        'raw': (blob.data_stream.read().decode('UTF-8').replace('\u00a0', '')
+                if blob else raw_article(title))
     }
 
 
