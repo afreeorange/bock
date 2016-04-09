@@ -33,6 +33,7 @@ setup(
             'pygments',
             'pymdown-extensions',
             'tornado',
+            'watchdog',
             'whoosh',
         ],
         tests_require=[
