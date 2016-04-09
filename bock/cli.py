@@ -5,6 +5,7 @@ from time import sleep
 
 from .factory import create_wiki
 from .api.helpers import update_search_index_with, delete_from_index
+from .logger import logger
 import click
 from tornado import autoreload
 from tornado.httpserver import HTTPServer
@@ -63,12 +64,12 @@ def article_watcher(wiki, observer):
 def web_server(wiki, port, debug=False):
 
     def kill_handler(signal_number, stack_frame):
-        print('\nStopping wiki')
+        logger.info('\nStopping wiki')
         sys.exit(1)
 
     signal.signal(signal.SIGINT, kill_handler)
 
-    print('Starting wiki on port {}. Ctrl+C will kill it.'.format(port))
+    logger.info('Starting wiki on port {}. Ctrl+C will kill it.'.format(port))
     HTTPServer(WSGIContainer(wiki)).listen(port)
     ioloop = IOLoop.instance()
 

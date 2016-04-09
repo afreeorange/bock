@@ -1,6 +1,7 @@
 import os
 import sys
 
+from .logger import logger
 from flask import Flask
 from git import Repo
 from git.exc import InvalidGitRepositoryError
@@ -55,8 +56,8 @@ def create_wiki(
     try:
         app.config['ARTICLE_REPO'] = Repo(app.config['ARTICLES_FOLDER'])
     except InvalidGitRepositoryError:
-        print('{} doesn\'t appear to be a valid '
-              'git repository'.format(app.config['ARTICLES_FOLDER']))
+        logger.error('{} doesn\'t appear to be a valid '
+                     'git repository'.format(app.config['ARTICLES_FOLDER']))
         sys.exit(1)
 
     # Article Refresh
