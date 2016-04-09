@@ -4,6 +4,7 @@ import json
 import os
 import re
 
+from ..logger import logger
 import arrow
 from flask import current_app, jsonify, send_file, redirect, url_for, abort
 from glob2 import glob
@@ -324,7 +325,7 @@ def delete_from_index(article_path):
                         )
 
     writer.delete_by_term('title', article_title)
-    print('Removed', article_title)
+    logger.debug('Removed {}'.format(article_title))
     writer.commit()
 
 
@@ -348,19 +349,19 @@ def update_search_index_with(thing):
                     content=f.read()
                     )
 
-                print('Updated', article_title)
+                logger.debug('Updated {}'.format(article_title))
 
             except ValueError as e:
-                print('Skipping {} ({})'.format(_, str(e)))
+                logger.error('Skipping {} ({})'.format(_, str(e)))
 
     writer.commit()
 
 
 def populate_search_index():
     files = glob('{}/**/*.md'.format(current_app.config['ARTICLES_FOLDER']))
-    print('Found {} documents'.format(len(files)))
+    logger.info('Found {} documents'.format(len(files)))
     update_search_index_with(files)
-    print('Done')
+    logger.info('Done')
 
 
 def create_search_index():
@@ -373,7 +374,7 @@ def create_search_index():
     if not os.path.exists(index_path):
         os.mkdir(index_path)
 
-    print('Creating index')
+    logger.info('Creating index')
     search_index = index.create_in(index_path, schema)
 
     return search_index
