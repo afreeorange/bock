@@ -2,7 +2,6 @@ from hashlib import sha1
 import hmac
 
 from . import api_blueprint
-from .helpers import generate_whoosh_index
 from flask import request, jsonify, current_app
 
 
@@ -34,11 +33,8 @@ def refresh_articles():
     except Exception as e:
         errors.append(str(e))
 
-    # Update the search index
-    try:
-        generate_whoosh_index(current_app)
-    except Exception as e:
-        errors.append(str(e))
+    # At this point, the search index should be updated with the
+    # filesystem watcher running as another process.
 
     status_code = 500 if errors else 200
 

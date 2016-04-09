@@ -6,7 +6,7 @@ from git import Repo
 from git.exc import InvalidGitRepositoryError
 from whoosh.fields import Schema, TEXT, ID
 from whoosh.qparser import MultifieldParser, FuzzyTermPlugin
-from .api.helpers import generate_whoosh_index
+from .api.helpers import create_search_index, populate_search_index
 
 
 def create_wiki(
@@ -66,13 +66,15 @@ def create_wiki(
 
     # Define a schema
     app.config['SEARCH_SCHEMA'] = Schema(
-                                    title=TEXT(stored=True),
+                                    title=ID(stored=True, unique=True),
                                     path=ID(stored=True),
                                     content=TEXT,
                                     )
 
     # Create an index
-    app.config['SEARCH_INDEX'] = generate_whoosh_index(app)
+    with app.app_context():
+        app.config['SEARCH_INDEX'] = create_search_index()
+        populate_search_index()
 
     # Create a query parser
     app.config['SEARCH_PARSER'] = MultifieldParser(

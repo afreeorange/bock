@@ -310,42 +310,70 @@ def search_articles(query_string):
     return jsonify(search_results)
 
 
-def generate_whoosh_index(app):
-    '''Generate a Whoosh search index.
+def delete_from_index(article_path):
+    writer = current_app.config['SEARCH_INDEX'].writer()
 
-    TODO: Be smart about this and refresh only changed articles, esp. when
-          using the webhook endpoint.
-    '''
-    document_path = app.config['ARTICLES_FOLDER']
-    schema = app.config['SEARCH_SCHEMA']
-    index_path = '{}/.search_index'.format(document_path)
+    # FIX THIS
+    article_title = re.sub(
+                        r'\.md$',
+                        r'',
+                        article_path.replace(
+                            current_app.config['ARTICLES_FOLDER'],
+                            ''
+                            ).lstrip('/')
+                        )
 
-    if not os.path.exists(index_path):
-        os.mkdir(index_path)
+    writer.delete_by_term('title', article_title)
+    print('Removed', article_title)
+    writer.commit()
 
-    print('Generating index')
-    files = glob('{}/**/*.md'.format(document_path))
-    print('Found {} documents'.format(len(files)))
 
-    search_index = index.create_in(index_path, schema)
-    writer = search_index.writer()
+def update_search_index_with(thing):
+    writer = current_app.config['SEARCH_INDEX'].writer()
+    articles_folder = current_app.config['ARTICLES_FOLDER']
 
-    for _ in files:
+    if type(thing) is not list:
+        thing = [thing]
+
+    for _ in thing:
         with open(_) as f:
             try:
-                article_path = _.replace(document_path, '').lstrip('/')
+                # FIX THIS
+                article_path = _.replace(articles_folder, '').lstrip('/')
                 article_title = re.sub(r'\.md$', r'', article_path)
 
-                # 'update_document' behaves like 'add_document' if fresh index
                 writer.update_document(
                     title=article_title,
                     path=article_path,
                     content=f.read()
                     )
+
+                print('Updated', article_title)
+
             except ValueError as e:
                 print('Skipping {} ({})'.format(_, str(e)))
 
     writer.commit()
+
+
+def populate_search_index():
+    files = glob('{}/**/*.md'.format(current_app.config['ARTICLES_FOLDER']))
+    print('Found {} documents'.format(len(files)))
+    update_search_index_with(files)
     print('Done')
+
+
+def create_search_index():
+    '''Create a search index
+    '''
+    document_path = current_app.config['ARTICLES_FOLDER']
+    schema = current_app.config['SEARCH_SCHEMA']
+
+    index_path = '{}/.search_index'.format(document_path)
+    if not os.path.exists(index_path):
+        os.mkdir(index_path)
+
+    print('Creating index')
+    search_index = index.create_in(index_path, schema)
 
     return search_index
