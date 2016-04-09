@@ -28,18 +28,25 @@ class BockRepositoryEventHandler(PatternMatchingEventHandler):
                          case_sensitive)
         self.wiki = wiki
 
-    def on_any_event(self, event):
-        '''An event can be one of "created", "deleted", "modified", or
-        "moved" on a file or a directory. For each of these events,
-        and only for files, update the search index.
-        '''
+    def on_created(self, event):
+        with self.wiki.app_context():
+            if not event.is_directory:
+                update_search_index_with(event.src_path)
 
-        if not event.is_directory:
-            with self.wiki.app_context():
-                if event.event_type in ['created', 'modified']:
-                    update_search_index_with(event.src_path)
-                elif event.event_type == 'deleted':
-                    delete_from_index(event.src_path)
+    def on_modified(self, event):
+        with self.wiki.app_context():
+            if not event.is_directory:
+                update_search_index_with(event.src_path)
+
+    def on_deleted(self, event):
+        with self.wiki.app_context():
+            if not event.is_directory:
+                delete_from_index(event.src_path)
+
+    def on_moved(self, event):
+        with self.wiki.app_context():
+            delete_from_index(event.src_path)
+            update_search_index_with(event.dest_path)
 
 
 def article_watcher(wiki, observer):
