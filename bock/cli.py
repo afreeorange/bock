@@ -82,30 +82,25 @@ def web_server(wiki, port, debug=False):
               '-d',
               is_flag=True,
               help='Start server in debug and live-reload mode')
-@click.option('--watch',
-              '-w',
-              is_flag=True,
-              help='Watch the local filesystem for changes')
-def start(port, articles_folder, debug, watch):
+def start(port, articles_folder, debug):
     '''Start a Tornado server with an instance of the wiki. Handle the
-    keyboard interrupt to stop the wiki.
+    keyboard interrupt to stop the wiki. Start a filesystem observer to listen
+    to changes to wiki articles.
     '''
 
     wiki = create_wiki(articles_folder=articles_folder, debug=debug)
 
-    # Set up a filesystem watcher if needed
-    if watch:
-        observer = Observer()
-        observer.schedule(
-            BockRepositoryEventHandler(patterns=['*.md'], wiki=wiki),
-            wiki.config['ARTICLES_FOLDER'],
-            recursive=True
-            )
+    observer = Observer()
+    observer.schedule(
+        BockRepositoryEventHandler(patterns=['*.md'], wiki=wiki),
+        wiki.config['ARTICLES_FOLDER'],
+        recursive=True
+        )
 
-        Process(
-                target=article_watcher,
-                args=(wiki, observer,)
-            ).start()
+    Process(
+            target=article_watcher,
+            args=(wiki, observer,)
+        ).start()
 
     Process(
             target=web_server,
