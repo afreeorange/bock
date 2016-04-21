@@ -11,13 +11,13 @@ def articles():
     modified_articles = list_of_modified_articles()
 
     return jsonify({
-            'title': 'Articles',
-            'articles': [
-                {
-                    'title': _,
-                    'uncommitted': True if _ in modified_articles else False
-                }
-                for _
-                in list_of_articles()
-            ]
-        })
+        'title': 'Articles',
+        'articles': [
+            {
+                'title': _,
+                'uncommitted': True if _ in modified_articles else False
+            }
+            for _
+            in list_of_articles()
+        ]
+    })

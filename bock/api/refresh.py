@@ -14,12 +14,12 @@ def refresh_articles():
     # is not found is
     # sha1=18f3deaf58be2f57b8b80b3fec2db94f90f5ecac
     computed_signature = 'sha1={}'.format(
-            hmac.new(
-                bytes(current_app.config['GITHUB_SECRET_KEY'], 'utf-8'),
-                msg=request.data,
-                digestmod=sha1
-            ).hexdigest()
-        )
+        hmac.new(
+            bytes(current_app.config['GITHUB_SECRET_KEY'], 'utf-8'),
+            msg=request.data,
+            digestmod=sha1
+        ).hexdigest()
+    )
     github_signature = request.headers.get('X-Hub-Signature')
 
     if computed_signature != github_signature:
@@ -39,6 +39,6 @@ def refresh_articles():
     status_code = 500 if errors else 200
 
     return jsonify({
-            'message': 'Attempted refresh',
-            'errors': errors
-            }), status_code
+        'message': 'Attempted refresh',
+        'errors': errors
+    }), status_code

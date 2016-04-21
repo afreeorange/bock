@@ -30,19 +30,19 @@ def underscore_title_in_route(f):
             title = kwargs['title']
             if ' ' in title:
                 return redirect(
-                            url_for('.article', title=title.replace(' ', '_'))
-                        )
+                    url_for('.article', title=title.replace(' ', '_'))
+                )
         return f(*args, **kwargs)
     return wrapped_function
 
 
 def markdown_to_html(text):
     return markdown.markdown(
-            text=text,
-            output_format='html5',
-            extensions=current_app.config['MARKDOWN_EXTENSIONS'],
-            extension_configs=current_app.config['MARKDOWN_EXTENSION_CONFIG'],
-        )
+        text=text,
+        output_format='html5',
+        extensions=current_app.config['MARKDOWN_EXTENSIONS'],
+        extension_configs=current_app.config['MARKDOWN_EXTENSION_CONFIG'],
+    )
 
 
 def article_path(title,
@@ -55,10 +55,10 @@ def article_path(title,
 
     if not basename:
         article = '{}/{}{}'.format(
-                current_app.config['ARTICLES_FOLDER'],
-                title.replace('_', ' '),
-                extension
-            )
+            current_app.config['ARTICLES_FOLDER'],
+            title.replace('_', ' '),
+            extension,
+        )
 
     article = '{}{}'.format(title.replace('_', ' '), extension)
 
@@ -67,9 +67,9 @@ def article_path(title,
 
     if full_path:
         article = '{}/{}'.format(
-                        current_app.config['ARTICLES_FOLDER'],
-                        article
-                        )
+            current_app.config['ARTICLES_FOLDER'],
+            article,
+        )
 
     return article
 
@@ -88,30 +88,30 @@ def raw_article(title):
 
 def get_last_modified(title):
     return str(
-            arrow.get(
-                os.stat(
-                    article_path(title, full_path=True)
-                    ).st_mtime
-                )
-            )
+        arrow.get(
+            os.stat(
+                article_path(title, full_path=True)
+            ).st_mtime
+        )
+    )
 
 
 def get_human_last_modified(title):
     return str(
-            arrow.get(
-                os.stat(
-                    article_path(title, full_path=True)
-                    ).st_mtime
-                ).humanize()
-            )
+        arrow.get(
+            os.stat(
+                article_path(title, full_path=True)
+            ).st_mtime
+        ).humanize()
+    )
 
 
 def send_a_file(filename, type='file'):
     file_path = '{}/_{}s/{}'.format(
-                    current_app.config['ARTICLES_FOLDER'],
-                    type,
-                    filename
-                )
+        current_app.config['ARTICLES_FOLDER'],
+        type,
+        filename
+    )
 
     if not os.path.isfile(file_path):
         return jsonify({'error': 'Couldn\'t find that'}), 404
@@ -123,33 +123,33 @@ def list_of_articles():
     articles_folder = current_app.config['ARTICLES_FOLDER']
 
     return sorted([
-            re.sub(
-                r'^/?',
-                '',
-                _.replace(articles_folder, '').replace('.md', '')
-            )
-            for _ in
-            glob('{}/**/*.md'.format(articles_folder))
-        ])
+        re.sub(
+            r'^/?',
+            '',
+            _.replace(articles_folder, '').replace('.md', '')
+        )
+        for _ in
+        glob('{}/**/*.md'.format(articles_folder))
+    ])
 
 
 def get_commits(title):
     return [
-            _
-            for _
-            in current_app.config['ARTICLE_REPO'].iter_commits(
-                    paths=article_path(title, basename=True)
-                )
-        ]
+        _
+        for _
+        in current_app.config['ARTICLE_REPO'].iter_commits(
+            paths=article_path(title, basename=True)
+        )
+    ]
 
 
 def get_commit(title, sha):
     commit = [
-            _
-            for _
-            in get_commits(title)
-            if _.hexsha == sha
-        ]
+        _
+        for _
+        in get_commits(title)
+        if _.hexsha == sha
+    ]
 
     return commit[0] if commit else None
 
@@ -172,11 +172,11 @@ def get_blob(commit, title):
             subtree_with_blob = subtree_with_blob[namespace]
 
         blob = [
-                _
-                for _
-                in subtree_with_blob.blobs
-                if _.name == article_path(title, namespace=False)
-            ]
+            _
+            for _
+            in subtree_with_blob.blobs
+            if _.name == article_path(title, namespace=False)
+        ]
 
     return blob[0] if blob else []
 
@@ -188,13 +188,13 @@ def get_revision_list(title):
         committed_date = arrow.get(commit.committed_date)
 
         revisions.append({
-                'id': commit.hexsha,
-                'message': commit.message,
-                'author': commit.author.name,
-                'email': commit.author.email,
-                'committed': str(committed_date),
-                'committed_humanized': committed_date.humanize()
-            })
+            'id': commit.hexsha,
+            'message': commit.message,
+            'author': commit.author.name,
+            'email': commit.author.email,
+            'committed': str(committed_date),
+            'committed_humanized': committed_date.humanize()
+        })
 
     return revisions
 
@@ -226,23 +226,23 @@ def get_json_ready_diff(title, a, b):
         return None
 
     unified_diff = json.dumps(
-                            '\n'.join(
-                                list(
-                                    difflib.unified_diff(
-                                        revision_a['raw'].splitlines(),
-                                        revision_b['raw'].splitlines(),
-                                        fromfile='a/{}'.format(title_path),
-                                        tofile='b/{}'.format(title_path),
-                                        lineterm=''
-                                    )
-                                )
-                            )
-                        )
+        '\n'.join(
+            list(
+                difflib.unified_diff(
+                    revision_a['raw'].splitlines(),
+                    revision_b['raw'].splitlines(),
+                    fromfile='a/{}'.format(title_path),
+                    tofile='b/{}'.format(title_path),
+                    lineterm=''
+                )
+            )
+        )
+    )
 
     unified_diff = 'diff --git a/{} b/{}\\n'.format(
-                        title_path,
-                        title_path
-                    ) + unified_diff
+        title_path,
+        title_path
+    ) + unified_diff
 
     # Escape HTML and "non-breaking space"
     return escape_html(unified_diff)
@@ -255,7 +255,7 @@ def escape_html(text):
         "'": '&apos;',
         '>': '&gt;',
         '<': '&lt;',
-        }
+    }
 
     return ''.join(html_escape_table.get(c, c) for c in text)
 
@@ -278,10 +278,10 @@ def is_article_modified(title):
 
 def search_articles(query_string):
     search_results = {
-            'query': query_string,
-            'count': 0,
-            'results': None
-            }
+        'query': query_string,
+        'count': 0,
+        'results': None
+    }
 
     query = current_app.config['SEARCH_PARSER'].parse(query_string)
 
@@ -296,17 +296,17 @@ def search_articles(query_string):
 
         for hit in results:
             full_article_path = '{}/{}'.format(
-                                    current_app.config['ARTICLES_FOLDER'],
-                                    hit["path"]
-                                    )
+                current_app.config['ARTICLES_FOLDER'],
+                hit["path"],
+            )
 
             with open(full_article_path) as f:
                 contents = f.read()
 
             search_results['results'].append({
-                    'title': hit['title'],
-                    'content_matches': hit.highlights('content', text=contents)
-                    })
+                'title': hit['title'],
+                'content_matches': hit.highlights('content', text=contents)
+            })
 
     return jsonify(search_results)
 
@@ -316,13 +316,13 @@ def delete_from_index(article_path):
 
     # FIX THIS
     article_title = re.sub(
-                        r'\.md$',
-                        r'',
-                        article_path.replace(
-                            current_app.config['ARTICLES_FOLDER'],
-                            ''
-                            ).lstrip('/')
-                        )
+        r'\.md$',
+        r'',
+        article_path.replace(
+            current_app.config['ARTICLES_FOLDER'],
+            ''
+        ).lstrip('/')
+    )
 
     writer.delete_by_term('title', article_title)
     logger.debug('Removed {}'.format(article_title))
@@ -347,7 +347,7 @@ def update_search_index_with(thing):
                     title=article_title,
                     path=article_path,
                     content=f.read()
-                    )
+                )
 
                 logger.debug('Updated {}'.format(article_title))
 

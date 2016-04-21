@@ -103,17 +103,17 @@ def start(port, articles_folder, debug):
         BockRepositoryEventHandler(patterns=['*.md'], wiki=wiki),
         wiki.config['ARTICLES_FOLDER'],
         recursive=True
-        )
+    )
 
     Process(
-            target=article_watcher,
-            args=(wiki, observer,)
-        ).start()
+        target=article_watcher,
+        args=(wiki, observer,)
+    ).start()
 
     Process(
-            target=web_server,
-            args=(wiki, port, debug,)
-        ).start()
+        target=web_server,
+        args=(wiki, port, debug,)
+    ).start()
 
 
 if __name__ == '__main__':

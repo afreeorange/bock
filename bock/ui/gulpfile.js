@@ -3,6 +3,7 @@
 // browser-sync \
 // del \
 // jshint \
+// run-sequence \
 // jshint-stylish \
 // gulp \
 // gulp-autoprefixer \
@@ -12,6 +13,7 @@
 // gulp-cssmin \
 // gulp-debug \
 // gulp-jade \
+// gulp-header \
 // gulp-filter \
 // gulp-rimraf \
 // gulp-jshint \

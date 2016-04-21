@@ -67,10 +67,10 @@ def create_wiki(
 
     # Define a schema
     app.config['SEARCH_SCHEMA'] = Schema(
-                                    title=ID(stored=True, unique=True),
-                                    path=ID(stored=True),
-                                    content=TEXT,
-                                    )
+        title=ID(stored=True, unique=True),
+        path=ID(stored=True),
+        content=TEXT,
+    )
 
     # Create an index
     with app.app_context():
@@ -79,9 +79,9 @@ def create_wiki(
 
     # Create a query parser
     app.config['SEARCH_PARSER'] = MultifieldParser(
-                                        ['title', 'content'],
-                                        schema=app.config['SEARCH_SCHEMA']
-                                        )
+        ['title', 'content'],
+        schema=app.config['SEARCH_SCHEMA'],
+    )
 
     app.config['SEARCH_PARSER'].add_plugin(FuzzyTermPlugin())
 
