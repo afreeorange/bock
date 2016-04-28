@@ -28,13 +28,13 @@ def article(title):
     '''
 
     return jsonify({
-            'title': article_path(title, namespace=False, extension=False),
-            'html': processed_article(title),
-            'raw': raw_article(title),
-            'modified': get_last_modified(title),
-            'modified_humanized': get_human_last_modified(title),
-            'uncommitted': is_article_modified(title)
-        })
+        'title': article_path(title, namespace=False, extension=False),
+        'html': processed_article(title),
+        'raw': raw_article(title),
+        'modified': get_last_modified(title),
+        'modified_humanized': get_human_last_modified(title),
+        'uncommitted': is_article_modified(title)
+    })
 
 
 @api_blueprint.route('/articles/<path:title>/revisions')
