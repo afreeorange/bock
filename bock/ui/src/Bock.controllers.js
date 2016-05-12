@@ -71,12 +71,6 @@ angular.module('Bock')
 
     };
 
-    $document.find('body').bind('keydown', function (event) {
-        if (event.keyCode === 70 && event.ctrlKey) {
-            vm.showSearchOverlay();
-        }
-    });
-
 })
 
 .controller('searchModalController', function($document, $state, close) {
