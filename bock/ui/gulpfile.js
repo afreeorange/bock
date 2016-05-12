@@ -91,6 +91,7 @@ var banner = [
     'Well aren\'t _you_ a curious little kitten?',
     '',
     '<%= pkg.name %> - <%= pkg.description %>',
+    '@version <%= pkg.version %>',
     '@built ' + date,
     '@link <%= pkg.homepage %>',
     '@author <%= pkg.author %>',
