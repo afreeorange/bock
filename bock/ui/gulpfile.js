@@ -66,14 +66,14 @@ var paths = {
             source + '**/' + appName + '.sass',
         ],
         scripts: [
-            source + '**/' + appName + '.module.js',
-            source + '**/*config.js',
-            source + '**/*run.js',
-            source + '**/*filters.js',
-            source + '**/*directives.js',
-            source + '**/*services.js',
-            source + '**/*controller*.js',
-            source + '**/*routes*.js'
+            source + 'scripts/**/' + appName + '.module.js',
+            source + 'scripts/**/*config.js',
+            source + 'scripts/**/*run.js',
+            source + 'scripts/**/*filters.js',
+            source + 'scripts/**/*directives.js',
+            source + 'scripts/**/*services.js',
+            source + 'scripts/**/*controller*.js',
+            source + 'scripts/**/*routes*.js'
         ],
         templates: [
             source + 'views/**/*.jade'
