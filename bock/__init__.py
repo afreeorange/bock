@@ -4,7 +4,7 @@ from .factory import create_wiki
 
 
 __title__ = 'wiki_nikhil_io'
-__version__ = '1.2.5'
+__version__ = '1.2.6'
 __author__ = 'Nikhil Anand'
 __license__ = 'MIT'
 __copyright__ = '(c) {} Nikhil Anand'.format(datetime.now().year)
