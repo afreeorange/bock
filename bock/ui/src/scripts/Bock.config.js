@@ -24,7 +24,8 @@ angular.module('Bock')
         extendedTimeOut: 5000
     });
 
-    // Create a new URL type for UI-Router that doesn't turn "/" into "%2F"
+    // Create a new URL type for UI-Router that doesn't turn "/" into "~2F"
+    // https://github.com/angular-ui/ui-router/issues/2551
     function valToString(val) {
         if (val) {
             return val.toString();
@@ -35,7 +36,6 @@ angular.module('Bock')
         encode: valToString,
         decode: valToString,
         is: function (val) {
-            console.log(val);
             return true;
         }
     });
