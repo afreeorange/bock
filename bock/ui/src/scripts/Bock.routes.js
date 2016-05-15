@@ -62,7 +62,7 @@ angular.module('Bock')
 
     .state('article', {
         title: '{{ $stateParams.articleTitle | formatTitle }}',
-        url: '/{articleTitle}',
+        url: '/{articleTitle:nonEncodedURL}',
         resolve: {
             articleData: function(BockService, $stateParams) {
                 var articleTitle = $stateParams.articleTitle || 'Home';
