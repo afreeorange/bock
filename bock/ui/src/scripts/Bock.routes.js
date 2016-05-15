@@ -43,6 +43,14 @@ angular.module('Bock')
         templateUrl: 'no_home.html'
     })
 
+    .state('files', {
+        title: 'Files',
+        url: '/files/{fileName}',
+        controller: function($window, $stateParams) {
+            $window.location.href = '/api/files/' + $stateParams.fileName;
+        }
+    })
+
     .state('listOfArticles', {
         title: 'List of Articles',
         url: '/articles',

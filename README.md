@@ -33,6 +33,7 @@ Notes
 
 * `/` is used for article namespaces
 * `_` is not allowed in titles
+* Files/attachments go in `_files`
 * `.md` is the only valid extension for Markdown files.
 * The UI must be built before the source distribution
 * Namespaces are done using folders. They're removed in article titles and in the `title` tag.
@@ -60,7 +61,7 @@ TODO
 * [ ] Fix routing with "/" problem in Angular (only works in Chrome, not Safari or FF)
 * [ ] If article path is really a folder, generate list of articles
 * [ ] Fix problem with compare (strange Unicode chars from binary to str conversion)
-* [ ] Use and update an existing search index if found
+* [x] Use and update an existing search index if found
 * [ ] Redo logging
 
 [realms_wiki]: https://github.com/scragg0x/realms-wiki
