@@ -93,7 +93,7 @@ angular.module('Bock')
 
     .state('article.raw', {
         title: '{{ $stateParams.articleTitle | formatTitle }} - Source',
-        url: '/raw',
+        url: '?raw',
         views: {
             '@': {
                 templateUrl: 'raw_article.html',
