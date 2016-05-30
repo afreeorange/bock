@@ -1,11 +1,11 @@
+import logging
 from multiprocessing import Process
 import signal
 import sys
 from time import sleep
 
-from .factory import create_wiki
 from .api.helpers import update_search_index_with, delete_from_index
-from .logger import logger
+from .factory import create_wiki
 import click
 from tornado import autoreload
 from tornado.httpserver import HTTPServer
@@ -13,6 +13,8 @@ from tornado.ioloop import IOLoop
 from tornado.wsgi import WSGIContainer
 from watchdog.events import PatternMatchingEventHandler
 from watchdog.observers import Observer
+
+logger = logging.getLogger(__name__)
 
 
 class BockRepositoryEventHandler(PatternMatchingEventHandler):

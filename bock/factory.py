@@ -1,13 +1,15 @@
+import logging
 import os
 import sys
 
-from .logger import logger
+from .api.helpers import create_search_index, populate_search_index
 from flask import Flask
 from git import Repo
 from git.exc import InvalidGitRepositoryError
 from whoosh.fields import Schema, TEXT, ID
 from whoosh.qparser import MultifieldParser, FuzzyTermPlugin
-from .api.helpers import create_search_index, populate_search_index
+
+logger = logging.getLogger(__name__)
 
 
 def create_wiki(
@@ -65,19 +67,19 @@ def create_wiki(
 
     # SEARCH
 
-    # Define a schema
+    logger.debug('Creating schema')
     app.config['SEARCH_SCHEMA'] = Schema(
         title=ID(stored=True, unique=True),
         path=ID(stored=True),
         content=TEXT,
     )
 
-    # Create an index
+    logger.debug('Generating search index')
     with app.app_context():
         app.config['SEARCH_INDEX'] = create_search_index()
         populate_search_index()
 
-    # Create a query parser
+    logger.debug('Creating query parser')
     app.config['SEARCH_PARSER'] = MultifieldParser(
         ['title', 'content'],
         schema=app.config['SEARCH_SCHEMA'],

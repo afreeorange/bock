@@ -42,15 +42,25 @@ Notes
 Development
 -----------
 
+### API
+
 ```bash
 # In a folder full of articles
 gunicorn bock:instance --reload
+```
 
+### UI
+
+```bash
 # In the "ui" folder
 gulp serve
 ```
 
-Now connect to `localhost:3000` for BrowserSync awesomeness.
+Connect to `localhost:3000` for BrowserSync awesomeness.
+
+### Logging
+
+To see debug messages, `export DEBUG=True` and restart the server.
 
 TODO
 ----
@@ -61,7 +71,7 @@ TODO
 * [ ] If article path is really a folder, generate list of articles
 * [ ] Fix problem with compare (strange Unicode chars from binary to str conversion)
 * [x] Use and update an existing search index if found
-* [ ] Redo logging
+* [x] Redo logging
 * [ ] Disable history feature if not git repository
 
 [realms_wiki]: https://github.com/scragg0x/realms-wiki
