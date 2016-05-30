@@ -1,15 +1,17 @@
 import difflib
 import functools
 import json
+import logging
 import os
 import re
 
-from ..logger import logger
 import arrow
 from flask import current_app, jsonify, send_file, redirect, url_for, abort
 from glob2 import glob
 import markdown
 from whoosh import index
+
+logger = logging.getLogger(__name__)
 
 
 def abort_if_not_found(f):

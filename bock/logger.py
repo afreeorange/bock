@@ -1,10 +1,15 @@
 import logging
+import os
 
-logger = logging.getLogger('Bock')
-
+logger = logging.getLogger('bock')
 handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
+handler.setFormatter(
+    logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+)
 
 logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+
+if os.getenv('DEBUG'):
+    logger.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.INFO)
