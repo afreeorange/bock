@@ -28,6 +28,44 @@ In a git repository full of Markdown articles, run `bock`. This will start a ser
 
 As of now, this will regenerate a full index in `/path/to/articles/.search_index` every time you run that command. However, it will update the index selectively whenever you create, move, modify, or remove articles while the server's running.
 
+Notes on Namespaces and Titles
+------------------------------
+
+TL;DR: Use only alphanumeric and these chars in folder names and article titles.
+
+    ; @ & = + $ , - . ! ~ * ' ( )
+
+Some further notes based on [RFC 2396](http://www.ietf.org/rfc/rfc2396.txt):
+
+### Reserved Characters
+
+`; / ? : @ & = + $ ,`
+
+* `/` turns in to a `:`, strangely enough
+* `:` Cannot be used on OS X
+* `?` does not work
+* Everything else does
+
+### Unreserved Characters
+
+`- _ . ! ~ * ' ( )`
+
+* All of these work, with the exception of `_` (which, in this app, is used for pretty URLs)
+
+### 'Unwise' Characters
+
+`{ } | \ ^ [ ] ` `
+
+* True to their name: don't use.
+* `\` messes up `os.path`.
+* The rest get encoded.
+
+### Excluded Set
+
+`< > # % "` and space
+
+* But space is okay since it gets turned into underscore in the Angular app (it's in its encoded form in the API.)
+
 Notes
 -----
 

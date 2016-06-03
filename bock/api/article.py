@@ -1,66 +1,70 @@
 import random
 
 from . import api_blueprint
-from .helpers import (
-    abort_if_not_found,
-    article_path,
+from .helpers.paths import article_title
+from .helpers.articles import (
     get_human_last_modified,
-    get_json_ready_diff,
     get_last_modified,
-    get_revision,
-    get_revision_list,
     is_article_modified,
     list_of_articles,
     markdown_to_html,
     processed_article,
     raw_article,
-    underscore_title_in_route,
+)
+from .helpers.misc import (
+    abort_if_not_found,
+    de_underscore_article_path
+)
+from .helpers.repository import (
+    get_json_ready_diff,
+    get_revision,
+    get_revision_list,
 )
 from flask import jsonify, redirect, url_for, request
 
 
-@api_blueprint.route('/articles/<path:title>')
+@api_blueprint.route('/articles/<path:article_path>')
+@de_underscore_article_path
 @abort_if_not_found
-@underscore_title_in_route
-def article(title):
+def article(article_path):
     '''Return a single article with its raw source, processed HTML, title,
     and modification dates.
     '''
 
     return jsonify({
-        'title': article_path(title, namespace=False, extension=False),
-        'html': processed_article(title),
-        'raw': raw_article(title),
-        'modified': get_last_modified(title),
-        'modified_humanized': get_human_last_modified(title),
-        'uncommitted': is_article_modified(title)
+        'title': article_title(article_path),
+        'html': processed_article(article_path),
+        'raw': raw_article(article_path),
+        'modified': get_last_modified(article_path),
+        'modified_humanized': get_human_last_modified(article_path),
+        'uncommitted': is_article_modified(article_path)
     })
 
 
-@api_blueprint.route('/articles/<path:title>/revisions')
+@api_blueprint.route('/articles/<path:article_path>/revisions')
+@de_underscore_article_path
 @abort_if_not_found
-@underscore_title_in_route
-def revision_list(title):
+def revision_list(article_path):
     '''Retrieve a list of revisions identified by their SHAs
     '''
 
     return jsonify({
-        'title': article_path(title, namespace=False, extension=False),
-        'revisions': get_revision_list(title)
+        'title': article_title(article_path),
+        'revisions': get_revision_list(article_path)
     })
 
 
-@api_blueprint.route('/articles/<path:title>/revisions/<string:sha>')
+@api_blueprint.route('/articles/<path:article_path>/revisions/<string:sha>')
+@de_underscore_article_path
 @abort_if_not_found
-@underscore_title_in_route
-def revision(title, sha):
+def revision(article_path, sha):
     '''Retrieve a particular revision specified by its git SHA
     '''
 
-    revision = get_revision(title, sha)
+    revision = get_revision(article_path, sha)
 
     return jsonify({
-        'title': article_path(title, namespace=False, extension=False),
+        'title': article_title(article_path),
         'html': markdown_to_html(revision['raw']),
         'raw': revision['raw'],
         'committed': revision['committed'],
@@ -69,10 +73,10 @@ def revision(title, sha):
     })
 
 
-@api_blueprint.route('/articles/<path:title>/compare')
+@api_blueprint.route('/articles/<path:article_path>/compare')
+@de_underscore_article_path
 @abort_if_not_found
-@underscore_title_in_route
-def compare(title):
+def compare(article_path):
     a = request.args.get('a')
     b = request.args.get('b')
 
@@ -81,7 +85,7 @@ def compare(title):
             'error': 'Need both SHAs for comparison'
         }), 400
 
-    diff = get_json_ready_diff(title, a, b)
+    diff = get_json_ready_diff(article_path, a, b)
 
     if not diff:
         return jsonify({
@@ -89,7 +93,7 @@ def compare(title):
         }), 400
 
     return jsonify({
-        'title': article_path(title, namespace=False, extension=False),
+        'title': article_title(article_path),
         'diff': diff
     })
 

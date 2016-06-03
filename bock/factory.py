@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 
-from .api.helpers import create_search_index, populate_search_index
+from .api.helpers.search import create_search_index, populate_search_index
 from flask import Flask
 from git import Repo
 from git.exc import InvalidGitRepositoryError

@@ -1,5 +1,5 @@
 from . import api_blueprint
-from .helpers import send_a_file
+from .helpers.misc import send_a_file
 
 
 @api_blueprint.route('/images/<path:imagename>')

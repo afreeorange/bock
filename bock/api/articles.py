@@ -1,5 +1,8 @@
 from . import api_blueprint
-from .helpers import list_of_articles, list_of_modified_articles
+from .helpers.articles import (
+    list_of_articles,
+    list_of_modified_articles,
+)
 from flask import jsonify
 
 

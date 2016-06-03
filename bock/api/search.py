@@ -1,5 +1,5 @@
 from . import api_blueprint
-from .helpers import search_articles
+from .helpers.search import search_articles
 
 
 @api_blueprint.route('/search/<string:term>')
