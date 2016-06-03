@@ -36,7 +36,7 @@ def get_blob(commit, article_path):
             _
             for _
             in commit.tree.blobs
-            if _.name == article_path
+            if _.name == article_title_with_extension(article_path)
         ]
 
     else:
