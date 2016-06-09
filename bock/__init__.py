@@ -1,11 +1,14 @@
 from datetime import datetime
+import os
 
 from .factory import create_wiki
 from .logger import logger
 
 
-# Uncomment for development with gunicorn
-# instance = create_wiki(debug=True, search=False, refresh_index=False)
+# For development with gunicorn
+instance = None
+if os.getenv('DEBUG'):
+    instance = create_wiki(debug=True, search=False, refresh_index=False)
 
 # Package metadata
 __title__ = 'bock'

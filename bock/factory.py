@@ -65,27 +65,28 @@ def create_wiki(
     # Article Refresh
     app.config['GITHUB_SECRET_KEY'] = os.getenv('GITHUB_SECRET_KEY', 'XXX')
 
-    # SEARCH
+    # Search
+    if search:
+        logger.debug('Creating schema')
+        app.config['SEARCH_SCHEMA'] = Schema(
+            title=ID(stored=True, unique=True),
+            path=ID(stored=True),
+            content=TEXT,
+        )
 
-    logger.debug('Creating schema')
-    app.config['SEARCH_SCHEMA'] = Schema(
-        title=ID(stored=True, unique=True),
-        path=ID(stored=True),
-        content=TEXT,
-    )
+        logger.debug('Creating query parser')
+        app.config['SEARCH_PARSER'] = MultifieldParser(
+            ['title', 'content'],
+            schema=app.config['SEARCH_SCHEMA'],
+        )
 
-    logger.debug('Generating search index')
-    with app.app_context():
-        app.config['SEARCH_INDEX'] = create_search_index()
-        populate_search_index()
+        if refresh_index:
+            logger.debug('Generating search index')
+            with app.app_context():
+                app.config['SEARCH_INDEX'] = create_search_index()
+                populate_search_index()
 
-    logger.debug('Creating query parser')
-    app.config['SEARCH_PARSER'] = MultifieldParser(
-        ['title', 'content'],
-        schema=app.config['SEARCH_SCHEMA'],
-    )
-
-    app.config['SEARCH_PARSER'].add_plugin(FuzzyTermPlugin())
+        app.config['SEARCH_PARSER'].add_plugin(FuzzyTermPlugin())
 
     # Register the wiki API and UI blueprints
     from .api import api_blueprint
