@@ -24,20 +24,12 @@ angular.module('Bock')
         extendedTimeOut: 5000
     });
 
-    // Create a new URL type for UI-Router that doesn't turn "/" into "~2F"
-    // https://github.com/angular-ui/ui-router/issues/2551
-    function valToString(val) {
-        if (val) {
-            return val.toString();
-        }
-        return val;
-    }
-    $urlMatcherFactoryProvider.type('nonEncodedURL', {
-        encode: valToString,
-        decode: valToString,
-        is: function (val) {
-            return true;
-        }
-    });
+    // // Create a new URL type for UI-Router that doesn't turn "/" into "~2F"
+    // // https://github.com/angular-ui/ui-router/issues/2551
+    // $urlMatcherFactoryProvider.type('nonEncodedURL', {
+    //     encode: function (item) { return item || ''; },
+    //     decode: function (item) { return item || ''; },
+    //     is: function (item) { return true; }
+    // });
 
 });

@@ -6,27 +6,13 @@ angular.module('Bock')
     function($rootScope, $state, $stateParams, $timeout, $interpolate, BockService, $templateCache, toastr) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
-
-        // Manipulate page titles depending on state
-        $rootScope.$title = 'Loading...';
-        $rootScope.$on("$stateChangeSuccess", function() {
-
-            if (!$state.$current.self.title) {
-                $rootScope.$title = null;
-            } else {
-                var title = $interpolate($state.$current.self.title);
-                $timeout(function() {
-                    $rootScope.$title = title({$stateParams: $stateParams});
-                });
-            }
-
-        });
+        $rootScope.$title = 'Loading...'; // Manipulate page titles depending on state
 
         // Do one of two things. Redirect to
         // (1) an underscored path if spaces in URI
         // (2) a random page. This is done by fetching a list of articles
         //     and picking a random one on the client side.
-        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){ 
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) { 
 
             if (toState.name == 'article' && /\s/g.test(toParams.articleTitle)) {
                 var adjustedTitle = toParams.articleTitle.split(' ').join('_');
@@ -55,6 +41,19 @@ angular.module('Bock')
                         console.log(response);
                     }
                 );
+            }
+
+        });
+
+        $rootScope.$on('$stateChangeSuccess', function() {
+
+            if (!$state.$current.self.title) {
+                $rootScope.$title = null;
+            } else {
+                var title = $interpolate($state.$current.self.title);
+                $timeout(function() {
+                    $rootScope.$title = title({$stateParams: $stateParams});
+                });
             }
 
         });

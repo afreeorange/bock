@@ -70,7 +70,7 @@ angular.module('Bock')
 
     .state('article', {
         title: '{{ $stateParams.articleTitle | formatTitle }}',
-        url: '/{articleTitle:nonEncodedURL}',
+        url: '/{articleTitle}',
         resolve: {
             articleData: function(BockService, $stateParams) {
                 var articleTitle = $stateParams.articleTitle || 'Home';
@@ -93,7 +93,13 @@ angular.module('Bock')
 
     .state('article.raw', {
         title: '{{ $stateParams.articleTitle | formatTitle }} - Source',
-        url: '?raw',
+        url: '/raw',
+        resolve: {
+            articleData: function(BockService, $stateParams) {
+                var articleTitle = $stateParams.articleTitle || 'Home';
+                return BockService.getArticle(articleTitle);
+            }
+        },
         views: {
             '@': {
                 templateUrl: 'raw_article.html',

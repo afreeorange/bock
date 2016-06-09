@@ -7,7 +7,7 @@ angular.module('Bock')
 
         return $http({
                     method: 'GET',
-                    url: '/api/articles/' + articleTitle
+                    url: '/api/articles/' + encodeURI(articleTitle.split('_').join(' '))
                 })
                 .then(
                     function(response) {
@@ -32,7 +32,7 @@ angular.module('Bock')
     service.getRawArticle = function(articleTitle) {
         return $http({
                     method: 'GET',
-                    url: '/api/articles/' + articleTitle,
+                    url: '/api/articles/' + encodeURI(articleTitle.split('_').join(' ')),
                     headers: {
                         'Content-Type': 'text/plain'
                     },
@@ -70,7 +70,7 @@ angular.module('Bock')
     service.getListOfRevisions = function(articleTitle) {
         return $http({
                     method: 'GET',
-                    url: '/api/articles/' + articleTitle + '/revisions',
+                    url: '/api/articles/' + encodeURI(articleTitle.split('_').join(' ')) + '/revisions',
                 })
                 .then(
                     function(response) {
@@ -87,7 +87,7 @@ angular.module('Bock')
     service.getRevision = function(articleTitle, revisionID) {
         return $http({
                     method: 'GET',
-                    url: '/api/articles/' + articleTitle + '/revisions/' + revisionID,
+                    url: '/api/articles/' + encodeURI(articleTitle.split('_').join(' ')) + '/revisions/' + revisionID,
                 })
                 .then(
                     function(response) {
@@ -104,7 +104,7 @@ angular.module('Bock')
     service.getRawRevision = function(articleTitle, revisionID) {
         return $http({
                     method: 'GET',
-                    url: '/api/articles/' + articleTitle + '/revisions/' + revisionID,
+                    url: '/api/articles/' + encodeURI(articleTitle.split('_').join(' ')) + '/revisions/' + revisionID,
                     headers: {
                         'Content-Type': 'text/plain'
                     },
@@ -125,7 +125,7 @@ angular.module('Bock')
     service.getCompareDiff = function(articleTitle, revisionA, revisionB) {
         return $http({
                     method: 'GET',
-                    url: '/api/articles/' + articleTitle + '/compare?a=' + revisionA + '&b=' + revisionB
+                    url: '/api/articles/' + encodeURI(articleTitle.split('_').join(' ')) + '/compare?a=' + revisionA + '&b=' + revisionB
                 })
                 .then(
                     function(response) {
