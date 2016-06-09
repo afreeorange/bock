@@ -5,7 +5,7 @@ from .logger import logger
 
 
 # Uncomment for development with gunicorn
-instance = create_wiki(debug=True, search=False, refresh_index=False)
+# instance = create_wiki(debug=True, search=False, refresh_index=False)
 
 # Package metadata
 __title__ = 'bock'

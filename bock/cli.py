@@ -4,7 +4,7 @@ import signal
 import sys
 from time import sleep
 
-from .api.helpers import update_search_index_with, delete_from_index
+from .api.helpers.search import update_search_index_with, delete_from_index
 from .factory import create_wiki
 import click
 from tornado import autoreload
