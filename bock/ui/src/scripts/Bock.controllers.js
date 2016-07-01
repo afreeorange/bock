@@ -17,13 +17,15 @@ angular.module('Bock')
     vm.shasToCompare = [];
 
     // This can be written better but it's late and I don't care... :/
-    // Need to fix a bug where duplicates show up in revisions array.
     vm.updateSHAs = function(revisionID) {
-        console.log(revisionID);
         if (vm.shasToCompare.length == 2) {
             vm.shasToCompare.pop();
         }
         vm.shasToCompare.unshift(revisionID); // -> [a, b] ->
+
+        if (vm.shasToCompare[0] == revisionID && vm.shasToCompare[1] == revisionID) {
+            vm.shasToCompare.pop();
+        }
 
         for (var key in vm.listOfSHAs) {
             vm.listOfSHAs[key] = false;
