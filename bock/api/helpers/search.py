@@ -5,6 +5,7 @@ import os
 from flask import current_app, jsonify
 from glob2 import glob
 from whoosh import index
+from .paths import article_title, article_title_with_extension
 
 logger = logging.getLogger(__name__)
 
@@ -46,19 +47,10 @@ def search_articles(query_string):
 
 def delete_from_index(article_path):
     writer = current_app.config['SEARCH_INDEX'].writer()
+    writer.delete_by_term('title', article_title(article_path))
 
-    # FIX THIS
-    article_title = re.sub(
-        r'\.md$',
-        r'',
-        article_path.replace(
-            current_app.config['ARTICLES_FOLDER'],
-            ''
-        ).lstrip('/')
-    )
+    logger.debug('Removed {}'.format(article_title(article_path)))
 
-    writer.delete_by_term('title', article_title)
-    logger.debug('Removed {}'.format(article_title))
     writer.commit()
 
 
@@ -72,17 +64,13 @@ def update_search_index_with(thing):
     for _ in thing:
         with open(_) as f:
             try:
-                # FIX THIS
-                article_path = _.replace(articles_folder, '').lstrip('/')
-                article_title = re.sub(r'\.md$', r'', article_path)
-
                 writer.update_document(
-                    title=article_title,
-                    path=article_path,
+                    title=article_title(_),
+                    path=article_title_with_extension(_),
                     content=f.read()
                 )
 
-                logger.debug('Updated {}'.format(article_title))
+                logger.debug('Updated {}'.format(article_title(_)))
 
             except ValueError as e:
                 logger.error('Skipping {} ({})'.format(_, str(e)))
