@@ -1,94 +1,29 @@
-import logging
 import os
-import sys
+import logging
 
-from .api.helpers.search import create_search_index, populate_search_index
 from flask import Flask
-from git import Repo
-from git.exc import InvalidGitRepositoryError
-from whoosh.fields import Schema, TEXT, ID
-from whoosh.qparser import MultifieldParser, FuzzyTermPlugin
+from .lib import BockCore
 
 logger = logging.getLogger(__name__)
 
 
-def create_wiki(
-        articles_folder=None,
-        debug=False,
-        search=True,
-        refresh_index=True):
-    '''Wiki application factory
-    '''
-
-    # Create a Flask server and set up the routes
-    app = Flask(__name__, template_folder='ui/cached_dist')
+def create_wiki(articles_path=None, debug=False):
+    app = Flask(__name__)
     app.debug = debug
 
-    # Configure Markdown conversion settings
-    app.config['MARKDOWN_EXTENSIONS'] = [
-        'markdown.extensions.abbr',
-        'markdown.extensions.admonition',
-        'markdown.extensions.attr_list',
-        'markdown.extensions.codehilite',
-        'markdown.extensions.def_list',
-        'markdown.extensions.fenced_code',
-        'markdown.extensions.footnotes',
-        'markdown.extensions.headerid',
-        'markdown.extensions.meta',
-        'markdown.extensions.sane_lists',
-        'markdown.extensions.smarty',
-        'markdown.extensions.tables',
-        'markdown.extensions.toc',
-        'markdown.extensions.wikilinks',
-        'pymdownx.pymdown',
-    ]
+    app.config['articles_path'] = articles_path
+    if not articles_path:
+        app.config['articles_path'] = os.path.abspath(os.path.curdir)
+        logger.info('Set article path')
 
-    app.config['MARKDOWN_EXTENSION_CONFIG'] = {
-        'markdown.extensions.codehilite': {
-            'css_class': 'code-highlight'
-        }
-    }
+    app.config['bock_core'] = BockCore(
+        articles_path=app.config['articles_path']
+    )
 
-    # Set the path to the repo with Markdown articles
-    app.config['ARTICLES_FOLDER'] = articles_folder
-    if not articles_folder:
-        app.config['ARTICLES_FOLDER'] = os.path.abspath(os.path.curdir)
+    app.config['github_key'] = os.getenv('BOCK_GITHUB_KEY', 'XXX')
+    logger.info('Github key is {}'.format(app.config['github_key']))
 
-    # Read from the repo; quit if not a git repo
-    try:
-        app.config['ARTICLE_REPO'] = Repo(app.config['ARTICLES_FOLDER'])
-    except InvalidGitRepositoryError:
-        logger.error('{} doesn\'t appear to be a valid '
-                     'git repository'.format(app.config['ARTICLES_FOLDER']))
-        sys.exit(1)
-
-    # Article Refresh
-    app.config['GITHUB_SECRET_KEY'] = os.getenv('GITHUB_SECRET_KEY', 'XXX')
-
-    # Search
-    if search:
-        logger.debug('Creating schema')
-        app.config['SEARCH_SCHEMA'] = Schema(
-            title=ID(stored=True, unique=True),
-            path=ID(stored=True),
-            content=TEXT,
-        )
-
-        logger.debug('Creating query parser')
-        app.config['SEARCH_PARSER'] = MultifieldParser(
-            ['title', 'content'],
-            schema=app.config['SEARCH_SCHEMA'],
-        )
-
-        if refresh_index:
-            logger.debug('Generating search index')
-            with app.app_context():
-                app.config['SEARCH_INDEX'] = create_search_index()
-                populate_search_index()
-
-        app.config['SEARCH_PARSER'].add_plugin(FuzzyTermPlugin())
-
-    # Register the wiki API and UI blueprints
+    # Register API and UI blueprints
     from .api import api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api')
 
