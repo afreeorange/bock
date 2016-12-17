@@ -8,7 +8,7 @@ from .logger import logger
 # For development with gunicorn
 instance = None
 if os.getenv('DEBUG'):
-    instance = create_wiki(debug=True, search=False, refresh_index=False)
+    instance = create_wiki()
 
 # Package metadata
 __title__ = 'bock'

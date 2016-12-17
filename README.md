@@ -19,10 +19,10 @@ To push articles from GitHub, set an environment variable called `GITHUB_SECRET_
 Usage
 -----
 
-In a git repository full of Markdown articles, run `bock`. This will start a server on port 8000. To set a different path, 
+In a git repository full of Markdown articles, run `bock`. This will start a server on port 8000. To set a different path,
 
     bock --article-path /path/to/articles
-    
+
     # This works too
     bock -a /path/to/articles
 
@@ -35,7 +35,7 @@ Use only alphanumeric and these chars in folder names (namespaces) and article t
 
     ; @ & = + $ , - . ! ~ * ' ( )
 
-Foward-slashes will be turned into `~2F`. That's just how it is. 
+Foward-slashes will be turned into `~2F`. That's just how it is.
 
 Notes
 -----
@@ -55,7 +55,7 @@ Development
 
 ```bash
 # In a folder full of articles
-gunicorn bock:instance --reload
+export DEBUG=true && gunicorn bock:instance --reload
 ```
 
 ### UI
@@ -73,7 +73,7 @@ To see debug messages, `export DEBUG=True` and restart the server.
 
 ### UI Router
 
-Turns slashes into `~2F`. v0.2.11 doesn't do this but has a host of other problems. The strangest one is how [UI Router's `$state` is empty](https://github.com/angular-ui/ui-router/issues/1627) when I have article paths with slashes. 
+Turns slashes into `~2F`. v0.2.11 doesn't do this but has a host of other problems. The strangest one is how [UI Router's `$state` is empty](https://github.com/angular-ui/ui-router/issues/1627) when I have article paths with slashes.
 
 Other pertinent issues:
 
