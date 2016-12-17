@@ -26,7 +26,6 @@ setup(
     install_requires=[
         'argh==0.26.2',
         'arrow==0.10.0',
-        'bottle==0.12.10',
         'click==6.6',
         'Flask==0.11.1',
         'gitdb2==2.0.0',
