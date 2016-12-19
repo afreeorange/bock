@@ -1,31 +1,3 @@
-// npm install \
-// add-stream \
-// browser-sync \
-// del \
-// jshint \
-// run-sequence \
-// jshint-stylish \
-// gulp \
-// gulp-autoprefixer \
-// gulp-concat \
-// gulp-concat \
-// gulp-flatten \
-// gulp-cssmin \
-// gulp-debug \
-// gulp-jade \
-// gulp-header \
-// gulp-filter \
-// gulp-rimraf \
-// gulp-jshint \
-// gulp-load-plugins \
-// gulp-ng-annotate \
-// gulp-recess \
-// gulp-rename \
-// gulp-sass \
-// gulp-uglify \
-// gulp-webserver \
-// --save-dev
-
 var gulp = require('gulp'),
     browserSync = require('browser-sync').create()
     addStream = require('add-stream'),
@@ -39,7 +11,7 @@ var development_port = 5000;
 var appName = 'Bock';
 var source = 'src/';
 var destination = 'cached_dist/';
-var SPATemplate = source + appName + '.jade';
+var SPATemplate = source + appName + '.pug';
 
 var paths = {
     vendor: {
@@ -78,7 +50,7 @@ var paths = {
             source + 'scripts/**/*routes*.js'
         ],
         templates: [
-            source + 'views/**/*.jade'
+            source + 'views/**/*.pug'
         ],
         fonts: [
             source + 'fonts/**'
@@ -121,7 +93,7 @@ function prepareTemplatesForCaching() {
 
     return gulp.src(paths.app.templates)
                .pipe($.debug())
-               .pipe($.jade())
+               .pipe($.pug())
                .pipe($.angularTemplatecache({module: appName}));
 }
 
@@ -202,7 +174,7 @@ gulp.task('build:styles', ['build:styles:vendor', 'build:styles:app'], function(
 gulp.task('build:spa', ['build:scripts:app'], function() {
     return gulp.src(SPATemplate)
                .pipe($.debug())
-               .pipe($.jade())
+               .pipe($.pug())
                .pipe($.rename('index.html'))
                .pipe($.header(banner, {pkg: pkg}))
                .pipe(gulp.dest(destination))
