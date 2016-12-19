@@ -114,7 +114,7 @@ def article(article_path):
     """
     try:
         return jsonify(ca.config['bock_core'].get_article(article_path))
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         return jsonify({
             'message': 'Couldn\'t find that article'
         }), 404

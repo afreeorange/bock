@@ -1,0 +1,79 @@
+/* Adapted from
+http://facelessuser.github.io/pymdown-extensions/extensions/headeranchor
+*/
+
+article .headeranchor-link {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    padding-right: 6px;
+    padding-left: 30px;
+    margin-left: -30px;
+}
+
+article .headeranchor-link:hover {
+    border: none;
+}
+
+article .headeranchor-link:focus {
+    outline: none;
+}
+
+article h1,
+article h2,
+article h3,
+article h4,
+article h5,
+article h6 {
+    position: relative;
+}
+
+article h1 .headeranchor,
+article h2 .headeranchor,
+article h3 .headeranchor,
+article h4 .headeranchor,
+article h5 .headeranchor,
+article h6 .headeranchor {
+    display: none;
+    color: #DDD;
+    vertical-align: middle;
+}
+
+article h1:hover .headeranchor-link,
+article h2:hover .headeranchor-link,
+article h3:hover .headeranchor-link,
+article h4:hover .headeranchor-link,
+article h5:hover .headeranchor-link,
+article h6:hover .headeranchor-link {
+    padding-left: 8px;
+    margin-left: -35px;
+    text-decoration: none;
+}
+
+article h1:hover .headeranchor-link .headeranchor,
+article h2:hover .headeranchor-link .headeranchor,
+article h3:hover .headeranchor-link .headeranchor,
+article h4:hover .headeranchor-link .headeranchor,
+article h5:hover .headeranchor-link .headeranchor,
+article h6:hover .headeranchor-link .headeranchor {
+    display: inline-block;
+}
+
+article .headeranchor {
+    font: bold 1em helvetica, arial, sans-serif;
+    line-height: 1;
+    display: inline-block;
+    text-decoration: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.headeranchor:before {
+    content: '#';
+}

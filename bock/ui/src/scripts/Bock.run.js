@@ -12,7 +12,7 @@ angular.module('Bock')
         // (1) an underscored path if spaces in URI
         // (2) a random page. This is done by fetching a list of articles
         //     and picking a random one on the client side.
-        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) { 
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
 
             if (toState.name == 'article' && /\s/g.test(toParams.articleTitle)) {
                 var adjustedTitle = toParams.articleTitle.split(' ').join('_');
@@ -22,7 +22,7 @@ angular.module('Bock')
 
             if (toState.name == 'random') {
                 event.preventDefault();
-                
+
                 BockService.getListOfArticles()
                 .then(
                     function(response) {
@@ -35,7 +35,7 @@ angular.module('Bock')
                         } else {
                             $state.go('article', {articleTitle: randomArticleTitle});
                         }
-                    }, 
+                    },
                     function(response) {
                         toastr.error('Couldn\'t randomize articles :( Check the console.', 'Oh no!');
                         console.log(response);

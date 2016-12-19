@@ -12,33 +12,45 @@ from whoosh import index
 from whoosh.fields import Schema, TEXT, ID
 from whoosh.qparser import MultifieldParser, FuzzyTermPlugin
 
-
 logger = logging.getLogger(__name__)
 
 
 class BockCore():
     def __init__(self, articles_path):
         """Attempt to initialize a folder with Markdown articles. If a git
-        repo, create a search index and populate it
+        repo, create a search index and populate.
+
+        Markdown Extension References
+        * http://facelessuser.github.io/pymdown-extensions
+        * https://pythonhosted.org/Markdown/extensions
         """
         self.article_repo = Repo(articles_path)
         self.articles_path = articles_path
         self.markdown_extensions = [
             'markdown.extensions.abbr',
-            'markdown.extensions.admonition',
             'markdown.extensions.attr_list',
-            'markdown.extensions.codehilite',
             'markdown.extensions.def_list',
+            'markdown.extensions.fenced_code',
             'markdown.extensions.footnotes',
-            'markdown.extensions.meta',
+            'markdown.extensions.tables',
+            'markdown.extensions.smart_strong',
+            'markdown.extensions.admonition',
+            'markdown.extensions.codehilite',
+            'markdown.extensions.headerid',
             'markdown.extensions.sane_lists',
             'markdown.extensions.smarty',
-            'markdown.extensions.tables',
             'markdown.extensions.toc',
             'markdown.extensions.wikilinks',
             'pymdownx.betterem',
-            'pymdownx.pymdown',
-            'pymdownx.superfences',
+            'pymdownx.caret',
+            'pymdownx.githubemoji',
+            'pymdownx.headeranchor',
+            'pymdownx.magiclink',
+            'pymdownx.mark',
+            'pymdownx.smartsymbols',
+            'pymdownx.tasklist',
+            'pymdownx.tilde',
+            'pymdownx.critic',
         ]
         self.markdown_extensions_config = {
             'markdown.extensions.codehilite': {

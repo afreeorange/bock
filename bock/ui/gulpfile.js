@@ -46,7 +46,9 @@ var paths = {
         styles: [
             source + 'styles/contrib/meyer.css',
             source + 'styles/contrib/code-highlight.css',
+            source + 'styles/contrib/header-anchors.css',
             source + 'styles/contrib/ionicons.min.css',
+            source + 'styles/contrib/critic.css',
             'bower_components/angular-loading-bar/build/loading-bar.min.css',
             'bower_components/diff2html/dist/diff2html.min.css'
         ],
@@ -113,7 +115,7 @@ gulp.task('fonts', [], function() {
                .pipe(gulp.dest(destination + '/fonts'));
 });
 
-// ------ Scripts ------    
+// ------ Scripts ------
 
 function prepareTemplatesForCaching() {
 
@@ -221,6 +223,7 @@ gulp.task('serve', [], function() {
     });
 
     gulp.watch(source + '**/*.sass', ['build:styles']);
+    gulp.watch(source + '**/*.css', ['build:styles']);
     gulp.watch(paths.app.scripts, ['build:scripts']);
     gulp.watch(paths.app.templates, ['build:scripts']);
     gulp.watch(SPATemplate, ['build:spa']);
