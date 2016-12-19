@@ -5,6 +5,7 @@ import sys
 from time import sleep
 
 from .factory import create_wiki
+from . import __version__
 import click
 from tornado import autoreload
 from tornado.httpserver import HTTPServer
@@ -110,11 +111,21 @@ def web_server(wiki, port, debug=False):
     is_flag=True,
     help='Start server in debug and live-reload mode',
 )
-def start(port, articles_path, debug):
+@click.option(
+    '--version',
+    '-v',
+    is_flag=True,
+    help='Display wiki version and quit',
+)
+def start(port, articles_path, debug, version):
     """Start a Tornado server with an instance of the wiki. Handle the
     keyboard interrupt to stop the wiki. Start a filesystem observer to listen
     to changes to wiki articles.
     """
+
+    if version:
+        print('Bock v{}'.format(__version__))
+        sys.exit(0)
 
     wiki = create_wiki(articles_path=articles_path, debug=debug)
 
