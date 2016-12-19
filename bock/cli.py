@@ -70,6 +70,7 @@ def article_watcher(wiki, observer):
             sleep(1)
     except KeyboardInterrupt:
         observer.stop()
+
     observer.join()
 
 
@@ -87,6 +88,7 @@ def web_server(wiki, port, debug=False):
 
     if debug:
         autoreload.start(ioloop)
+
     ioloop.start()
 
 

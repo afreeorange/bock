@@ -17,60 +17,60 @@ html(ng-app="Bock" lang="en-US" direction="ltr")
                 ul
                     li(ng-controller="searchController as sc")
                         a(ng-href="#" ng-click="sc.showSearchOverlay()")
-                            i.ion-ios-search  
+                            i.ion-ios-search
                             span Search
 
                     li
                         a(href='/')
-                            i.ion-ios-home-outline  
+                            i.ion-ios-home-outline
                             span Home
 
                     li
                         a(ui-sref='listOfArticles')
-                            i.ion-ios-copy-outline 
+                            i.ion-ios-copy-outline
                             span Articles
 
                     li
                         a(ui-sref='random')
-                            i.ion-ios-shuffle 
+                            i.ion-ios-shuffle
                             span Random Article
 
                     li(ng-show="$state.includes('article') && !$state.is('article.revisionList')")
                         a(ui-sref="article.revisionList({articleTitle: $stateParams.articleTitle})")
-                            i.ion-ios-undo-outline 
+                            i.ion-ios-undo-outline
                             span Revisions
 
                     li(ng-show="$state.is('article.revisionList')")
                         a(ui-sref="article({articleTitle: $stateParams.articleTitle})")
-                            i.ion-ios-paper-outline 
+                            i.ion-ios-paper-outline
                             span Original Article
 
                     li.source-html-link(ng-show="$state.is('article')")
                         a(ui-sref="article.raw({articleTitle: $stateParams.articleTitle})")
-                            i.ion-social-markdown 
+                            i.ion-social-markdown
                             span Raw Article
 
                     li.source-html-link(ng-show="$state.is('article.raw')")
                         a(ui-sref="article({articleTitle: $stateParams.articleTitle})")
-                            i.ion-social-html5 
+                            i.ion-social-html5
                             span HTML Article
 
                     li.source-html-link(ng-show="$state.is('article.revisionList.revision')")
                         a(ui-sref="article.revisionList.revision.raw({articleTitle: $stateParams.articleTitle, revisionID: $stateParams.revisionID})")
-                            i.ion-social-markdown 
+                            i.ion-social-markdown
                             span Raw Revision
 
                     li.source-html-link(ng-show="$state.is('article.revisionList.revision.raw')")
                         a(ui-sref="article.revisionList.revision({articleTitle: $stateParams.articleTitle, revisionID: $stateParams.revisionID})")
-                            i.ion-social-html5-outline 
+                            i.ion-social-html5-outline
                             span HTML Revision
 
             .ui-view.fade(autoscroll="true")
 
             footer
                 p
-                    span(ui-view="lastModifiedInfo") 
-                    |&nbsp;&copy;&nbsp; 
+                    span(ui-view="lastModifiedInfo")
+                    |&nbsp;&copy;&nbsp;
                     a(href="https://nikhil.io") Nikhil Anand
                     |&nbsp;&nbsp;
                     a(href="https://github.com/afreeorange/bock")
