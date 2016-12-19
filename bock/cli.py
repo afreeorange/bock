@@ -4,8 +4,8 @@ import signal
 import sys
 from time import sleep
 
-from .factory import create_wiki
 from . import __version__
+from .factory import create_wiki
 import click
 from tornado import autoreload
 from tornado.httpserver import HTTPServer
