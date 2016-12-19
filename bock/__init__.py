@@ -12,7 +12,7 @@ if os.getenv('DEBUG'):
 
 # Package metadata
 __title__ = 'bock'
-__version__ = '1.4.2'
+__version__ = '1.5.2'
 __author__ = 'Nikhil Anand'
 __license__ = 'MIT'
 __copyright__ = '(c) {} Nikhil Anand'.format(datetime.now().year)
