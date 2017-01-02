@@ -88,7 +88,16 @@ TODO
 * [ ] If article path is really a folder, generate list of articles
 * [ ] Fix problem with compare (strange Unicode chars from binary to str conversion)
 * [ ] Use and update an existing search index if found
-* [ ] Disable history feature if not git repository
+* [ ] Add Google Analytics
+* [ ] Add some shortcut for search overlay
+* [ ] Fix issue with document name change (history disappears)
+* [ ] Add alphabetical list of article titles
+* [ ] Add caching (?)
+* [ ] Add syntax highlighting for raw Markdown view ([highlight.js](https://highlightjs.org)?)
+* [ ] Fix ToC bottom border (shouldn't be the same as title)
+* [ ] Move to ES6 and Webpack
+* [ ] Fix issue with Compare view where it incorrectly shows "renamed" (issue due to spaces in title.)
+* [ ] Add 'Recent Activity'to /Home
 
 Notes
 -----
