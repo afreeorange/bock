@@ -354,9 +354,19 @@ class BockCore():
             )
         )
 
-        unified_diff = 'diff --git a/{title} b/{title}\n{diff}'.format(
+        diff_template = """diff --git a/{title} b/{title}
+index {sha_a}..{sha_b} {file_mode}
+{diff}
+"""
+
+        unified_diff = diff_template.format(
             title=article_path,
             diff=unified_diff,
+            sha_a=a[0:7],
+            sha_b=b[0:7],
+            file_mode=oct(
+                os.stat(self.full_article_path(article_path)).st_mode
+            )[2:]
         )
 
         # Escape HTML and "non-breaking space"
