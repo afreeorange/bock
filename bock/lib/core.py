@@ -263,7 +263,7 @@ class BockCore():
 
         return commit[0] if commit else None
 
-    def get_blob(self, commit, article_path):
+    def get_blob(self, article_path, commit):
         """Get the git blob for a given commit and article title
         """
         namespaces = article_path.split('/')
@@ -320,7 +320,7 @@ class BockCore():
             return None
 
         commit_date = arrow.get(commit.committed_date)
-        blob = self.get_blob(commit, article_path)
+        blob = self.get_blob(article_path, commit)
         raw_article_content = (
             blob.data_stream.read().decode('UTF-8').replace('\u00a0', '')
             if blob
@@ -335,11 +335,10 @@ class BockCore():
             'committed_humanized': commit_date.humanize(),
         }
 
-    def get_diff(self, article_path, a, b, json_ready=False):
+    def get_diff(self, article_path, a, b):
         """Return a diff string between two revisions of a given
         article title.
         """
-        title_path = self.article_path_with_extension(article_path)
         revision_a = self.get_revision(article_path, a)
         revision_b = self.get_revision(article_path, b)
 
@@ -355,15 +354,10 @@ class BockCore():
             )
         )
 
-        if json_ready:
-            unified_diff = json.dumps(unified_diff)
-
-        unified_diff = 'diff --git {}/{} {}/{}\n'.format(
-            'a',
-            title_path,
-            'b',
-            title_path,
-        ) + unified_diff
+        unified_diff = 'diff --git a/{title} b/{title}\n{diff}'.format(
+            title=article_path,
+            diff=unified_diff,
+        )
 
         # Escape HTML and "non-breaking space"
         return self.escape_html(unified_diff)

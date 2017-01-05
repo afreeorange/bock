@@ -150,7 +150,6 @@ def compare(article_path):
             article_path,
             request.args.get('a'),
             request.args.get('b'),
-            json_ready=True
         )
     })
 

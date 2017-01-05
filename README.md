@@ -96,7 +96,7 @@ TODO
 * [ ] Add syntax highlighting for raw Markdown view ([highlight.js](https://highlightjs.org)?)
 * [ ] Fix ToC bottom border (shouldn't be the same as title)
 * [ ] Move to ES6 and Webpack
-* [ ] Fix issue with Compare view where it incorrectly shows "renamed" (issue due to spaces in title.)
+* [X] Fix issue with Compare view where it incorrectly shows "renamed" (issue due to spaces in title.)
 * [ ] Add 'Recent Activity'to /Home
 
 Notes
