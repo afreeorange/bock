@@ -86,7 +86,7 @@ def get_random():
         url_for(
             '.article',
             article_path=random.choice(
-                ca.config['bock_core'].list_of_articles
+                ca.config['bock_core'].simple_list_of_articles
             )
         )
     ), 302
