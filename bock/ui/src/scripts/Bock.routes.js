@@ -61,7 +61,7 @@ angular.module('Bock')
                 controllerAs: 'asc',
                 resolve: {
                     listOfArticles: function(BockService) {
-                        return BockService.getListOfArticles();
+                        return BockService.getAlphabetizedListOfArticles();
                     }
                 }
             }
@@ -186,5 +186,5 @@ angular.module('Bock')
     })
 
     ;
-    
+
 });

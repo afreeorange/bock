@@ -50,10 +50,27 @@ angular.module('Bock')
                 );
     };
 
-    service.getListOfArticles = function() {
+    service.getAlphabetizedListOfArticles = function() {
         return $http({
                     method: 'GET',
                     url: '/api/articles?alphabetized'
+                })
+                .then(
+                    function(response) {
+                        return response;
+                    },
+                    function(response) {
+                        toastr.error('Could not fetch list of articles. See the console for more info.', 'Oops');
+                        console.error(response);
+                        return false;
+                    }
+                );
+    };
+
+    service.getListOfArticles = function() {
+        return $http({
+                    method: 'GET',
+                    url: '/api/articles'
                 })
                 .then(
                     function(response) {

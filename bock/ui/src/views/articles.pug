@@ -9,5 +9,5 @@
                 span {{ results.length }}
             ul
                 li(ng-repeat="article in articles | filter:articleTitle as results")
-                    a(ui-sref="article({articleTitle: anArticle.title})") {{ article.title }}
+                    a(ui-sref="article({articleTitle: article.title})") {{ article.title }}
                     i.ion-edit(ng-show="article.uncommitted")
