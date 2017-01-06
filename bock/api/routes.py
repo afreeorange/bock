@@ -89,7 +89,7 @@ def get_random():
                 ca.config['bock_core'].simple_list_of_articles
             )
         )
-    ), 302
+    )
 
 
 @api_blueprint.route('/search/<term>')
