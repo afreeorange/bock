@@ -7,7 +7,7 @@ angular.module('Bock')
 
 .controller('articlesController', function(listOfArticles) {
     var vm = this;
-    vm.listOfArticles = listOfArticles.data.articles;
+    vm.listOfArticles = listOfArticles.data;
 })
 
 .controller('revisionListController', function(listOfRevisions, $state, $stateParams) {

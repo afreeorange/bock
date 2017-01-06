@@ -91,7 +91,7 @@ TODO
 * [ ] Add Google Analytics
 * [ ] Add some shortcut for search overlay
 * [ ] Fix issue with document name change (history disappears)
-* [ ] Add alphabetical list of article titles
+* [X] Add alphabetical list of article titles
 * [ ] Add caching (?)
 * [ ] Add syntax highlighting for raw Markdown view ([highlight.js](https://highlightjs.org)?)
 * [ ] Fix ToC bottom border (shouldn't be the same as title)

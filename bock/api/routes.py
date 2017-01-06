@@ -177,17 +177,10 @@ def articles():
     """Show a list of articles. Augment the core's return list with
     information on whether or not the article has any uncommitted changes
     """
-    modified_articles = ca.config['bock_core'].list_of_modified_articles
-    return jsonify({
-        'articles': [
-            {
-                'title': _,
-                'uncommitted': True if _ in modified_articles else False
-            }
-            for _
-            in ca.config['bock_core'].list_of_articles
-        ]
-    })
+    if 'alphabetized' not in request.args:
+        return jsonify({'articles': ca.config['bock_core'].list_of_articles})
+
+    return jsonify(ca.config['bock_core'].alphabetized_list_of_articles)
 
 
 @api_blueprint.route('/')

@@ -4,7 +4,10 @@
     input(ng-model="articleTitle" placeholder="Filter by title" auto-focus)
 
     #articles-list
-        ul
-            li(ng-repeat="anArticle in asc.listOfArticles | filter:articleTitle")
-                a(ui-sref="article({articleTitle: anArticle.title})")  {{ anArticle.title }}
-                i.ion-edit(ng-show="anArticle.uncommitted")
+        div(ng-repeat="(letter, articles) in asc.listOfArticles" ng-show="results.length > 0")
+            h2 {{ letter }}
+                span {{ results.length }}
+            ul
+                li(ng-repeat="article in articles | filter:articleTitle as results")
+                    a(ui-sref="article({articleTitle: anArticle.title})") {{ article.title }}
+                    i.ion-edit(ng-show="article.uncommitted")

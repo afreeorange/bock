@@ -6,12 +6,7 @@
 
 #articles
     display: table
-
-    #articles-list
-        -webkit-columns: 3
-        -moz-columns: 3
-        columns: 3
-        column-gap: 1em
+    width: 100%
 
     h1
         @include main-heading
@@ -25,26 +20,42 @@
         margin: 0 0 2em 0
         padding: 0.5em 0
 
-    li
-        display: inline-table
-        min-height: 3.5em
-        width: 100%
-        border-bottom: 1px dotted #DDD
-        padding-right: 0.25em
+    #articles-list
+        -webkit-columns: 3
+        -moz-columns: 3
+        columns: 3
+        column-gap: 1em
 
-        i
+        div
+            margin-bottom: 1em
             display: inline-block
-            color: red
-            vertical-align: super
-            font-size: 0.75em
-            margin-left: 0.25em
+            width: 100%
 
-    a
-        @include article-list-title-properties
-        text-decoration: none
-        display: inline-block
-        color: #333
-        padding: 0.5em 0
+        h2
+            font: bold 1.5em $heading-font
+            font-weight: 900
+            border-bottom: 1px dashed #cccccc
+            padding-bottom: 0.125em
+            margin-bottom: 0.125em
+            position: relative
 
-    a:hover
-        color: $link-color
+            span
+                margin-left: 0.25em
+                position: absolute
+                right: 0
+                color: #dddddd
+                padding: 0 10px
+                border-radius: 20px
+                font-weight: normal
+
+        ul
+            li
+                a
+                    @include article-list-title-properties
+                    text-decoration: none
+                    display: inline-block
+                    color: #333
+                    padding: 0.5em 0
+
+                a:hover
+                    color: $link-color

@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import re
+from collections import defaultdict
 
 import arrow
 from git import Repo
@@ -120,7 +121,7 @@ class BockCore():
         if not os.path.isfile(self.full_article_path(article_path)):
             raise FileNotFoundError
 
-        if article_path in self.list_of_modified_articles:
+        if article_path in self.list_of_uncommitted_articles:
             return True
 
         return False
@@ -141,8 +142,8 @@ class BockCore():
         }
 
     @property
-    def list_of_articles(self):
-        """Return a list of article titles
+    def simple_list_of_articles(self):
+        """Return a simple list of articles
         """
         return sorted([
             re.sub(
@@ -155,8 +156,43 @@ class BockCore():
         ])
 
     @property
-    def list_of_modified_articles(self):
-        """Return a list of article titles that have been modified
+    def list_of_articles(self):
+        """Return a simple list of articles with information on
+        whether they've been modified
+        """
+        uncommitted_list = self.list_of_uncommitted_articles
+        simple_list = self.simple_list_of_articles
+
+        return [
+            {
+                'title': _,
+                'uncommitted': True if _ in uncommitted_list else False
+            }
+            for _
+            in simple_list
+        ]
+
+    @property
+    def alphabetized_list_of_articles(self):
+        """Return an alphabetized list of articles with information on
+        whether they've been modified
+        """
+        alphabetized_list = defaultdict(list)
+        uncommitted_list = self.list_of_uncommitted_articles
+
+        for _ in self.simple_list_of_articles:
+            alphabetized_list[_[:1].upper()].append(
+                {
+                    'title': _,
+                    'uncommitted': True if _ in uncommitted_list else False
+                }
+            )
+
+        return alphabetized_list
+
+    @property
+    def list_of_uncommitted_articles(self):
+        """Return a list of articles that have been modified
         """
         return [
             _.a_path.replace('.md', '')
@@ -440,7 +476,7 @@ index {sha_a}..{sha_b} {file_mode}
         """Wraps the `update_index_with` function for the entire
         list of articles
         """
-        self.update_index_with(self.list_of_articles)
+        self.update_index_with(self.simple_list_of_articles)
 
     def search_articles(self, query_string):
         """Searches the index with the given query string and returns
