@@ -94,7 +94,7 @@ TODO
 * [X] Add alphabetical list of article titles
 * [ ] Add caching (?)
 * [ ] Add syntax highlighting for raw Markdown view ([highlight.js](https://highlightjs.org)?)
-* [ ] Fix ToC bottom border (shouldn't be the same as title)
+* [X] Fix ToC bottom border (shouldn't be the same as title)
 * [ ] Move to ES6 and Webpack
 * [X] Fix issue with Compare view where it incorrectly shows "renamed" (issue due to spaces in title.)
 * [ ] Add 'Recent Activity'to /Home
