@@ -1,7 +1,8 @@
 angular.module('Bock', [
-  'ui.router',
   'angular-loading-bar',
+  'angularModalService',
+  'hljs',
   'ngAnimate',
   'toastr',
-  'angularModalService'
+  'ui.router'
 ]);

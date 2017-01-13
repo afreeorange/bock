@@ -1,3 +1,5 @@
 #raw
     h1 {{ ac.articleData.title }}
-    pre {{ ac.articleData.raw }}
+        i.uncommitted-icon.ion-edit(ng-show="ac.articleData.uncommitted")
+    pre
+        code(ng-bind-html="ac.articleData.raw | syntaxHighlight: 'markdown' | unsafe")
