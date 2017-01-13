@@ -7,6 +7,11 @@ var
   del = require('del')
   ;
 
+if (!process.env.GA_TOKEN) {
+  console.error('Google Analytics token not set. Quitting.')
+  process.exit(1);
+}
+
 var development_host = '127.0.0.1';
 var development_port = 5000;
 var appName = 'Bock';
@@ -34,6 +39,8 @@ var paths = {
       'bower_components/angular-ui-router/release/angular-ui-router.min.js',
       'bower_components/angular-loading-bar/build/loading-bar.min.js',
       'bower_components/angular-highlightjs/build/angular-highlightjs.min.js',
+      'bower_components/angulartics/dist/angulartics.min.js',
+      'bower_components/angulartics-google-analytics/dist/angulartics-ga.min.js',
       'bower_components/moment/min/moment.min.js',
       'bower_components/diff2html/dist/diff2html.min.js'
     ]
@@ -196,6 +203,7 @@ gulp.task('build:spa', ['build:scripts:app'], function() {
              .pipe($.debug())
              .pipe($.pug())
              .pipe($.rename('index.html'))
+             .pipe($.template({GoogleAnalyticsToken: process.env.GA_TOKEN}))
              .pipe($.header(banner, {pkg: pkg}))
              .pipe(gulp.dest(destination))
              .pipe(browserSync.stream());
