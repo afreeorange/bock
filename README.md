@@ -56,7 +56,7 @@ export DEBUG=true && gunicorn bock:instance --reload
 gulp serve
 ```
 
-Connect to `localhost:3000` for BrowserSync awesomeness.
+Connect to `localhost:3000` for BrowserSync awesomeness. The Google Analytics token is set via an env var called `GA_TOKEN`
 
 ### UI Router
 
