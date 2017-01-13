@@ -52,7 +52,7 @@ html(ng-app="Bock" lang="en-US" direction="ltr")
 
                     li.source-html-link(ng-show="$state.is('article.raw')")
                         a(ui-sref="article({articleTitle: $stateParams.articleTitle})")
-                            i.ion-social-html5
+                            i.ion-social-html5-outline
                             span HTML Article
 
                     li.source-html-link(ng-show="$state.is('article.revisionList.revision')")
@@ -70,9 +70,8 @@ html(ng-app="Bock" lang="en-US" direction="ltr")
             footer
                 p
                     span(ui-view="lastModifiedInfo")
-                    |&nbsp;&copy;&nbsp;
+                    br
                     a(href="https://nikhil.io") Nikhil Anand
-                    |&nbsp;&nbsp;
                     a(href="https://github.com/afreeorange/bock")
                         i.ion-beer
 
