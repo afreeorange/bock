@@ -6,8 +6,8 @@
         h2 This article doesn&#8217;t have any revisions.
         h3 It&#8217;s not part of the article repository. You might want to add it now.
 
-    h2#single-revisions(ng-if="rlc.listOfRevisions.revisions.length == 1").
-        This article has just one revision.
+    h2#single-version(ng-if="rlc.listOfRevisions.revisions.length == 1").
+        This article has just one version
 
     #revision-list
         .revision-row(ng-repeat="revision in rlc.listOfRevisions.revisions")
