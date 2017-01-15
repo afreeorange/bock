@@ -16,15 +16,16 @@
 
             label(for="{{ revision.id }}")
                 .link
+                    i.ion-ios-paper-outline
+                    |&nbsp;
                     a.revision-sha(ui-sref="article.revisionList.revision({articleTitle: $stateParams.articleTitle, revisionID: revision.id})")
                         |{{ revision.id | trimSHA }}
-                        i.ion-android-open
 
                 .notes
                     i {{ revision.message }}
 
                 .committer.
-                    #[a(href="mailto:{{ revision.email }}") {{ revision.author }}], {{ revision.committed_humanized }}, at {{ revision.committed | readableTimestamp }}
+                    #[i.ion-ios-person-outline] #[a(href="mailto:{{ revision.email }}") {{ revision.author }}] &nbsp; #[i.ion-ios-clock-outline] {{ revision.committed_humanized }}, at {{ revision.committed | readableTimestamp }}
 
     button(type="Submit"
             ng-if="rlc.listOfRevisions.revisions.length >= 2"

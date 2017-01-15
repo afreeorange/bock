@@ -47,7 +47,7 @@ html(ng-app="Bock" lang="en-US" direction="ltr")
 
                     li.source-html-link(ng-show="$state.is('article')")
                         a(ui-sref="article.raw({articleTitle: $stateParams.articleTitle})")
-                            i.ion-social-markdown
+                            i.markdown-mark
                             span Raw Article
 
                     li.source-html-link(ng-show="$state.is('article.raw')")
@@ -57,7 +57,7 @@ html(ng-app="Bock" lang="en-US" direction="ltr")
 
                     li.source-html-link(ng-show="$state.is('article.revisionList.revision')")
                         a(ui-sref="article.revisionList.revision.raw({articleTitle: $stateParams.articleTitle, revisionID: $stateParams.revisionID})")
-                            i.ion-social-markdown
+                            i.markdown-mark
                             span Raw Revision
 
                     li.source-html-link(ng-show="$state.is('article.revisionList.revision.raw')")
@@ -70,11 +70,11 @@ html(ng-app="Bock" lang="en-US" direction="ltr")
             footer
                 p
                     span(ui-view="lastModifiedInfo")
-                    br
+                    br(ng-show="$state.is('article') || $state.is('article.revisionList.revision')")
                     a(href="https://nikhil.io") Nikhil Anand
                     i.ion-more &nbsp;&nbsp;
                     a(href="https://github.com/afreeorange/bock")
-                        i.ion-beer
+                        i.ion-social-octocat
 
         script(type="application/javascript" src="/Bock.js")
         script(type="application/javascript")

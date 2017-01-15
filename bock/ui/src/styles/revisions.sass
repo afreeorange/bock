@@ -27,15 +27,25 @@
     #revision-list
         font-family: $body-font
 
-        i
-            font-style: italic
+        .link
+            i
+                color: #666666
+                font-size: 0.95em
+
+        .notes
+            i
+                font-style: italic
 
         .revision-row
             width: 100%
             cursor: pointer
-            border-bottom: 1px dotted #CCC
+            border-bottom: 1px dotted #cccccc
             position: relative
             padding: 0.5em 0
+
+            label
+                div
+                    background-image: none
 
             input
                 position: absolute
@@ -48,15 +58,22 @@
                 font-size: 0.75em
                 color: #999
 
+                i
+                    color: #666666
+
             .revision-sha
                 font-family: $monospace-font
 
-        .revision-row:last-child
+        :last-child
             border: 0
 
+        :hover
+            cursor: pointer
+            background-image: repeating-linear-gradient(45deg, #FFF, #fff 25px, #f9f9f9 25px, #f9f9f9 50px)
+
     #single-version
-        color: #666
+        color: #999
         font-family: $heading-font
+        font-size: modular-heading($modular-heading-ratio, 2) + em
         font-weight: 700
-        font-size: 1.5em
         margin: 0.75em 0
