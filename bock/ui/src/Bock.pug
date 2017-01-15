@@ -52,7 +52,7 @@ html(ng-app="Bock" lang="en-US" direction="ltr")
 
                     li.source-html-link(ng-show="$state.is('article.raw')")
                         a(ui-sref="article({articleTitle: $stateParams.articleTitle})")
-                            i.ion-social-html5-outline
+                            i.ion-code-working
                             span HTML Article
 
                     li.source-html-link(ng-show="$state.is('article.revisionList.revision')")
@@ -62,7 +62,7 @@ html(ng-app="Bock" lang="en-US" direction="ltr")
 
                     li.source-html-link(ng-show="$state.is('article.revisionList.revision.raw')")
                         a(ui-sref="article.revisionList.revision({articleTitle: $stateParams.articleTitle, revisionID: $stateParams.revisionID})")
-                            i.ion-social-html5-outline
+                            i.ion-code-working
                             span HTML Revision
 
             .ui-view.fade(autoscroll="true")
