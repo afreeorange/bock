@@ -5,6 +5,7 @@ var
   runSequence = require('run-sequence'),
   $ = require('gulp-load-plugins')({pattern: ['gulp-*', 'gulp.*'], camelize: true}),
   del = require('del')
+  package_info = require('./package.json')
   ;
 
 if (!process.env.GA_TOKEN) {
@@ -203,6 +204,7 @@ gulp.task('build:spa', ['build:scripts:app'], function() {
              .pipe($.debug())
              .pipe($.pug())
              .pipe($.rename('index.html'))
+             .pipe($.replace('BUILD_VERSION', package_info.version))
              .pipe($.template({GoogleAnalyticsToken: process.env.GA_TOKEN}))
              .pipe($.header(banner, {pkg: pkg}))
              .pipe(gulp.dest(destination))
