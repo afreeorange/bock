@@ -1,3 +1,4 @@
 #raw
     h1 {{ $stateParams.articleTitle }}
-    pre {{ rc.revision.raw }}
+    pre
+        code(ng-bind-html="rc.revision.raw | syntaxHighlight: 'markdown' | unsafe")
