@@ -10,6 +10,8 @@ In a virtualenv
 
     pip install git+https://github.com/afreeorange/bock.git
 
+There's a Docker option too. See "Usage".
+
 ### GitHub Push
 
 [Create a webhook](https://developer.github.com/webhooks/creating/) that pushes "everything" to
@@ -27,6 +29,9 @@ In a git repository full of Markdown articles, run `bock`. This will start a ser
 
     # This works too
     bock -a /path/to/articles
+
+    # Or if using Docker
+    docker run -v /path/to/articles:/articles -p 8000:8000 afreeorange/bock
 
 As of now, this will regenerate a full index in `/path/to/articles/.search_index` every time you run that command. However, it will update the index selectively whenever you create, move, modify, or remove articles while the server's running.
 
@@ -88,7 +93,7 @@ TODO
 * [ ] If article path is really a folder, generate list of articles
 * [ ] Fix problem with compare (strange Unicode chars from binary to str conversion)
 * [ ] Use and update an existing search index if found
-* [ ] Add Google Analytics
+* [X] Add Google Analytics
 * [ ] Add some shortcut for search overlay
 * [ ] Fix issue with document name change (history disappears)
 * [X] Add alphabetical list of article titles
