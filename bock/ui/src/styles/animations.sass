@@ -1,20 +1,24 @@
-.fade.ng-enter
-    transition: 0.5s linear all
-    opacity: 0
+.fade-in
+    animation:fade-in 1s
+@keyframes fade-in
+    from
+        opacity:0
+    to
+        opacity:1
 
-.fade.ng-enter.ng-enter-active
-    opacity: 1
+.fade-out
+    animation:fade-out 1s
+@keyframes fade-out
+    from
+        opacity:1
+    to
+        opacity:0
 
-.modal.ng-enter
-    transition: 0.5s linear all
-    opacity: 0
+.show-progress
+    animation: loader-width 0.75s
+@keyframes loader-width
+    from
+        width :1%
+    to
+        width: 99%
 
-.modal.ng-enter.ng-enter-active
-    opacity: 1
-
-.modal.ng-leave
-    transition: 0.5s linear all
-    opacity: 1
-
-.modal.ng-leave.ng-leave-active
-    opacity: 0
