@@ -1,14 +1,28 @@
 /*
 TODO:
 
-- Pipeline with prettier
-- Pipeline with uglify
 - Fix flash of older dom state
-- Add stuff to top-level bockComponent
+- Add loading bar to top-level bockComponent
+- Versioning
+- Google Analytics
+- JSX (?)
 */
 
+// Don't need the whole darn thing to highlight just Markdown. Let
+// Webpack's tree-shaking remove all other unnecessary syntaxes.
+// https://bjacobel.com/2016/12/04/highlight-bundle-size
+import hljs from 'highlight.js/lib/highlight';
+import markdown from 'highlight.js/lib/languages/markdown';
+import m from 'mithril';
+import Diff2Html from 'diff2html';
+import 'diff2html/src/ui/css/diff2html.css';
+import './styles/Bock.sass';
+
+hljs.registerLanguage('markdown', markdown);
+
 const version = '2.0.0';
-const upstreamAPI = 'http://wiki.nikhil.io/api';
+
+const upstreamAPI = '/api';
 
 // Why is this not in the standard lib?
 const monthNames = [
@@ -188,10 +202,8 @@ const searchModalComponent = {
   view: () => m(modalState.hidden ? '#search-overlay.hide' : '#search-overlay', [
     m('#search-form', [
       m('h1', [m('i.ion-search', ' '), 'Search']),
-      m(
-        'form',
-        { onsubmit: searchModalComponent.search },
-        m('input#search-term', { type: 'text', autoFocus: 'auto-focus' }),
+      m('form', { onsubmit: searchModalComponent.search },
+        m('input#search-term', { type: 'text', autoFocus: 'auto-focus' })
       ),
       m('a', [
         m('i.ion-ios-close-outline', { onclick: () => { modalState.toggle(); } }, null),
@@ -274,7 +286,6 @@ const navigationComponent = {
 
     // Logic to push raw and revision nav links
     if (routeChunks[1] !== 'search' && routeChunks[1] !== 'articles' && routeChunks[1] !== 'compare') {
-
       // Don't want to show revisions link on revisions page
       if (routeChunks.length === 3 && routeChunks.includes('revisions')) {
         navItemsList.push([`/${routeChunks[1]}`, 'Original Article', 'ion-ios-paper-outline', null, {}]);
@@ -314,11 +325,11 @@ const navigationComponent = {
               [
                 m('i', { class: item[2] }),
                 m('span', item[1]),
-              ],
-            ), // a
+              ]
+            ) // a
           )
-        )
-      ]), // ul
+        ),
+      ]) // ul
     ); // nav
   }, // view
 };
@@ -336,16 +347,14 @@ const footerComponent = {
 
     return m(
       'footer',
-      m(
-        'p',
-        [
+      m('p', [
           m('span', timestampInfo),
           m('br'),
           m('a', { href: 'https://nikhil.io' }, 'Nikhil Anand'),
           m('i.ion-more', m.trust('&nbsp;&nbsp;')),
           m('a', { href: 'https://github.com/afreeorange/bock' }, [m('i.ion-beer'), m.trust(` v${version}`)]),
-        ],
-      ),
+        ]
+      )
     );
   },
 };
@@ -414,9 +423,12 @@ const articleComponent = {
       m(
         articleWrapper,
         [
-          m('h1', Articles.current.title),
+          m('h1', [
+            Articles.current.title,
+            Articles.current.uncommitted ? m('i.ion-edit.red') : null
+          ]),
           articleContentComponent,
-        ],
+        ]
       ),
       m(footerComponent, articleTimestamp),
     ]);
@@ -468,7 +480,7 @@ const articleListComponent = {
                 */
                 m('li', [
                   m('a', { href: `/${underscoreTitle(article.title)}`, oncreate: m.route.link }, article.title),
-                  article.uncommitted ? m('i.ion-edit') : null,
+                  article.uncommitted ? m('i.ion-edit.red') : null,
                 ])), // end inner map
             ]),
           ])), // end outer map
@@ -485,8 +497,8 @@ const compareComponent = {
 
   // TODO: Fix this; does it have to be onupdate?
   onupdate: () => {
-    document.getElementById('line-compare').innerHTML = Diff2Html.getPrettyHtml(Articles.comparisonDiff);
-    document.getElementById('side-compare').innerHTML = Diff2Html.getPrettyHtml(Articles.comparisonDiff, { outputFormat: 'side-by-side' });
+    document.getElementById('line-compare').innerHTML = Diff2Html.Diff2Html.getPrettyHtml(Articles.comparisonDiff);
+    document.getElementById('side-compare').innerHTML = Diff2Html.Diff2Html.getPrettyHtml(Articles.comparisonDiff, { outputFormat: 'side-by-side' });
   },
 
   view: vnode => m(bockComponent, [
@@ -518,10 +530,12 @@ const revisionListComponent = {
   onupdate: () => {
     // Enable the compare submission button only if there
     // are exactly two revisions selected
-    if (Articles.revisionComparisons.length === 2) {
-      document.getElementsByTagName('button')[0].disabled = false;
-    } else {
-      document.getElementsByTagName('button')[0].disabled = true;
+    if (Articles.revisionComparisons.length > 1) {
+      if (Articles.revisionComparisons.length === 2) {
+        document.getElementsByTagName('button')[0].disabled = false;
+      } else {
+        document.getElementsByTagName('button')[0].disabled = true;
+      }
     }
   },
 
@@ -544,17 +558,16 @@ const revisionListComponent = {
             m('i.ion-ios-clock-outline', ' '),
             m('span', `${revision.committed_humanized}, at ${formatTimestamp(revision.committed)}`),
           ]),
-        ]), // label
+        ]) // label
       )); // Articles.revisions.map
 
     return m(bockComponent, [
       m(navigationComponent),
       m('#revisions', [
         m('h1', deUnderscoreTitle(vnode.key)),
-        m('#revision-list', [
-          revisionRows,
-        ]),
-        m('button', { type: 'Submit', disabled: true, onclick: revisionListComponent.submitRevisions }, 'Compare Revisions'),
+        Articles.revisions.length === 1 ? m('h2#single-version', 'This article has just one version') : null,
+        m('#revision-list', [revisionRows]),
+        Articles.revisions.length > 1 ? m('button', { type: 'Submit', disabled: true, onclick: revisionListComponent.submitRevisions }, 'Compare Revisions') : null,
       ]),
       m(footerComponent),
     ]); // bockComponent
@@ -606,7 +619,7 @@ const searchResultsComponent = {
   },
 };
 
-// m.route.prefix('')
+m.route.prefix('')
 m.route(document.getElementById('container'), '/Home', {
   '/articles': {
     render: () => {
@@ -663,4 +676,3 @@ m.route(document.getElementById('container'), '/Home', {
     },
   },
 });
-

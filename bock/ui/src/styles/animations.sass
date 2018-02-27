@@ -1,24 +1,33 @@
 .fade-in
-    animation:fade-in 1s
+    animation: fade-in 1s
+
 @keyframes fade-in
     from
-        opacity:0
+        opacity: 0
     to
-        opacity:1
+        opacity: 1
 
 .fade-out
-    animation:fade-out 1s
+    animation: fade-out 1s
+
 @keyframes fade-out
     from
-        opacity:1
+        opacity: 1
     to
-        opacity:0
+        opacity: 0
 
 .show-progress
     animation: loader-width 0.75s
+
 @keyframes loader-width
     from
-        width :1%
+        width: 1%
     to
         width: 99%
 
+#loading
+    width: 0
+    height: 8px
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAASUlEQVQoU3XPwQ0AIAgEwaMm7b8CrQkjBoIn+lwmQQT0tEFlQrhfYSMHjAMGGgr0kzO24igPuEmFfH3eYrD6POPnOr42jvsNuC+zTx02YUSozwAAAABJRU5ErkJggg==)
+    position: absolute
+    top: 0
