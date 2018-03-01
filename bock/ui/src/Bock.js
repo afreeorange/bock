@@ -16,11 +16,10 @@ import m from 'mithril';
 import Diff2Html from 'diff2html';
 import 'diff2html/src/ui/css/diff2html.css';
 import Analytics from 'universal-ga';
-import packageInfo from '../package.json';
 import './styles/Bock.sass';
 
-// const upstreamAPI = '/api';
-const upstreamAPI = 'http://wiki.nikhil.io/api';
+const version = '2.0.1';
+const upstreamAPI = '/api';
 
 // Set up Google Analytics
 const googleAnalyticsToken = process.env.WIKI_GA_TOKEN;
@@ -362,7 +361,7 @@ const footerComponent = {
         m('br'),
         m('a', { href: 'https://nikhil.io' }, 'Nikhil Anand'),
         m('i.ion-more', m.trust('&nbsp;&nbsp;')),
-        m('a', { href: 'https://github.com/afreeorange/bock' }, [m('i.ion-beer'), m.trust(` v${packageInfo.version}`)]),
+        m('a', { href: 'https://github.com/afreeorange/bock' }, [m('i.ion-beer'), m.trust(` v${version}`)]),
       ]),
     );
   },
