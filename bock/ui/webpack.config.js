@@ -4,6 +4,7 @@ const HTMLPlugin = require("html-webpack-plugin")
 const path = require("path")
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 const webpack = require("webpack")
+const packageInfo = require("./package.json")
 
 const outputFolder = "cached_dist"
 
@@ -22,10 +23,11 @@ const BockTemplate = new HTMLPlugin({
     removeEmptyAttributes: true,
   },
 })
-const environmentVariables = new webpack.DefinePlugin({
+const variables = new webpack.DefinePlugin({
   'process.env': {
     'WIKI_GA_TOKEN': JSON.stringify(process.env.WIKI_GA_TOKEN),
-  }
+  },
+  'projectVersion': JSON.stringify(packageInfo.version)
 })
 
 module.exports = {
@@ -94,7 +96,7 @@ module.exports = {
     CleanOutputs,
     BockCSS,
     BockTemplate,
-    environmentVariables,
+    variables,
     new UglifyJsPlugin(),
   ],
   devServer: {

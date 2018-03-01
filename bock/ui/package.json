@@ -1,6 +1,6 @@
 {
   "name": "wiki.nikhil.io.ui",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "Web interface to my wiki",
   "main": "Bock.js",
   "repository": {
