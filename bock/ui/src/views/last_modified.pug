@@ -1,7 +1,0 @@
-time.last-modified(
-    ng-show="$state.is('article') || $state.is('article.raw')"
-) Last modified {{ ac.articleData.modified_humanized }}, at {{ ac.articleData.modified | readableTimestamp }} 
-
-time.last-committed(
-    ng-show="$state.is('article.revisionList.revision') || $state.is('article.revisionList.revision.raw')"
-) Committed {{ rc.revision.committed_humanized }} at {{ rc.revision.committed | readableTimestamp }} 

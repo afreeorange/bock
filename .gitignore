@@ -90,3 +90,4 @@ ENV/
 
 # Miscellaneous
 .search_index
+.sass-cache
