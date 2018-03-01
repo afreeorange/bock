@@ -3,7 +3,6 @@ TODO:
 
 - Fix flash of older dom state
 - Add loading bar to top-level bockComponent
-- Versioning
 - JSX (?)
 */
 
@@ -18,7 +17,6 @@ import 'diff2html/src/ui/css/diff2html.css';
 import Analytics from 'universal-ga';
 import './styles/Bock.sass';
 
-const version = '2.0.1';
 const upstreamAPI = '/api';
 
 // Set up Google Analytics
@@ -361,7 +359,7 @@ const footerComponent = {
         m('br'),
         m('a', { href: 'https://nikhil.io' }, 'Nikhil Anand'),
         m('i.ion-more', m.trust('&nbsp;&nbsp;')),
-        m('a', { href: 'https://github.com/afreeorange/bock' }, [m('i.ion-beer'), m.trust(` v${version}`)]),
+        m('a', { href: 'https://github.com/afreeorange/bock' }, [m('i.ion-beer'), m.trust(` v${projectVersion}`)]),
       ]),
     );
   },
