@@ -1,8 +1,8 @@
 {
   "name": "wiki.nikhil.io.ui",
-  "version": "2.0.0",
+  "version": "1.8.1",
   "description": "Web interface to my wiki",
-  "main": "index.js",
+  "main": "Bock.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/afreeorange/bock.git"
@@ -28,6 +28,7 @@
     "@babel/preset-env": "^7.0.0-beta.40",
     "babel-eslint": "^8.2.2",
     "babel-loader": "^8.0.0-beta.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
     "base64-font-loader": "0.0.4",
     "clean-webpack-plugin": "^0.1.18",
     "css-loader": "^0.28.9",
@@ -49,6 +50,7 @@
   "dependencies": {
     "diff2html": "^2.3.3",
     "highlight.js": "^9.12.0",
-    "mithril": "^1.1.6"
+    "mithril": "^1.1.6",
+    "universal-ga": "^1.2.0"
   }
 }

@@ -22,6 +22,11 @@ const BockTemplate = new HTMLPlugin({
     removeEmptyAttributes: true,
   },
 })
+const environmentVariables = new webpack.DefinePlugin({
+  'process.env': {
+    'WIKI_GA_TOKEN': JSON.stringify(process.env.WIKI_GA_TOKEN),
+  }
+})
 
 module.exports = {
   entry: [
@@ -42,7 +47,10 @@ module.exports = {
           {
             loader: "babel-loader",
             options: {
-              presets: ["@babel/preset-env"]
+              presets: ["@babel/preset-env"],
+              plugins: [
+                ["transform-react-jsx", { "pragma": "m" }]
+              ]
             }
           },
           {
@@ -86,6 +94,7 @@ module.exports = {
     CleanOutputs,
     BockCSS,
     BockTemplate,
+    environmentVariables,
     new UglifyJsPlugin(),
   ],
   devServer: {
@@ -94,4 +103,3 @@ module.exports = {
     port: 9000,
   }
 }
-

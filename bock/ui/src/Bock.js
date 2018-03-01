@@ -4,7 +4,6 @@ TODO:
 - Fix flash of older dom state
 - Add loading bar to top-level bockComponent
 - Versioning
-- Google Analytics
 - JSX (?)
 */
 
@@ -16,13 +15,20 @@ import markdown from 'highlight.js/lib/languages/markdown';
 import m from 'mithril';
 import Diff2Html from 'diff2html';
 import 'diff2html/src/ui/css/diff2html.css';
+import Analytics from 'universal-ga';
+import packageInfo from '../package.json';
 import './styles/Bock.sass';
 
+// const upstreamAPI = '/api';
+const upstreamAPI = 'http://wiki.nikhil.io/api';
+
+// Set up Google Analytics
+const googleAnalyticsToken = process.env.WIKI_GA_TOKEN;
+Analytics.initialize(googleAnalyticsToken);
+Analytics.pageview('/');
+
+// Register Highlight.js syntax
 hljs.registerLanguage('markdown', markdown);
-
-const version = '2.0.0';
-
-const upstreamAPI = '/api';
 
 // Why is this not in the standard lib?
 const monthNames = [
@@ -71,6 +77,7 @@ const deUnderscoreTitle = title => title.replace(/_/g, ' ');
 // Article model
 const Articles = {
   current: {}, // For simplicity, store both the article and the revision in this key
+  error: false,
 
   getOne: key => m.request({
     method: 'GET',
@@ -78,6 +85,8 @@ const Articles = {
   }).then((response) => {
     Articles.current = response;
     return response;
+  }).catch(() => {
+    Articles.error = true;
   }),
 
   list: [], // I don't mutate this.
@@ -202,8 +211,9 @@ const searchModalComponent = {
   view: () => m(modalState.hidden ? '#search-overlay.hide' : '#search-overlay', [
     m('#search-form', [
       m('h1', [m('i.ion-search', ' '), 'Search']),
-      m('form', { onsubmit: searchModalComponent.search },
-        m('input#search-term', { type: 'text', autoFocus: 'auto-focus' })
+      m('form',
+        { onsubmit: searchModalComponent.search },
+        m('input#search-term', { type: 'text', autoFocus: 'auto-focus' }),
       ),
       m('a', [
         m('i.ion-ios-close-outline', { onclick: () => { modalState.toggle(); } }, null),
@@ -325,11 +335,11 @@ const navigationComponent = {
               [
                 m('i', { class: item[2] }),
                 m('span', item[1]),
-              ]
-            ) // a
-          )
+              ],
+            ), // a
+          ),
         ),
-      ]) // ul
+      ]), // ul
     ); // nav
   }, // view
 };
@@ -348,13 +358,12 @@ const footerComponent = {
     return m(
       'footer',
       m('p', [
-          m('span', timestampInfo),
-          m('br'),
-          m('a', { href: 'https://nikhil.io' }, 'Nikhil Anand'),
-          m('i.ion-more', m.trust('&nbsp;&nbsp;')),
-          m('a', { href: 'https://github.com/afreeorange/bock' }, [m('i.ion-beer'), m.trust(` v${version}`)]),
-        ]
-      )
+        m('span', timestampInfo),
+        m('br'),
+        m('a', { href: 'https://nikhil.io' }, 'Nikhil Anand'),
+        m('i.ion-more', m.trust('&nbsp;&nbsp;')),
+        m('a', { href: 'https://github.com/afreeorange/bock' }, [m('i.ion-beer'), m.trust(` v${packageInfo.version}`)]),
+      ]),
     );
   },
 };
@@ -384,6 +393,10 @@ const articleComponent = {
   onupdate: () => {
     if (m.route.get().split('/').includes('raw')) {
       hljs.highlightBlock(document.getElementsByClassName('markdown')[0]);
+    }
+
+    if (Articles.error === true) {
+      m.route.set('/oops');
     }
   },
 
@@ -425,10 +438,10 @@ const articleComponent = {
         [
           m('h1', [
             Articles.current.title,
-            Articles.current.uncommitted ? m('i.ion-edit.red') : null
+            Articles.current.uncommitted ? m('i.ion-edit.red') : null,
           ]),
           articleContentComponent,
-        ]
+        ],
       ),
       m(footerComponent, articleTimestamp),
     ]);
@@ -543,8 +556,7 @@ const revisionListComponent = {
     const route = m.route.get();
 
     const revisionRows = Articles.revisions.map(revision =>
-      m(
-        '.revision-row',
+      m('.revision-row',
         m('label', { for: `revision-${revision.id}` }, [
           m('input', { type: 'checkbox', id: `revision-${revision.id}`, onchange: Articles.collectRevisionComparisons }),
           m('.link', [
@@ -558,8 +570,9 @@ const revisionListComponent = {
             m('i.ion-ios-clock-outline', ' '),
             m('span', `${revision.committed_humanized}, at ${formatTimestamp(revision.committed)}`),
           ]),
-        ]) // label
-      )); // Articles.revisions.map
+        ]), // label
+      ),
+    ); // Articles.revisions.map
 
     return m(bockComponent, [
       m(navigationComponent),
@@ -619,7 +632,19 @@ const searchResultsComponent = {
   },
 };
 
-m.route.prefix('')
+const errorComponent = {
+  view: () => m('#error',
+    m('h1', [
+      m('i.ion-sad-outline'),
+      'Uh-oh',
+      m('small', 'I could not find that'),
+    ],
+    ),
+  ),
+};
+
+/* Set up routing */
+m.route.prefix('');
 m.route(document.getElementById('container'), '/Home', {
   '/articles': {
     render: () => {
@@ -637,6 +662,12 @@ m.route(document.getElementById('container'), '/Home', {
     render: () => {
       document.title = 'Random Articles...';
       return m(randomArticleComponent);
+    },
+  },
+  '/oops': {
+    render: () => {
+      document.title = 'Oops';
+      return m(errorComponent);
     },
   },
   '/:key': {
