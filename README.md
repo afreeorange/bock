@@ -16,7 +16,7 @@ There's a Docker option too. See "Usage".
 
 [Create a webhook](https://developer.github.com/webhooks/creating/) that pushes "everything" to
 
-    http://server/api/refresh_articles
+    http://{server}/api/refresh_articles
 
 On the server, and before you deploy, set an environment variable called `BOCK_GITHUB_KEY` with the secret key you configured for the webhook.
 
@@ -25,13 +25,12 @@ Usage
 
 In a git repository full of Markdown articles, run `bock`. This will start a server on port 8000. To set a different path,
 
+    # Equivalent commands
     bock --article-path /path/to/articles
-
-    # This works too
     bock -a /path/to/articles
 
     # Or if using Docker
-    docker run -v /path/to/articles:/articles -p 8000:8000 afreeorange/bock
+    docker run -v /path/to/articles:/articles -p 8000:8000 259614114414.dkr.ecr.us-east-1.amazonaws.com/bock
 
 As of now, this will regenerate a full index in `/path/to/articles/.search_index` every time you run that command. However, it will update the index selectively whenever you create, move, modify, or remove articles while the server's running.
 
@@ -57,39 +56,23 @@ export DEBUG=true && gunicorn bock:instance --reload
 ### UI
 
 ```bash
-# In the "ui" folder
-gulp serve
+# In the "ui" folder, install dependencies
+npm install
+
+# Start a live-reloading server on localhost:9000
+npm start
+
+# Build
+npm run build
 ```
 
-Connect to `localhost:3000` for BrowserSync awesomeness. The Google Analytics token is set via an env var called `GA_TOKEN`
-
-### UI Router
-
-Turns slashes into `~2F`. v0.2.11 doesn't do this but has a host of other problems. The strangest one is how [UI Router's `$state` is empty](https://github.com/angular-ui/ui-router/issues/1627) when I have article paths with slashes.
-
-Other pertinent issues:
-
-* https://github.com/angular-ui/ui-router/issues/2551
-* https://github.com/angular-ui/ui-router/issues/1119
-* https://github.com/angular-ui/ui-router/issues/1670
-
-Another issue is that UI Router 'swallows' query params in nested states. In this snippet, and when you navigate to `article.raw`, you don't see `?raw` in the URI :/
-
-```javascript
-.state('article') {
-    url: '/:articleID'
-}
-.state('article.raw') {
-    url: '?raw'
-}
-```
+The Google Analytics token is set via an env var called `BOCK_GA_TOKEN `
 
 TODO
 ----
 
 * [ ] Write and finish tests for UI
 * [ ] Write and finish tests for API
-* [ ] Fix routing with "/" problem in Angular (only works in Chrome, not Safari or FF)
 * [ ] If article path is really a folder, generate list of articles
 * [ ] Fix problem with compare (strange Unicode chars from binary to str conversion)
 * [ ] Use and update an existing search index if found
@@ -98,9 +81,9 @@ TODO
 * [ ] Fix issue with document name change (history disappears)
 * [X] Add alphabetical list of article titles
 * [ ] Add caching (?)
-* [ ] Add syntax highlighting for raw Markdown view ([highlight.js](https://highlightjs.org)?)
+* [x] Add syntax highlighting for raw Markdown view
 * [X] Fix ToC bottom border (shouldn't be the same as title)
-* [ ] Move to ES6 and Webpack
+* [X] Move to ES6 and Webpack
 * [X] Fix issue with Compare view where it incorrectly shows "renamed" (issue due to spaces in title.)
 * [ ] Add 'Recent Activity'to /Home
 
@@ -109,7 +92,6 @@ Notes
 
 ### Miscellaneous
 
-* `/` is used for article namespaces. However, due to issues with UI Router, slashes are turned into `~2F`. I've given up on trying to fix this.
 * `_` is not allowed in titles.
 * Files/attachments go in `_files`.
 * `.md` is the only valid extension for Markdown files.
@@ -117,9 +99,9 @@ Notes
 * Headings go up to `<h4>`.
 * List items go three levels deep.
 
-Based on [RFC 2396](http://www.ietf.org/rfc/rfc2396.txt):
+### [RFC 2396](http://www.ietf.org/rfc/rfc2396.txt)
 
-### Reserved Characters
+#### Reserved Characters
 
 `; / ? : @ & = + $ ,`
 
@@ -128,13 +110,13 @@ Based on [RFC 2396](http://www.ietf.org/rfc/rfc2396.txt):
 * `?` does not work
 * Everything else does
 
-### Unreserved Characters
+#### Unreserved Characters
 
 `- _ . ! ~ * ' ( )`
 
 * All of these work, with the exception of `_` (which, in this app, is used for pretty URLs)
 
-### 'Unwise' Characters
+#### 'Unwise' Characters
 
 `{ } | \ ^ [ ] ` `
 
@@ -142,7 +124,7 @@ Based on [RFC 2396](http://www.ietf.org/rfc/rfc2396.txt):
 * `\` messes up `os.path`.
 * The rest get encoded.
 
-### Excluded Set
+#### Excluded Set
 
 `< > # % "` and space
 
