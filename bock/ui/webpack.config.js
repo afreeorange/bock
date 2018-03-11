@@ -34,7 +34,7 @@ const BockTemplate = new HTMLPlugin({
 });
 const variables = new webpack.DefinePlugin({
   'process.env': {
-    WIKI_GA_TOKEN: JSON.stringify(process.env.WIKI_GA_TOKEN),
+    BOCK_GA_TOKEN: JSON.stringify(process.env.BOCK_GA_TOKEN),
   },
   projectVersion: JSON.stringify(packageInfo.version),
 });
