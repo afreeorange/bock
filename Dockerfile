@@ -3,7 +3,7 @@ MAINTAINER Nikhil Anand <mail@nikhil.io>
 
 RUN apk update \
     && apk add --no-cache git \
-    && pip install git+https://github.com/afreeorange/bock.git \
+    && pip install -U git+https://github.com/afreeorange/bock.git \
     && find /usr/local \
        \( -type d -a -name test -o -name tests \) \
        -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
