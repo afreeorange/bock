@@ -4,6 +4,7 @@ TODO:
 - Fix flash of older dom state
 - Add loading bar to top-level bockComponent
 - JSX (?)
+- I should probably split this into modules...
 */
 
 // Don't need the whole darn thing to highlight just Markdown. Let
@@ -665,6 +666,16 @@ m.route(document.getElementById('container'), '/Home', {
     render: () => {
       document.title = 'Oops';
       return m(errorComponent);
+    },
+  },
+  '/images/:filename': {
+    render: (vnode) => {
+      return window.open(`${upstreamAPI}/images/${vnode.attrs.filename}`);
+    },
+  },
+  '/files/:filename': {
+    render: (vnode) => {
+      return window.open(`${upstreamAPI}/files/${vnode.attrs.filename}`);
     },
   },
   '/:key': {

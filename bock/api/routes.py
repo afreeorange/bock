@@ -21,7 +21,7 @@ def __send_a_file(filename, type='file'):
     in the article repository.
     """
     file_path = '{}/_{}s/{}'.format(
-        ca.config['bock_core'],
+        ca.config['articles_path'],
         type,
         filename
     )
@@ -36,7 +36,7 @@ def __send_a_file(filename, type='file'):
 def image(filename):
     """Serve a file from the `_images` folder
     """
-    return __send_a_file(filename)
+    return __send_a_file(filename, type='image')
 
 
 @api_blueprint.route('/files/<path:filename>')

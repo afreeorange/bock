@@ -15,7 +15,8 @@
   "homepage": "https://github.com/afreeorange/bock/blob/master/README.md",
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.js",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch"
   },
   "keywords": [
     "wiki",
