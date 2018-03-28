@@ -1,7 +1,11 @@
 bock :beer:
 ===========
 
-A Python-based attempt at a [quick personal wiki][wiki_link]. [These][realms_wiki] wikis [exist][gollum] but aren't the way I'd like them. I write stuff, push to [this repo][article_repo] which triggers a webhook to pull on my server. This project makes my Markdown articles all pretty and searchable.
+A Python-based attempt at a [quick Markdown-based personal wiki][wiki_link] with a 'modern' responsive frontend based on [MithrilJS][mithril].
+
+Other [such][realms_wiki] [wikis][gollum] exist but aren't the way I'd like them.
+
+I write my articles and [push them to Github][article_repo]. This triggers a webhook to pull the changes onto my server. This project makes my articles all pretty, searchable, and Time-Machine-able 😍
 
 Installation
 ------------
@@ -12,25 +16,30 @@ In a virtualenv
 
 There's a Docker option too. See "Usage".
 
-### GitHub Push
+### Environment Variables
 
-[Create a webhook](https://developer.github.com/webhooks/creating/) that pushes "everything" to
+* `BOCK_GA_TOKEN` - The Google Analytics token. I use it to build a cached version of the SPA in `bock/ui`.
+* `BOCK_GITHUB_KEY` - The Github webhook's secret key.
+
+### Webhook
+
+I have [a webhook](https://developer.github.com/webhooks/creating/) that pushes everything to
 
     http://{server}/api/refresh_articles
-
-On the server, and before you deploy, set an environment variable called `BOCK_GITHUB_KEY` with the secret key you configured for the webhook.
 
 Usage
 -----
 
 In a git repository full of Markdown articles, run `bock`. This will start a server on port 8000. To set a different path,
 
-    # Equivalent commands
-    bock --article-path /path/to/articles
-    bock -a /path/to/articles
+```bash
+# Equivalent commands
+bock --article-path /path/to/articles
+bock -a /path/to/articles
 
-    # Or if using Docker
-    docker run -v /path/to/articles:/articles -p 8000:8000 259614114414.dkr.ecr.us-east-1.amazonaws.com/bock
+# Or if using Docker
+docker run -v /path/to/articles:/articles -p 8000:8000 afreeorange/bock
+```
 
 As of now, this will regenerate a full index in `/path/to/articles/.search_index` every time you run that command. However, it will update the index selectively whenever you create, move, modify, or remove articles while the server's running.
 
@@ -65,8 +74,6 @@ npm start
 # Build
 npm run build
 ```
-
-The Google Analytics token is set via an env var called `BOCK_GA_TOKEN `
 
 TODO
 ----
@@ -134,3 +141,4 @@ Notes
 [gollum]: https://github.com/gollum/gollum
 [article_repo]: https://github.com/afreeorange/wiki.nikhil.io.articles
 [wiki_link]: http://wiki.nikhil.io
+[mithril]: https://mithril.js.org
