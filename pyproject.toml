@@ -22,12 +22,10 @@ keywords = [
     "react"
 ]
 include = [
-    "README.md",
-    "LICENSE",
     "bock/ui/cached_dist/**/*"
 ]
 exclude = [
-    "bock/ui/cached_dist/src"
+    "bock/ui/README.md"
 ]
 
 [tool.poetry.scripts]

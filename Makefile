@@ -21,3 +21,6 @@ build: clean
 	@# Copy built assets over
 	mkdir bock/ui/cached_dist
 	cp -rv ui/build/ bock/ui/cached_dist
+
+	@# Build the package!
+	poetry build
