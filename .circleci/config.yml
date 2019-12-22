@@ -1,0 +1,29 @@
+# https://circleci.com/docs/2.0/language-javascript
+
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: afreeorange/build:latest
+    steps:
+      - checkout
+
+      # Download and cache dependencies. Use the latest cache
+      # if no exact match is found.
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run:
+          name: Installing dependencies
+          command: yarn
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Building the site
+          command: yarn build

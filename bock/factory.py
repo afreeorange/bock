@@ -1,12 +1,10 @@
-import logging
 import os
 import sys
 
 from .lib import BockCore
+from .logger import logger
 from flask import Flask
 from git import InvalidGitRepositoryError, NoSuchPathError
-
-logger = logging.getLogger(__name__)
 
 
 def create_wiki(articles_path=None, debug=False):

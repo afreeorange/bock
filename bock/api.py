@@ -3,9 +3,9 @@ import hmac
 import os
 import random
 
-from . import api_blueprint
 from flask import (
     abort,
+    Blueprint,
     current_app as ca,
     redirect,
     jsonify,
@@ -14,6 +14,8 @@ from flask import (
     url_for,
     send_file,
 )
+
+api_blueprint = Blueprint('api_blueprint', __name__)
 
 
 def __send_a_file(filename, type='file'):

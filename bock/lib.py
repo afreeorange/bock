@@ -152,6 +152,7 @@ class BockCore():
             )
             for _ in
             glob('{}/**/*.md'.format(self.articles_path))
+            if "node_modules" not in _
         ])
 
     @property
