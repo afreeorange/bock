@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bock"
-version = "2.1.0"
+version = "2.2.0"
 description = "A Markdown-based personal wiki in Python and React"
 authors = ["Nikhil Anand <mail@nikhil.io>"]
 license = "MIT"
