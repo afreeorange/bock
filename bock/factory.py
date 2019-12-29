@@ -4,6 +4,7 @@ import sys
 
 from .lib import BockCore
 from flask import Flask
+from flask_cors import CORS
 from git import InvalidGitRepositoryError, NoSuchPathError
 
 logger = logging.getLogger(__name__)
@@ -12,6 +13,8 @@ logger = logging.getLogger(__name__)
 def create_wiki(articles_path=None, debug=False):
     app = Flask(__name__)
     app.debug = debug
+
+    CORS(app)
 
     app.config['articles_path'] = articles_path if articles_path \
         else os.path.abspath(os.path.curdir)

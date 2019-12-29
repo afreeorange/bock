@@ -137,8 +137,14 @@ Notes
 
 * But space is okay since it gets turned into underscore in the Angular app (it's in its encoded form in the API.)
 
+License
+-------
+
+MIT
+
 [realms_wiki]: https://github.com/scragg0x/realms-wiki
 [gollum]: https://github.com/gollum/gollum
 [article_repo]: https://github.com/afreeorange/wiki.nikhil.io.articles
 [wiki_link]: http://wiki.nikhil.io
 [mithril]: https://mithril.js.org
+
