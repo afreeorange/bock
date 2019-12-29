@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Note: this clobbers any older releases with the same version...
+
+export VERSION=$(make version)
+export RELEASE_ARTIFACT="dist/wsi_api-${VERSION}-py3-none-any.whl"
+
+echo "Releasing to GitHub"
+ghr \
+    -t "$GITHUB_TOKEN" \
+    -u "$CIRCLE_PROJECT_USERNAME" \
+    -r "$CIRCLE_PROJECT_REPONAME" \
+    -c "$CIRCLE_SHA1" \
+    -delete "$VERSION" \
+    "$RELEASE_ARTIFACT"
+
+echo "Cleaning up"
+make clean

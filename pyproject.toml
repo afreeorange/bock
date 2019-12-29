@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "bock"
+version = "2.1.0"
+description = "A Markdown-based personal wiki in Python and React"
+authors = ["Nikhil Anand <mail@nikhil.io>"]
+license = "MIT"
+readme = "README.md"
+homepage = "http://wiki.nikhil.io"
+repository = "https://github.com/afreeorange/bock"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Utilities",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7"
+]
+keywords = [
+    "wiki",
+    "markdown",
+    "flask",
+    "react"
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+flask = "^1.1"
+gunicorn = "^20.0"
+click = "^7.0"
+pendulum = "^2.0"
+gitpython = "^3.0"
+
+[tool.poetry.dev-dependencies]
+bump2version = "^0.5.11"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
