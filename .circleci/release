@@ -2,8 +2,8 @@
 
 # Note: this clobbers any older releases with the same version...
 
-export VERSION=$(make version)
-export RELEASE_ARTIFACT="dist/wsi_api-${VERSION}-py3-none-any.whl"
+VERSION=$(make version)
+RELEASE_ARTIFACT="dist/bock-${VERSION}-py3-none-any.whl"
 
 echo "Releasing to GitHub"
 ghr \

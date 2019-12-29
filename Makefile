@@ -29,3 +29,7 @@ build: clean
 	@# Build!
 	poetry build
 
+
+.PHONY: version
+version:
+	poetry version | cut -d" " -f2
