@@ -9,13 +9,29 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "bock-ui/package.json" }}
-            - v1-dependencies-
+            - node-dependencies-{{ checksum "bock-ui/package.json" }}
+            - node-dependencies-
+
+      - restore_cache:
+          keys:
+            - python-dependencies-{{ checksum "poetry.lock" }}
+            - python-dependencies-
+
+      - run:
+          name: Install Dependencies
+          command: |
+            poetry install
+            cd bock-ui && npm install
 
       - save_cache:
           paths:
             - bock-ui/node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: node-dependencies-{{ checksum "bock-ui/package.json" }}
+
+      - save_cache:
+          paths:
+            - /home/circleci/.cache/pypoetry/virtualenvs
+          key: python-dependencies-{{ checksum "poetry.lock" }}
 
       - run:
           name: Building package
