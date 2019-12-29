@@ -32,4 +32,4 @@ build: clean
 
 .PHONY: version
 version:
-	poetry version | cut -d" " -f2
+	@poetry version | cut -d" " -f2
