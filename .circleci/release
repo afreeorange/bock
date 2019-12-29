@@ -2,7 +2,7 @@
 
 # Note: this clobbers any older releases with the same version.
 
-if [[ ! -v "$GITHUB_TOKEN" ]]; then
+if [[ -z "$GITHUB_TOKEN" ]]; then
     echo "GITHUB_TOKEN is not set. Aborting."
     exit 1
 fi
