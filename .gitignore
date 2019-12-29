@@ -1,6 +1,6 @@
 # Custom
 .search_index
-bock/ui/cached_dist
+bock-ui/cached_dist
 
 # Common. Via:
 # https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore
