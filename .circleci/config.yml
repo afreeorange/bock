@@ -40,35 +40,6 @@ jobs:
             git config user.name "CircleCI Builder"
             make build
 
-      - persist_to_workspace:
-          root: ./
-          paths: ./*
-
-  github-release:
-    docker:
-      - image: afreeorange/build:latest
-    steps:
-      - attach_workspace:
-          at: ./
       - run:
           name: Releasing to GitHub
           command: /bin/bash ./.circleci/release
-
-  # aws-deploy:
-  #   docker:
-  #     - image: afreeorange/build:latest
-  #   steps:
-  #     - add_ssh_keys
-  #     - run:
-  #         name: Deploying to AWS
-  #         command: ssh -o StrictHostKeyChecking=no $AWS_USER@$AWS_HOST -p $AWS_PORT $AWS_DEPLOY_SCRIPT
-
-workflows:
-  version: 2.1
-
-  build-and-release:
-    jobs:
-      - build
-      - github-release:
-          requires:
-            - build
