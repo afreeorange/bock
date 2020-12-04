@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "diff2html": "^2.3.3",
-    "highlight.js": "^9.12.0",
+    "highlight.js": "^10.4.1",
     "mithril": "^1.1.7",
     "universal-ga": "^1.2.0"
   }
