@@ -2,7 +2,7 @@ FROM python:3-alpine
 
 COPY dist/* /tmp/
 
-ENV VERSION=3.3.0
+ENV VERSION=3.3.1
 
 RUN \
     apk add git && \
