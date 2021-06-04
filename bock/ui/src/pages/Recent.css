@@ -1,0 +1,19 @@
+.recent section {
+  margin-bottom: var(--root-spacing);
+}
+
+.recent section nav[aria-label="Breadcrumb"] {
+  font-size: medium;
+}
+
+.recent section a {
+  color: var(--color-highlight);
+  text-decoration-color: var(--color-highlight);
+}
+
+.recent section p {
+  margin: 0;
+  padding: 0;
+  color: var(--color-grey-light);
+  font-size: var(--font-size-small);
+}

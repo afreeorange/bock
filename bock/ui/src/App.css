@@ -1,0 +1,112 @@
+:root {
+  /* Measurements */
+  --border-radius: 0.25em;
+  --line-height: 1.5;
+  --max-width: 75%;
+  --root-spacing: 1em;
+
+  /* Sizes */
+  --font-size-small: small;
+
+  /* Colors */
+  --color-black: #101010;
+  --color-grey-dark: #666;
+  --color-grey-light: #ccc;
+  --color-grey-superlight: #eee;
+  --color-grey: #999;
+  --color-highlight-light: #ff6600;
+  --color-highlight: #ff3300;
+}
+
+html,
+body {
+  color: var(--color-black);
+  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
+    helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+  line-height: var(--line-height);
+}
+
+.container {
+  margin: 0 auto;
+  max-width: var(--max-width);
+}
+
+pre,
+code {
+  font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console,
+    monospace;
+  font-size: var(--font-size-small);
+}
+
+a {
+  color: var(--color-highlight);
+  text-underline-offset: 2px;
+}
+a:hover {
+  color: var(--color-highlight-light);
+}
+
+hr {
+  border: 0;
+  border-top: 1px dotted var(--color-grey-light);
+}
+
+svg {
+  vertical-align: middle;
+}
+
+/* BADGES */
+h1 > span,
+h2 > span {
+  background-color: var(--color-highlight-light);
+  border-radius: var(--border-radius);
+  color: white;
+  display: inline-flex;
+  font-size: 14px;
+  justify-content: center;
+  margin-bottom: 0.25em;
+  min-width: 1.5em;
+  padding: 0.125em 0.5em;
+  vertical-align: middle;
+}
+h1 > span + span,
+h2 > span + span {
+  margin-left: calc(var(--root-spacing) / 2);
+}
+
+/* INPUTS */
+form[role="search"] {
+  display: flex;
+}
+form[role="search"] input,
+form[role="search"] button[type="submit"] {
+  border-radius: var(--border-radius);
+  border: 0;
+  font-size: large;
+  padding: 0.25em;
+}
+form[role="search"] input {
+  border: 1px solid var(--color-grey-light);
+  width: 100%;
+}
+form[role="search"] button[type="submit"] {
+  background: var(--color-highlight);
+  border: 0;
+  color: white;
+  font-weight: bold;
+  margin-left: 1em;
+  padding: 0 0.5em;
+}
+form[role="search"] button[type="submit"]:hover {
+  background: var(--color-highlight-light);
+  cursor: pointer;
+}
+form[role="search"] button[type="submit"]:disabled {
+  background: var(--color-grey-light);
+}
+
+@media all and (max-width: 700px) {
+  :root {
+    --max-width: 95%;
+  }
+}

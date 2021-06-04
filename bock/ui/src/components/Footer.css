@@ -1,0 +1,8 @@
+footer {
+  margin: calc(var(--root-spacing) * 2) 0;
+}
+footer,
+footer a {
+  color: var(--color-grey-light);
+  font-size: var(--font-size-small);
+}

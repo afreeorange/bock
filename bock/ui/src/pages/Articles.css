@@ -1,0 +1,21 @@
+.articles > ul {
+  margin: var(--root-spacing) 0;
+  padding: 0;
+}
+.articles > ul a {
+  color: var(--color-black);
+  text-decoration: none;
+}
+.articles > ul a:hover {
+  color: var(--color-highlight);
+  text-decoration: underline;
+}
+
+.articles > ul li {
+  padding: 0.25em;
+  list-style-type: none;
+}
+.articles > ul li:nth-child(2n) {
+  border-top: 1px dotted var(--color-grey-light);
+  border-bottom: 1px dotted var(--color-grey-light);
+}
