@@ -60,6 +60,6 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/react-syntax-highlighter": "^13.5.0",
     "autoprefixer": "^9",
-    "postcss": "^7"
+    "postcss": "^8"
   }
 }
