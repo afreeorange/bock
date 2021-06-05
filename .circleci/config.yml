@@ -2,16 +2,15 @@ version: 2.1
 
 jobs:
   build-ui:
-    # working_directory: ~/project/bock/ui
     docker:
       - image: cimg/node:16.3.0
     steps:
       - checkout
 
-      # - restore_cache:
-      #     name: 🗃 Restoring package cache
-      #     keys:
-      #       - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - restore_cache:
+          name: 🗃 Restoring package cache
+          keys:
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
       # This command is for yarn v1 only! See this:
       # https://circleci.com/docs/2.0/yarn/
@@ -19,16 +18,16 @@ jobs:
       #     name: Install Dependencies
       #     command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
 
-      # - save_cache:
-      #     name: 💾 Saving package cache
-      #     key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      #     paths:
-      #       - ~/.cache/yarn
+      - save_cache:
+          name: 💾 Saving package cache
+          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/project/bock/ui/node_modules
 
       - run:
           command: |
             pwd
-            ls -l
+            ls -lA
             yarn
             yarn build
 
