@@ -92,7 +92,7 @@ jobs:
       - run:
           name: Load Docker image layer cache
           command: |
-            set +o pipefail
+            set +eo pipefail
             docker load -i /caches/app.tar || true
       - run:
           name: Build application Docker image
@@ -112,6 +112,7 @@ jobs:
           name: Push application Docker image
           command: |
             export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
+            echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USER" --password-stdin
             docker push afreeorange/bock:latest
             docker push afreeorange/"bock:$VERSION"
 
