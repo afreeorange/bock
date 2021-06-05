@@ -93,23 +93,29 @@ jobs:
           name: Load Docker image layer cache
           command: |
             set +o pipefail
-            docker load -i /caches/bock.tar | true
+            docker load -i /caches/app.tar | true
       - run:
           name: Build application Docker image
           command: |
-            docker build –cache-from=app -t app .
+            export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
+            docker build –-cache-from=app -t afreeorange/bock:latest .
+            docker build –-cache-from=app -t afreeorange/"bock:$VERSION" .
       - run:
           name: Save Docker image layer cache
           command: |
             mkdir -p /caches
-            docker save -o /caches/bock.tar app
+            docker save -o /caches/app.tar app
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
-            - /caches/bock.tar
+            - /caches/app.tar
       - deploy:
           name: Push application Docker image
-          command: .scripts/deploy-docker
+          command: |
+            export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
+            docker push afreeorange/bock:latest
+            docker push afreeorange/"bock:$VERSION"
+
 
 workflows:
   version: 2
