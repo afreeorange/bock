@@ -27,28 +27,30 @@ jobs:
             - ~/project/bock/ui/node_modules
 
       - run:
-          command: yarn build
+          command: |
+            ls -lA bock/ui/
+            yarn build
 
       - persist_to_workspace:
           root: .
           paths:
             - .
 
-  build-api:
-    docker:
-      - image: cimg/python:3.9.5
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          command: |
-            ls -lA bock/ui/
+  # build-api:
+  #   docker:
+  #     - image: cimg/python:3.9.5
+  #   steps:
+  #     - attach_workspace:
+  #         at: .
+  #     - run:
+  #         command: |
+  #           ls -lA bock/ui/
 
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build-ui
-      - build-api:
-          requires:
-            - build-ui
+      # - build-api:
+      #     requires:
+      #       - build-ui
