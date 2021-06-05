@@ -10,8 +10,6 @@ jobs:
           command: .scripts/build-ui
 
   build-api:
-    requires:
-      - build-ui
     docker:
       - image: cimg/python
     steps:
@@ -24,4 +22,6 @@ workflows:
   build_and_test:
     jobs:
       - build-ui
-      - build-api
+      - build-api:
+          requires:
+            - build-ui
