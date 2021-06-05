@@ -67,18 +67,12 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - gh/release:
-          context:
-            - GITHUB_CREDS
-          filters:
-            branches:
-              only:
-                - main
-          notes-file: CHANGELOG.md
-          requires:
-            - node/test
-          tag: 1.0.0
-          title: Test Release
+      - gh/setup
+      - run:
+          name: Release to Github
+          command: |
+            export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
+            gh release create $VERSION ./dist/* --title "$VERSION" --repo afreeorange/bock
 
 workflows:
   version: 2
