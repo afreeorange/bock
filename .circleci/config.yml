@@ -72,7 +72,10 @@ jobs:
           name: Release to Github
           command: |
             export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
-            gh release delete $VERSION --repo afreeorange/bock --yes
+            if gh release list --repo afreeorange/bock | grep "$VERSION"; then
+                echo "Found an existing release. Will overwrite. Go ahead and judge me."
+                gh release delete "$VERSION" --repo afreeorange/bock --yes
+            fi
             gh release create $VERSION ./dist/* --title "$VERSION" --repo afreeorange/bock
       - persist_to_workspace:
           root: .
@@ -89,6 +92,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-{{ .Branch }}
+            - deps-{{ checksum "poetry.lock" }}
       - run:
           name: Load Docker image layer cache
           command: |

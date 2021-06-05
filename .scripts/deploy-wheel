@@ -10,13 +10,11 @@ if [[ -z "$GITHUB_TOKEN" ]]; then
 fi
 
 echo "Releasing to GitHub"
-ghr \
-    -t "$GITHUB_TOKEN" \
-    -u "$CIRCLE_PROJECT_USERNAME" \
-    -r "$CIRCLE_PROJECT_REPONAME" \
-    -c "$CIRCLE_SHA1" \
-    -delete "$VERSION" \
-    "$RELEASE_ARTIFACT"
+if gh release list --repo afreeorange/bock | grep "$VERSION"; then
+    echo "Found an existing release. Will overwrite. Go ahead and judge me."
+    gh release delete "$VERSION" --repo afreeorange/bock --yes
+fi
+gh release create "$VERSION" ./dist/* --title "$VERSION" --repo afreeorange/bock
 
 echo "Cleaning up"
 make clean
