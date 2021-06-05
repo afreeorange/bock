@@ -72,6 +72,7 @@ jobs:
           name: Release to Github
           command: |
             export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
+            gh release delete $VERSION --repo afreeorange/bock --yes
             gh release create $VERSION ./dist/* --title "$VERSION" --repo afreeorange/bock
 
 workflows:
