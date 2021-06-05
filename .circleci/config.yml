@@ -14,9 +14,11 @@ jobs:
 
       # This command is for yarn v1 only! See this:
       # https://circleci.com/docs/2.0/yarn/
-      # - run:
-      #     name: Install Dependencies
-      #     command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
+      - run:
+          name: Install Dependencies
+          command: |
+            cd bock/ui
+            yarn install --frozen-lockfile --cache-folder .cache/yarn
 
       - save_cache:
           name: 💾 Saving package cache
@@ -25,7 +27,7 @@ jobs:
             - ~/project/bock/ui/node_modules
 
       - run:
-          command: .scripts/build-ui
+          command: yarn build
 
       - persist_to_workspace:
           root: .
@@ -40,8 +42,7 @@ jobs:
           at: .
       - run:
           command: |
-            ls -l bock/ui/node_modules
-            .scripts/build-api
+            ls -lA bock/ui/
 
 workflows:
   version: 2
