@@ -2,7 +2,6 @@ version: 2.1
 
 orbs:
   gh: circleci/github-cli@1.0
-  node: circleci/node@4.3
 
 jobs:
   build-ui:
@@ -10,7 +9,6 @@ jobs:
       - image: cimg/node:16.3.0
     steps:
       - checkout
-
       - restore_cache:
           name: 🗃 Restoring package cache
           keys:
@@ -23,19 +21,16 @@ jobs:
           command: |
             cd bock/ui
             yarn install --frozen-lockfile --cache-folder /home/circleci/.cache/yarn
-
       - save_cache:
           name: 💾 Saving package cache
           key: yarn-packages-{{ .Branch }}-{{ checksum "bock/ui/yarn.lock" }}
           paths:
             - ~/project/bock/ui/node_modules
-
       - run:
           name: Build UI
           command: |
             cd bock/ui
             yarn build
-
       - persist_to_workspace:
           root: .
           paths:
@@ -48,7 +43,7 @@ jobs:
       - attach_workspace:
           at: .
       - restore_cache:
-          keys: 
+          keys:
             - deps-{{ checksum "poetry.lock" }}
       - run:
           name: Install Dependencies
@@ -56,29 +51,22 @@ jobs:
             poetry install
       - save_cache:
           key: deps-{{ checksum "poetry.lock" }}
-          paths: 
+          paths:
             - /home/circleci/.cache/pypoetry/virtualenvs
       - run:
           command: |
             .scripts/build-api
-            ls -lA dist/
-
-  publish-github-release:
-    docker:
-      - image: cibuilds/github:0.10
-    steps:
-      - attach_workspace:
-          at: ./artifacts
-      - run:
-          name: "Publish Release on GitHub"
-          command: |
-            VERSION=$(my-binary --version)
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
   release-to-github:
     docker:
-      - image: 'cimg/base:stable'
+      - image: "cimg/base:stable"
     steps:
+      - attach_workspace:
+          at: .
       - gh/release:
           context:
             - GITHUB_CREDS
@@ -100,3 +88,6 @@ workflows:
       - build-api:
           requires:
             - build-ui
+      - release-to-github:
+          requires:
+            - build-api
