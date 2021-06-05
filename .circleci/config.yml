@@ -81,7 +81,7 @@ jobs:
 
   release-to-dockerhub:
     docker:
-      - image: docker:17.05.0-ce-git
+      - image: docker:20
     steps:
       - attach_workspace:
           at: .
@@ -93,18 +93,17 @@ jobs:
           name: Load Docker image layer cache
           command: |
             set +o pipefail
-            docker load -i /caches/app.tar | true
+            docker load -i /caches/app.tar || true
       - run:
           name: Build application Docker image
           command: |
             export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
-            docker build –-cache-from=app -t afreeorange/bock:latest .
-            docker build –-cache-from=app -t afreeorange/"bock:$VERSION" .
+            docker build --tag afreeorange/bock:latest --tag afreeorange/"bock:$VERSION" . 
       - run:
           name: Save Docker image layer cache
           command: |
             mkdir -p /caches
-            docker save -o /caches/app.tar app
+            docker save -o /caches/app.tar afreeorange/bock:latest
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
@@ -115,7 +114,6 @@ jobs:
             export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
             docker push afreeorange/bock:latest
             docker push afreeorange/"bock:$VERSION"
-
 
 workflows:
   version: 2
