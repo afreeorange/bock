@@ -12,6 +12,7 @@ import { Article, MaybePath } from "../types";
 
 import "./Article.css";
 import "./CodeHighlight.css";
+import { APP_URI } from "../constants";
 
 SyntaxHighlighter.registerLanguage("markdown", md);
 
@@ -47,6 +48,10 @@ const Component: React.FC<{
   return (
     <>
       <Helmet>
+        <meta property="og:title" content={article.name} />
+        <meta property="og:description" content={article.excerpt} />
+        <meta property="og:url" content={`${APP_URI}/${article.path}`} />
+
         <title>{article.name}</title>
       </Helmet>
 

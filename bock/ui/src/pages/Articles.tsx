@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
 import { Footer, Loading, Oops } from "../components";
+import { APP_URI } from "../constants";
 import { linkFromPath } from "../helpers";
 import { useArticles } from "../hooks";
 import { SimpleListOfArticles } from "../types";
@@ -59,6 +60,9 @@ const Component: React.FC = () => {
     return (
       <div className="articles">
         <Helmet>
+          <meta property="og:title" content="List of Articles" />
+          <meta property="og:url" content={`${APP_URI}/articles`} />
+
           <title>List of Articles</title>
         </Helmet>
 

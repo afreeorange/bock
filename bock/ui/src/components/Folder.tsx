@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Footer } from ".";
 import { Folder } from "../types";
 import Hierarchy from "./Hierarchy";
+import { APP_URI } from "../constants";
 
 import "./Folder.css";
 
@@ -12,6 +13,9 @@ const Component = ({ folder }: { folder: Folder }) => {
   return (
     <div className="folder">
       <Helmet>
+        <meta property="og:title" content={folder.name} />
+        <meta property="og:url" content={`${APP_URI}/${folder.path}`} />
+
         <title>{folder.name}</title>
       </Helmet>
 
@@ -32,39 +36,45 @@ const Component = ({ folder }: { folder: Folder }) => {
 
       <hr />
 
-      <div className="entities">
+      <div
+        className={`entities${
+          folder.children.folders.length === 0 ? " no-folders" : ""
+        }${folder.children.articles.length === 0 ? " no-articles" : ""}`}
+      >
         {folder.children.folders.length > 0 && (
-          <section className="folders">
+          <section>
             <h2>
               Folders <span>{folder.children.folders.length}</span>
             </h2>
-            {folder.children.folders.map((folder) => (
-              <li key={folder.key}>
-                <Link to={`/${folder.path}`} key={folder.key}>
-                  {folder.name}
-                </Link>
-              </li>
-            ))}
+            <ul>
+              {folder.children.folders.map((folder) => (
+                <li key={folder.key}>
+                  <Link to={`/${folder.path}`} key={folder.key}>
+                    {folder.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </section>
         )}
 
         {folder.children.articles.length > 0 ? (
-          <section className="articles">
+          <section>
             <h2>
               Articles <span>{folder.children.articles.length}</span>
             </h2>
-            {folder.children.articles.map((article) => (
-              <li key={article.key}>
-                <Link to={`/${article.path}`} key={article.key}>
-                  {article.name}
-                </Link>
-              </li>
-            ))}
+            <ul>
+              {folder.children.articles.map((article) => (
+                <li key={article.key}>
+                  <Link to={`/${article.path}`} key={article.key}>
+                    {article.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </section>
         ) : (
-          <section className="no-articles">
-            Looks like there are no articles in this folder
-          </section>
+          <section>Looks like there are no articles in this folder</section>
         )}
       </div>
 

@@ -39,6 +39,7 @@ export type Article = BaseEntity & {
   text: string;
   uncommitted: boolean;
   revisions: RevisionMeta[];
+  excerpt: string;
 };
 
 export type Folder = BaseEntity & {
@@ -76,7 +77,9 @@ export type SearchResults = {
 
 export type Statistics = {
   count: number;
-  latest: BaseEntity[];
+  latest: (BaseEntity & {
+    excerpt: string;
+  })[];
 };
 
 export type SimpleArticle = {

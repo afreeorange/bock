@@ -14,7 +14,7 @@ const Component: React.FC<{
   let label = "";
 
   return (
-    <nav aria-label="Breadcrumb">
+    <nav aria-label="Hierarchy">
       <ol>
         {!hideRoot && (
           <li>
@@ -36,14 +36,13 @@ const Component: React.FC<{
             <li key={`hierarchy-${idx}`}>
               {h.type === "folder" ? (
                 <>
-                  <FiFolder /> &nbsp;
+                  <FiFolder />{" "}
                 </>
               ) : (
                 <>
-                  <FiFile /> &nbsp;
+                  <FiFile />{" "}
                 </>
               )}
-
               <Link title={`Link to ${label}`} to={glom}>
                 {label}
               </Link>

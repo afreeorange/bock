@@ -2,7 +2,7 @@
   margin-bottom: var(--root-spacing);
 }
 
-.recent section nav[aria-label="Breadcrumb"] {
+.recent section nav[aria-label="Hierarchy"] {
   font-size: medium;
 }
 
@@ -12,8 +12,10 @@
 }
 
 .recent section p {
-  margin: 0;
-  padding: 0;
-  color: var(--color-grey-light);
+  color: var(--color-grey);
   font-size: var(--font-size-small);
+}
+
+.recent section p:nth-of-type(2) {
+  color: var(--color-grey-light);
 }

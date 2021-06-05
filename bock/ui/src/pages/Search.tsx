@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { Link, useHistory, useParams } from "react-router-dom";
 
 import { Footer, Loading, Oops } from "../components";
+import { APP_URI } from "../constants";
 import { linkFromPath } from "../helpers";
 import { useSearch } from "../hooks";
 
@@ -57,6 +58,10 @@ export const Search: React.FC = () => {
   return (
     <>
       <Helmet>
+        <meta property="og:title" content="Search" />
+        <meta property="og:description" content="Search the wiki" />
+        <meta property="og:url" content={`${APP_URI}/search`} />
+
         <title>Search</title>
       </Helmet>
       <header>

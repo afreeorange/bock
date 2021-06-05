@@ -1,6 +1,10 @@
 .entities {
   display: grid;
-  grid-template-columns: 35% auto;
+  grid-template-columns: 40% auto;
+}
+
+.entities.no-folders {
+  display: block;
 }
 
 .entities .no-articles {

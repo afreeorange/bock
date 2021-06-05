@@ -8,6 +8,7 @@ from bock.constants import ABBREVIATED_SHA_SIZE, MAX_LENGTH_OF_LATEST_ARTICLES
 from bock.helpers import (
     absolute_paths_to_articles_in,
     escape_html,
+    get_article_excerpt,
     get_entity_hierarchy,
     get_entity_metadata,
     raw_markdown_from,
@@ -204,6 +205,7 @@ def abbreviated_article_info(article_root, absolute_path_to_article):
         "name": name,
         "size_in_bytes": size,
         "type": "file",
+        "excerpt": get_article_excerpt(raw_markdown_from(absolute_path_to_article)),
     }
 
 
@@ -221,9 +223,9 @@ def get_statistics(
         reverse=True,
     )[0:prune_to]
 
-    ret_mtime = [abbreviated_article_info(article_root, _) for _ in by_mtime]
+    article_info = [abbreviated_article_info(article_root, _) for _ in by_mtime]
 
     return {
         "count": len(list_of_absolute_paths_to_articles),
-        "latest": ret_mtime,
+        "latest": article_info,
     }

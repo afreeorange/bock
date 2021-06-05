@@ -2,6 +2,7 @@ import glob
 import hmac
 import itertools
 import os
+import re
 import uuid
 from hashlib import sha1
 from typing import List
@@ -20,6 +21,7 @@ from bock.constants import (
     MAX_NUMBER_OF_WORKERS,
     PATHS_TO_REMOVE,
     VALID_REFRESH_ORIGINS,
+    WORDS_IN_EXCERPT,
 )
 
 # --- Some reusable Click options ---
@@ -209,6 +211,11 @@ def path_characteristics(article_root, maybe_article_path):
 # --- Metadata about the article or folder ---
 
 
+def get_article_excerpt(raw_article_markdown):
+    _ = " ".join(re.findall(r"\w+", raw_article_markdown)[0:WORDS_IN_EXCERPT])
+    return _ + "..."
+
+
 def get_entity_hierarchy(absolute_path_to_file_or_folder, article_root):
     _ = absolute_path_to_file_or_folder
 
@@ -285,7 +292,7 @@ def folder_data(absolute_path_to_folder: str, article_root: str):
     hierarchy = get_entity_hierarchy(root, article_root)
     size, created, modified = get_entity_metadata(absolute_path_to_folder)
     name = hierarchy[-1]["name"]
-    path = "/".join([_["name"] for _ in hierarchy[1:]])
+    path = "/".join([_["name"].replace(" ", "_") for _ in hierarchy[1:]])
 
     ret = {
         "type": "folder",
@@ -359,7 +366,7 @@ def folder_data(absolute_path_to_folder: str, article_root: str):
                     #
                     # NOTE: Need the `lstrip` for the ROOT path!
                     #
-                    "path": f"{path}/{name}".lstrip("/"),
+                    "path": f"{path}/{name}".lstrip("/").replace(" ", "_"),
                     "key": str(
                         uuid.uuid5(
                             uuid.NAMESPACE_DNS,
@@ -385,11 +392,12 @@ def article_data(absolute_path_to_file, article_root, article_repo):
     from .repository import uncommitted_articles
 
     name = hierarchy[-1]["name"]
-    path = "/".join([_["name"] for _ in hierarchy[1:]])
+    path = "/".join([_["name"].replace(" ", "_") for _ in hierarchy[1:]])
     uncommitted = path in uncommitted_articles(article_repo)
 
     return {
         "created": created,
+        "excerpt": get_article_excerpt(text),
         "hierarchy": hierarchy,
         "html": render_html_from(text),
         "modified": modified,

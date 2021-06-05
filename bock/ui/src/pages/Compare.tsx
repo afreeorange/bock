@@ -22,14 +22,18 @@ const SafeComparison: React.FC<{
   b: string;
 }> = ({ articlePath, a, b }) => {
   const { state, data } = useCompare(articlePath, a, b);
+  const title = `${articleNameFromPath(articlePath)} - Comparing Revisions`;
 
   if (state === "Loaded" && data) {
     return (
       <>
         <Helmet>
+          <meta property="og:title" content={title} />
+          <meta property="og:title" content={title} />
+
           <title>Comparing Revisions</title>
         </Helmet>
-        <h1>{articleNameFromPath(articlePath)} - Comparing Revisions</h1>
+        <h1>{title}</h1>
         <div
           dangerouslySetInnerHTML={{
             __html: Diff2Html.html(data, {

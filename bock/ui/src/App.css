@@ -14,7 +14,7 @@
   --color-grey-light: #ccc;
   --color-grey-superlight: #eee;
   --color-grey: #999;
-  --color-highlight-light: #ff6600;
+  --color-highlight-light: #ff0000;
   --color-highlight: #ff3300;
 }
 
@@ -56,16 +56,17 @@ svg {
 }
 
 /* BADGES */
+
 h1 > span,
 h2 > span {
   background-color: var(--color-highlight-light);
-  border-radius: var(--border-radius);
+  border-radius: 2em;
   color: white;
   display: inline-flex;
   font-size: 14px;
   justify-content: center;
   margin-bottom: 0.25em;
-  min-width: 1.5em;
+  min-width: 0.8em;
   padding: 0.125em 0.5em;
   vertical-align: middle;
 }
@@ -104,6 +105,14 @@ form[role="search"] button[type="submit"]:hover {
 form[role="search"] button[type="submit"]:disabled {
   background: var(--color-grey-light);
 }
+
+/* MISCELLANEOUS */
+
+.container header > h1 {
+  margin-top: 0.4em;
+}
+
+/* RESPONSIVE */
 
 @media all and (max-width: 700px) {
   :root {

@@ -7,6 +7,7 @@ import { useParams, useRouteMatch } from "react-router-dom";
 import { Footer, Hierarchy, Loading, Oops } from "../components";
 import { useRevision } from "../hooks";
 import { MaybePath } from "../types";
+import { APP_URI } from "../constants";
 
 const Component = () => {
   const { maybeArticlePath, revisionId } =
@@ -33,10 +34,19 @@ const Component = () => {
       ret = <div dangerouslySetInnerHTML={{ __html: data.html }} />;
     }
 
+    const title = `${data.name} - Revision ${revisionId.slice(0, 8)}`;
+
     return (
       <>
         <Helmet>
-          <title>{`${data.name} - Revision ${revisionId.slice(0, 8)}`}</title>
+          <meta property="og:title" content={title} />
+          <meta property="og:description" content={title} />
+          <meta
+            property="og:url"
+            content={`${APP_URI}/${maybeArticlePath}/revisions/${revisionId}`}
+          />
+
+          <title>{title}</title>
         </Helmet>
 
         <Hierarchy hierarchy={data.hierarchy} />

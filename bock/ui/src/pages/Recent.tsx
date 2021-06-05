@@ -1,5 +1,5 @@
 import React from "react";
-import { BsClockHistory } from "react-icons/bs";
+import { BsClock } from "react-icons/bs";
 
 import { Hierarchy, Loading, Oops } from "../components";
 import { humanReadableRelative, humanSize } from "../helpers";
@@ -27,8 +27,9 @@ export const Component: React.FC<{
         data.latest.map((a) => (
           <section key={a.key}>
             <Hierarchy hierarchy={a.hierarchy} hideRoot={hideRoot} />
+            <p>{a.excerpt}</p>
             <p>
-              <BsClockHistory /> {humanReadableRelative(a.modified)} ago,{" "}
+              <BsClock /> {humanReadableRelative(a.modified)} ago,{" "}
               {humanSize(a.size_in_bytes)}
             </p>
           </section>

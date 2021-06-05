@@ -23,21 +23,29 @@ nav[aria-label="main"] {
   font-size: x-large;
 }
 
-nav[aria-label="Breadcrumb"] {
+nav[aria-label="Hierarchy"] {
   color: var(--color-grey);
   font-size: var(--font-size-small);
 }
-nav[aria-label="Breadcrumb"] li {
+nav[aria-label="Hierarchy"] li {
   margin-right: 0;
 }
-nav[aria-label="Breadcrumb"] li span[role="separator"] {
+nav[aria-label="Hierarchy"] li span[role="separator"] {
   margin: 0 calc(var(--root-spacing) / 2);
   color: var(--color-grey-light);
 }
-nav[aria-label="Breadcrumb"] a {
+nav[aria-label="Hierarchy"] a {
   color: var(--color-grey);
   text-decoration-color: var(--color-grey-light);
 }
-nav[aria-label="Breadcrumb"] a:hover {
+nav[aria-label="Hierarchy"] a:hover {
   color: var(--color-highlight-light);
+}
+
+@media all and (max-width: 500px) {
+  nav[aria-label="Hierarchy"] {
+    overflow-x: scroll;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
 }
