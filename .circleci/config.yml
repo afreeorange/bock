@@ -2,6 +2,7 @@ version: 2.1
 
 jobs:
   build-ui:
+    working_directory: ~/project/bock/ui
     docker:
       - image: cimg/node:16.3.0
     steps:
@@ -28,13 +29,13 @@ jobs:
             yarn
             yarn build
 
-  build-api:
-    docker:
-      - image: cimg/python:3.9.5
-    steps:
-      - checkout
-      - run:
-          command: .scripts/build-api
+  # build-api:
+  #   docker:
+  #     - image: cimg/python:3.9.5
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         command: .scripts/build-api
 
 workflows:
   version: 2
@@ -44,3 +45,6 @@ workflows:
       - build-api:
           requires:
             - build-ui
+
+
+
