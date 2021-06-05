@@ -28,7 +28,7 @@ jobs:
 
       - run:
           command: |
-            ls -lA bock/ui/
+            cd bock/ui
             yarn build
 
       - persist_to_workspace:
