@@ -74,6 +74,46 @@ jobs:
             export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
             gh release delete $VERSION --repo afreeorange/bock --yes
             gh release create $VERSION ./dist/* --title "$VERSION" --repo afreeorange/bock
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  release-to-dockerhub:
+    docker:
+      - image: docker:20
+    steps:
+      - attach_workspace:
+          at: .
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/app.tar || true
+      - run:
+          name: Build application Docker image
+          command: |
+            export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
+            docker build --tag afreeorange/bock:latest --tag afreeorange/"bock:$VERSION" . 
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker save -o /caches/app.tar afreeorange/bock:latest
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/app.tar
+      - deploy:
+          name: Push application Docker image
+          command: |
+            export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
+            docker push afreeorange/bock:latest
+            docker push afreeorange/"bock:$VERSION"
 
 workflows:
   version: 2
@@ -84,5 +124,8 @@ workflows:
           requires:
             - build-ui
       - release-to-github:
+          requires:
+            - build-api
+      - release-to-dockerhub:
           requires:
             - build-api
