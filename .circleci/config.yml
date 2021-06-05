@@ -18,7 +18,7 @@ jobs:
           name: Install Dependencies
           command: |
             cd bock/ui
-            yarn install --frozen-lockfile --cache-folder .cache/yarn
+            yarn install --frozen-lockfile --cache-folder /home/circleci/.cache/yarn
 
       - save_cache:
           name: 💾 Saving package cache
@@ -55,7 +55,9 @@ jobs:
           paths: 
             - /home/circleci/.cache/pypoetry/virtualenvs
       - run:
-          command: .scripts/bock-api
+          command: |
+            .scripts/build-api
+            ls -lA dist/
 
 workflows:
   version: 2
