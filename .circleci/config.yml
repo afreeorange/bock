@@ -25,11 +25,7 @@ jobs:
             - ~/project/bock/ui/node_modules
 
       - run:
-          command: |
-            pwd
-            ls -lA
-            yarn
-            yarn build
+          command: .scripts/build-ui
 
       - persist_to_workspace:
           root: .
@@ -43,7 +39,9 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          command: .scripts/build-api
+          command: |
+            ls -l bock/ui/node_modules
+            .scripts/build-api
 
 workflows:
   version: 2
