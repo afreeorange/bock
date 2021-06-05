@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source .scripts/common
+
+docker push afreeorange/bock:latest
+docker push afreeorange/"bock:$VERSION"

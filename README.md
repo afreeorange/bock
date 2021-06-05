@@ -1,5 +1,7 @@
 # Bock 🍺
 
+[![CircleCI](https://circleci.com/gh/afreeorange/bock/tree/master.svg?style=svg)](https://circleci.com/gh/afreeorange/bock/tree/master)
+
 A personal wiki with Python/Flask and TypeScript/React.
 
 ## Running

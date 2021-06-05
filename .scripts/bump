@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Exists because I'm too lazy to type the bumpversion flags.
+BUMP_LEVEL="patch"
+if [[ -n "$1" ]]; then
+    BUMP_LEVEL="$1"
+fi
+
+bumpversion "$BUMP_LEVEL" --allow-dirty --verbose
