@@ -75,18 +75,22 @@ jobs:
             VERSION=$(my-binary --version)
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
 
-  gh/release:
-    context:
-      - GITHUB_CREDS
-    filters:
-      branches:
-        only:
-          - main
-    notes-file: CHANGELOG.md
-    requires:
-      - node/test
-    tag: 1.0.0
-    title: Test Release
+  release-to-github:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - gh/release:
+          context:
+            - GITHUB_CREDS
+          filters:
+            branches:
+              only:
+                - main
+          notes-file: CHANGELOG.md
+          requires:
+            - node/test
+          tag: 1.0.0
+          title: Test Release
 
 workflows:
   version: 2
