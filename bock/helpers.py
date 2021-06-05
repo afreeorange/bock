@@ -50,6 +50,7 @@ def click_option_debug(f):
 def click_option_host(f):
     f = click.option(
         "--host",
+        "-h",
         default="localhost",
         help="Run the API server with this hostname",
     )(f)
