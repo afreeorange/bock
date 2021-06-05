@@ -122,3 +122,6 @@ workflows:
       - release-to-github:
           requires:
             - build-api
+      - release-to-dockerhub:
+          requires:
+            - build-api
