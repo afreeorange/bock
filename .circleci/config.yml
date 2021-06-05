@@ -26,6 +26,8 @@ jobs:
             - ~/.cache/yarn
       - run:
           command: |
+            pwd
+            ls -l
             yarn
             yarn build
 
@@ -45,6 +47,3 @@ workflows:
       - build-api:
           requires:
             - build-ui
-
-
-
