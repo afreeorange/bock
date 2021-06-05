@@ -74,6 +74,42 @@ jobs:
             export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
             gh release delete $VERSION --repo afreeorange/bock --yes
             gh release create $VERSION ./dist/* --title "$VERSION" --repo afreeorange/bock
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  release-to-dockerhub:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - attach_workspace:
+          at: .
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/bock.tar | true
+      - run:
+          name: Build application Docker image
+          command: |
+            docker build –cache-from=app -t app .
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker save -o /caches/bock.tar app
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/bock.tar
+      - deploy:
+          name: Push application Docker image
+          command: .scripts/deploy-docker
 
 workflows:
   version: 2
