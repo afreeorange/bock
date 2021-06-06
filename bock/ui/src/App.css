@@ -74,8 +74,22 @@ h1 > span + span,
 h2 > span + span {
   margin-left: calc(var(--root-spacing) / 2);
 }
+h1 > span.green-badge,
+h2 > span.green-badge {
+  background-color: green;
+}
+h1 > span.green-badge:hover,
+h2 > span.green-badge:hover {
+  background-color: seagreen;
+}
+h1 > span.green-badge a,
+h2 > span.green-badge a {
+  text-decoration: none;
+  color: white;
+}
 
 /* INPUTS */
+
 form[role="search"] {
   display: flex;
 }

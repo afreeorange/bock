@@ -1,6 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, Link } from "react-router-dom";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import md from "react-syntax-highlighter/dist/esm/languages/hljs/markdown";
 import theme from "react-syntax-highlighter/dist/esm/styles/hljs/github-gist";
@@ -58,9 +58,12 @@ const Component: React.FC<{
       <Hierarchy hierarchy={article.hierarchy} />
 
       <header>
-        <h1>{`${article.name}${isRaw ? " - Raw" : ""}${
-          isRevisions ? " - Revisions" : ""
-        }`}</h1>
+        <h1>
+          {article.name}{" "}
+          {isRaw && <span>Raw</span>}
+          {isRaw && <span className="green-badge"><Link to={`/${isRaw.params.maybeArticlePath!}`}>See HTML</Link></span>}
+          {isRevisions && <span>Revisions</span>}
+        </h1>
       </header>
 
       {ret}
