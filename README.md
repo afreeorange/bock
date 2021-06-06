@@ -118,15 +118,6 @@ To build and deploy locally,
 .scripts/deploy-wheel
 ```
 
-### TODO
-
-* [ ] Tests
-* [x] Debugger bails for Flask :/
-* [x] Recursion depth?
-* [ ] Article limit?
-* [x] Packaging
-* [ ] PEX?
-
 ## Deployment
 
 Uses CircleCI's free tier to build [the release wheels](https://github.com/afreeorange/bock/releases) and [the Docker image](https://hub.docker.com/repository/docker/afreeorange/bock). See `.circleci/config.yml` for the CI config.
