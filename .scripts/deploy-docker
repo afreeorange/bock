@@ -2,5 +2,10 @@
 
 source .scripts/common
 
+[[ -z "$DOCKERHUB_USER" ]] && echo "DOCKERHUB_USERNAME is not set. Aborting." && exit 1
+[[ -z "$DOCKERHUB_PASSWORD" ]] && echo "DOCKERHUB_PASSWORD is not set. Aborting." && exit 2
+
+echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USER" --password-stdin
+
 docker push afreeorange/bock:latest
 docker push afreeorange/"bock:$VERSION"
