@@ -8,7 +8,7 @@ jobs:
     docker:
       - image: cimg/node:16.3.0
     environment:
-      CI: true
+      REACT_APP_CI: true
     steps:
       - checkout
       - restore_cache:
@@ -65,7 +65,7 @@ jobs:
 
   release-to-github:
     docker:
-      - image: "cimg/base:stable"
+      - image: cimg/base:stable
     steps:
       - attach_workspace:
           at: .
