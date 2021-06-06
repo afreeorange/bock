@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bock"
-version = "3.4.4"
+version = "3.4.5"
 description = "A small personal Wiki"
 authors = ["Nikhil Anand <nikhilanand@granular.ag>"]
 include = ["bock/ui/cached_dist/**"]
