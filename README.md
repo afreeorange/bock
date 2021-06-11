@@ -152,6 +152,10 @@ bock-local -a "$ARTICLE_ROOT" -k "$REFRESH_KEY" -o github &
 
 * [AsyncIO with Flask and and a SPA](https://github.com/SyntaxRules/svelte-flask/blob/main/run.py)
 
-## License
+## [License](https://sqlite.org/src/file?name=LICENSE.md&ci=trunk)
 
-[WTFPL](http://wtfpl.net/)
+The author disclaims copyright to this source code. In place of a legal notice, here is a blessing:
+
+* May you do good and not evil.
+* May you find forgiveness for yourself and forgive others.
+* May you share freely, never taking more than you give.
