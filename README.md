@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/afreeorange/bock/tree/master.svg?style=svg)](https://circleci.com/gh/afreeorange/bock/tree/master)
 
-A personal wiki with Python+Flask and TypeScript+React. Will make articles searchable (using [Whoosh](https://whoosh.readthedocs.io/en/latest/index.html)) and Time Machine™-able (using `git`) and watch a folder for changes (using [`watchgod`](https://pypi.org/project/watchgod/))
+A personal wiki with Python+Flask and TypeScript+React. Will make articles searchable (using [Whoosh](https://whoosh.readthedocs.io/en/latest/index.html)) and Time Machine™-able (using `git`) and watch a folder for changes (using [`watchgod`](https://pypi.org/project/watchgod/).) See it [in action here](http://wiki.nikhil.io/Hello).
 
 ## Usage
 
