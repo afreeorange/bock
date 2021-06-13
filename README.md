@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/afreeorange/bock/tree/master.svg?style=svg)](https://circleci.com/gh/afreeorange/bock/tree/master)
 
-A personal wiki with Python+Flask and TypeScript+React. Will make articles searchable (using [Whoosh](https://whoosh.readthedocs.io/en/latest/index.html)) and Time Machine™-able (using `git`) and watch a folder for changes (using [`watchgod`](https://pypi.org/project/watchgod/))
+A personal wiki with Python+Flask and TypeScript+React. Will make articles searchable (using [Whoosh](https://whoosh.readthedocs.io/en/latest/index.html)) and Time Machine™-able (using `git`) and watch a folder for changes (using [`watchgod`](https://pypi.org/project/watchgod/).) See it [in action here](http://wiki.nikhil.io/Hello).
 
 ## Usage
 
@@ -153,6 +153,10 @@ bock-local -a "$ARTICLE_ROOT" -k "$REFRESH_KEY" -o github &
 * [AsyncIO with Flask and and a SPA](https://github.com/SyntaxRules/svelte-flask/blob/main/run.py)
 * [Icon by Freepik](https://www.freepik.com/)
 
-## License
+## [License](https://sqlite.org/src/file?name=LICENSE.md&ci=trunk)
 
-[WTFPL](http://wtfpl.net/)
+The author disclaims copyright to this source code. In place of a legal notice, here is a blessing:
+
+* May you do good and not evil.
+* May you find forgiveness for yourself and forgive others.
+* May you share freely, never taking more than you give.
