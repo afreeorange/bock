@@ -12,6 +12,7 @@ from flask import Flask, Response, jsonify, request, send_file
 from flask_cors import CORS
 from git import InvalidGitRepositoryError, NoSuchPathError, Repo
 
+import bock
 from bock import __name__ as package_name
 from bock import __version__
 from bock.constants import (
@@ -292,14 +293,15 @@ def spa_static_css_asset(spa_asset):
     return send_file(f"ui/cached_dist/static/css/{spa_asset}")
 
 
-# Take care of anything that might be in the `public` folder
+# Take care of anything that might be in the `public` folder. Because this is a
+# 'modern SPA', send the index page if nothing is found.
+# TODO: This needs to be fixed.
 def spa_index_with_article_or_public_asset(maybe_article_path):
-    _ = f"{os.path.abspath('.')}/{package_name}/ui/cached_dist/{maybe_article_path}"
+    _ = f"{bock.__path__[0]}/ui/cached_dist/{maybe_article_path}"
 
-    if os.path.exists(_):
-        return send_file(_)
-
-    return send_file(f"ui/cached_dist/index.html")
+    return (
+        send_file(_) if os.path.exists(_) else send_file(f"ui/cached_dist/index.html")
+    )
 
 
 def spa_index():
@@ -365,6 +367,7 @@ def run_server(
         )
         app.add_url_rule(
             "/<path:maybe_article_path>",
+            # TODO: This needs to be fixed.
             "spa_index_with_article_or_public_asset",
             spa_index_with_article_or_public_asset,
         )
