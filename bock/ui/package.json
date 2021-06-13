@@ -1,7 +1,7 @@
 {
   "name": "bock-ui",
   "author": "Nikhil Anand",
-  "version": "3.4.6",
+  "version": "3.4.7",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.1.2",
