@@ -151,6 +151,7 @@ bock-local -a "$ARTICLE_ROOT" -k "$REFRESH_KEY" -o github &
 ## References
 
 * [AsyncIO with Flask and and a SPA](https://github.com/SyntaxRules/svelte-flask/blob/main/run.py)
+* [Icon by Freepik](https://www.freepik.com/)
 
 ## License
 

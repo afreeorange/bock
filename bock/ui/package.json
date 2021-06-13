@@ -1,5 +1,6 @@
 {
   "name": "bock-ui",
+  "author": "Nikhil Anand",
   "version": "3.4.6",
   "private": true,
   "dependencies": {
