@@ -1,3 +1,9 @@
+/* Hide this in case we have an article with a heading IN the document. We get
+   the headings from the name of the file.
+*/
+article h1 {
+  display: none;
+}
 article table {
   margin: var(--root-spacing) 0;
   border-collapse: collapse;
