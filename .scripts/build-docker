@@ -1,9 +1,0 @@
-#!/bin/bash
-
-source .scripts/common
-
-echo "👷‍♀️ Building Docker image"
-docker build -t "afreeorange/bock:$VERSION" .
-docker build -t afreeorange/bock:latest .
-
-echo "🚀 Finished Docker Image"

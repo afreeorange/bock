@@ -1,6 +1,0 @@
-.hello {
-  margin-bottom: calc(var(--root-spacing) * 4);
-}
-.hello > article {
-  font-size: x-large;
-}

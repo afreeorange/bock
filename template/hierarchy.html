@@ -1,0 +1,15 @@
+<nav>
+  <ul>
+    {% for node in hierarchy %}
+    <li>
+      <a data-entity-type="{{ node.Type }}" href="{%- if node.Name == "ROOT" -%}/ROOT{%- else -%}/{{ node.URI }}{%- endif -%}" title="{{ node.Name }}">
+      {%- if node.Name == "ROOT" -%}Root{%- else -%}{{ node.Name}}{%- endif -%}
+      </a>
+    </li>
+    {% endfor %}
+
+    {% if type == "raw" %}
+    <li><span>Raw</span></li>
+    {% endif %}
+  </ul>
+</nav>

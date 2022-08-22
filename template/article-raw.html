@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block main %}
+  {% include "hierarchy.html" %}
+  <h1>
+    {{ title }}
+    <span>Raw</span>
+  </h1>
+<pre><code>{{ source | safe }}</code></pre>
+{% endblock main %}

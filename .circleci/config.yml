@@ -1,138 +1,36 @@
 version: 2.1
 
 orbs:
-  gh: circleci/github-cli@1.0
+  aws-s3: circleci/aws-s3@2.0.0
 
 jobs:
-  build-ui:
+  build:
+    working_directory: ~/repo
     docker:
-      - image: cimg/node:16.3.0
-    environment:
-      REACT_APP_CI: true
+      - image: cimg/go:1.18
     steps:
       - checkout
       - restore_cache:
-          name: 🗃 Restoring package cache
           keys:
-            - yarn-packages-{{ .Branch }}-{{ checksum "bock/ui/yarn.lock" }}
-
-      # This command is for yarn v1 only! See this:
-      # https://circleci.com/docs/2.0/yarn/
+            - go-mod-v4-{{ checksum "go.sum" }}
       - run:
           name: Install Dependencies
-          command: |
-            cd bock/ui
-            yarn install --frozen-lockfile --cache-folder /home/circleci/.cache/yarn
+          command: go mod download
+      - run:
+          name: Compile
+          command: ./.scripts/build.sh
+      - aws-s3/sync:
+          aws-region: AWS_DEFAULT_REGION
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          from: dist/
+          to: "s3://public.nikhil.io/"
       - save_cache:
-          name: 💾 Saving package cache
-          key: yarn-packages-{{ .Branch }}-{{ checksum "bock/ui/yarn.lock" }}
+          key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
-            - ~/project/bock/ui/node_modules
-      - run:
-          name: Build UI
-          command: |
-            cd bock/ui
-            yarn build
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
-
-  build-api:
-    docker:
-      - image: cimg/python:3.9.5
-    steps:
-      - attach_workspace:
-          at: .
-      - restore_cache:
-          keys:
-            - deps-{{ checksum "poetry.lock" }}
-      - run:
-          name: Install Dependencies
-          command: |
-            poetry install
-      - save_cache:
-          key: deps-{{ checksum "poetry.lock" }}
-          paths:
-            - /home/circleci/.cache/pypoetry/virtualenvs
-      - run:
-          command: |
-            .scripts/build-api
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
-
-  release-to-github:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - attach_workspace:
-          at: .
-      - gh/setup
-      - run:
-          name: Release to Github
-          command: |
-            export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
-            if gh release list --repo afreeorange/bock | grep "$VERSION"; then
-                echo "Found an existing release. Will overwrite. Go ahead and judge me."
-                gh release delete "$VERSION" --repo afreeorange/bock --yes
-            fi
-            gh release create $VERSION ./dist/* --title "$VERSION" --repo afreeorange/bock
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
-
-  release-to-dockerhub:
-    docker:
-      - image: docker:20
-    steps:
-      - attach_workspace:
-          at: .
-      - setup_remote_docker
-      - restore_cache:
-          keys:
-            - v1-{{ .Branch }}
-            - deps-{{ checksum "poetry.lock" }}
-      - run:
-          name: Load Docker image layer cache
-          command: |
-            set +eo pipefail
-            docker load -i /caches/app.tar || true
-      - run:
-          name: Build application Docker image
-          command: |
-            export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
-            docker build --tag afreeorange/bock:latest --tag afreeorange/"bock:$VERSION" . 
-      - run:
-          name: Save Docker image layer cache
-          command: |
-            mkdir -p /caches
-            docker save -o /caches/app.tar afreeorange/bock:latest
-      - save_cache:
-          key: v1-{{ .Branch }}-{{ epoch }}
-          paths:
-            - /caches/app.tar
-      - deploy:
-          name: Push application Docker image
-          command: |
-            export VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
-            echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USER" --password-stdin
-            docker push afreeorange/bock:latest
-            docker push afreeorange/"bock:$VERSION"
+            - "/go/pkg/mod"
 
 workflows:
-  version: 2
-  build_and_test:
+  build-and-deploy:
     jobs:
-      - build-ui
-      - build-api:
-          requires:
-            - build-ui
-      - release-to-github:
-          requires:
-            - build-api
-      - release-to-dockerhub:
-          requires:
-            - build-api
+      - build

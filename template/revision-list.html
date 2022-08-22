@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block main %}
+  {% include "hierarchy.html" %}
+
+  {% set label = "Revision" %}
+  {% set count = revisions | length %}
+  {% if count > 1 or count == 0 %}
+    {% set label = "Revisions" %}
+  {% endif %}
+
+  <h1>
+    {{ title }} <span>{{ revisions | length }} {{ label }}</span>
+  </h1>
+  <ul>
+  {% for revision in revisions %}
+    <li>
+      <a href="{{ revision.ShortId }}">{{ revision.Date | date:"Monday, 2 Jan 2006 at 15:04 MST" }}</a>
+      <br />
+      <small>{{ revision.Subject }}</small>
+      <br />
+      <small>{{ revision.AuthorName }} <code>&lt;{{ revision.AuthorEmail }}&gt;</code></small>
+    </li>
+  {% endfor %}
+  </ul>
+{% endblock main %}

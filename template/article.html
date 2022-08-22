@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block main %}
+  {% include "hierarchy.html" %}
+  <h1>{{ title }} {% if untracked %}<span>Untracked</span>{% endif %}</h1>
+  {{ html | safe }}
+{% endblock main %}
+
+{% block footerElements %}
+  <li>{{ sizeInBytes }} bytes</li>
+  {% if not untracked %}
+    <li>Created on {{ created | date:"Monday, 2 Jan 2006 at 15:04 MST" }}</li>
+    <li>Modified on {{ modified | date:"Monday, 2 Jan 2006 at 15:04 MST" }}</li>
+  {% endif %}
+{% endblock footerElements %}
+
+{% block statistics %}
+  There are {{ meta.ArticleCount }} articles and {{ meta.RevisionCount }} revisions in this wiki. On {{ meta.BuildDate | date:"Monday, 2 Jan 2006 at 15:04 MST" }}, it took {{ meta.GenerationTime }} to generate it on a {{ meta.CPUCount }}-core {{ meta.Platform }}/{{ meta.Architecture }} system with {{ meta.MemoryInGB }}GiB RAM
+{% endblock statistics %}

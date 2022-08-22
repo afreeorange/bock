@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block main %}
+  <h1>Search {{ meta.ArticleCount }} articles</h1>
+
+  <form role="search">
+    <input placeholder="3 or more characters" autofocus />
+  </form>
+
+  <ul data-content="results"></ul>
+{% endblock main %}
+
+{% block scripts %}
+  <script src="/js/nunjucks.min.js"></script>
+  <script src="/js/sql-wasm.js"></script>
+  <script src="/js/search.js"></script>
+{% endblock scripts %}

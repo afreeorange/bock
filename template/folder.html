@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block main %}
+  {% include "hierarchy.html" %}
+
+  <h1>{{ title }}</h1>
+
+  {% if readme %}
+    {{ readme }}
+  {% endif %}
+
+  {% set subFolderLength = children.Folders | length %}
+  {% if subFolderLength > 0 %}
+  <h2>Folders
+    <span>{{ children.Folders | length }}</span>
+  </h2>
+  <ul>
+    {% for child in children.Folders %}
+      <li>
+        <strong>
+          <a href="{{ child.URI }}" title="{{ child.Name }}">
+            {{ child.Name }}
+          </a>
+      </strong>
+      </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% set subArticleLength = children.Articles | length %}
+  {% if subArticleLength > 0 %}
+  <h2>Articles
+    <span>{{ children.Articles | length }}</span>
+  </h2>
+  <ul>
+    {% for child in children.Articles %}
+      <li>
+        <a href="{{ child.URI }}" title="{{ child.Name }}">
+          {{ child.Name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+{% endblock main %}
