@@ -1,0 +1,220 @@
+.code-highlight {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 0 15px;
+  overflow: hidden;
+}
+
+/*
+ * GitHub style for Pygments
+ * Courtesy of GitHub.com
+ */
+.code-highlight .hll {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+.code-highlight .c {
+  color: #999988;
+  font-style: italic;
+}
+.code-highlight .err {
+  color: #a61717;
+  background-color: #e3d2d2;
+}
+.code-highlight .k {
+  font-weight: bold;
+}
+.code-highlight .o {
+  font-weight: bold;
+}
+.code-highlight .cm {
+  color: #999988;
+  font-style: italic;
+}
+.code-highlight .cp {
+  color: #999999;
+  font-weight: bold;
+}
+.code-highlight .c1 {
+  color: #999988;
+  font-style: italic;
+}
+.code-highlight .cs {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
+}
+.code-highlight .gd {
+  color: #000000;
+  background-color: #ffdddd;
+}
+.code-highlight .gd .x {
+  color: #000000;
+  background-color: #ffaaaa;
+}
+.code-highlight .ge {
+  font-style: italic;
+}
+.code-highlight .gr {
+  color: #aa0000;
+}
+.code-highlight .gh {
+  color: #999999;
+}
+.code-highlight .gi {
+  color: #000000;
+  background-color: #ddffdd;
+}
+.code-highlight .gi .x {
+  color: #000000;
+  background-color: #aaffaa;
+}
+.code-highlight .go {
+  color: #888888;
+}
+.code-highlight .gp {
+  color: #555555;
+}
+.code-highlight .gs {
+  font-weight: bold;
+}
+.code-highlight .gu {
+  color: #800080;
+  font-weight: bold;
+}
+.code-highlight .gt {
+  color: #aa0000;
+}
+.code-highlight .kc {
+  font-weight: bold;
+}
+.code-highlight .kd {
+  font-weight: bold;
+}
+.code-highlight .kn {
+  font-weight: bold;
+}
+.code-highlight .kp {
+  font-weight: bold;
+}
+.code-highlight .kr {
+  font-weight: bold;
+}
+.code-highlight .kt {
+  color: #445588;
+  font-weight: bold;
+}
+.code-highlight .m {
+  color: #009999;
+}
+.code-highlight .s {
+  color: #dd1144;
+}
+.code-highlight .n {
+  color: #333333;
+}
+.code-highlight .na {
+  color: teal;
+}
+.code-highlight .nb {
+  color: #0086b3;
+}
+.code-highlight .nc {
+  color: #445588;
+  font-weight: bold;
+}
+.code-highlight .no {
+  color: teal;
+}
+.code-highlight .ni {
+  color: purple;
+}
+.code-highlight .ne {
+  color: #990000;
+  font-weight: bold;
+}
+.code-highlight .nf {
+  color: #990000;
+  font-weight: bold;
+}
+.code-highlight .nn {
+  color: #555555;
+}
+.code-highlight .nt {
+  color: navy;
+}
+.code-highlight .nv {
+  color: teal;
+}
+.code-highlight .ow {
+  font-weight: bold;
+}
+.code-highlight .w {
+  color: #bbbbbb;
+}
+.code-highlight .mf {
+  color: #009999;
+}
+.code-highlight .mh {
+  color: #009999;
+}
+.code-highlight .mi {
+  color: #009999;
+}
+.code-highlight .mo {
+  color: #009999;
+}
+.code-highlight .sb {
+  color: #dd1144;
+}
+.code-highlight .sc {
+  color: #dd1144;
+}
+.code-highlight .sd {
+  color: #dd1144;
+}
+.code-highlight .s2 {
+  color: #dd1144;
+}
+.code-highlight .se {
+  color: #dd1144;
+}
+.code-highlight .sh {
+  color: #dd1144;
+}
+.code-highlight .si {
+  color: #dd1144;
+}
+.code-highlight .sx {
+  color: #dd1144;
+}
+.code-highlight .sr {
+  color: #009926;
+}
+.code-highlight .s1 {
+  color: #dd1144;
+}
+.code-highlight .ss {
+  color: #990073;
+}
+.code-highlight .bp {
+  color: #999999;
+}
+.code-highlight .vc {
+  color: teal;
+}
+.code-highlight .vg {
+  color: teal;
+}
+.code-highlight .vi {
+  color: teal;
+}
+.code-highlight .il {
+  color: #009999;
+}
+.code-highlight .gc {
+  color: #999;
+  background-color: #eaf2f5;
+}

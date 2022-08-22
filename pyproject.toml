@@ -1,0 +1,50 @@
+[tool.poetry]
+name = "bock"
+version = "3.4.14"
+description = "A small personal Wiki"
+authors = ["Nikhil Anand <nikhilanand@granular.ag>"]
+include = ["bock/ui/cached_dist/**"]
+exclude = [
+    "bock/ui/public",
+    "bock/ui/src",
+    "bock/ui/**/*.json",
+    "bock/ui/**/*.ts",
+    "bock/ui/**/*.tsx",
+    "bock/ui/*yarn*",
+    "bock/ui/*node_modules*",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Flask = "^1.1.2"
+gunicorn = "^20.1.0"
+click = "^7.1.2"
+pendulum = "^2.1.2"
+Markdown = "^3.3.4"
+watchgod = "^0.7"
+Whoosh = "^2.7.4"
+GitPython = "^3.1.15"
+pymdown-extensions = "^8.2"
+Flask-Cors = "^3.0.10"
+coloredlogs = "^15.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+black = { version = "^21.5b0", allow-prereleases = true }
+ipython = "^7.23.1"
+isort = "^5.8.0"
+mypy = "^0.812"
+flake8 = "^3.9.2"
+
+[tool.poetry.scripts]
+bock-serve = "bock.api.cli:main"
+bock-watch = "bock.watch.cli:main"
+bock-local = "bock.cli:main"
+bock-generate-static-files = "bock.static.cli:main"
+
+[tool.isort]
+multi_line_output = 3
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,51 @@
+nav a {
+  color: var(--color-grey-light);
+}
+nav a.active {
+  color: var(--color-highlight);
+}
+
+nav ul,
+nav ol {
+  margin: 0;
+  padding: 0;
+  line-height: calc(var(--line-height) * 1.5);
+}
+nav ul li,
+nav ol li {
+  list-style-type: none;
+  display: inline-block;
+  margin-right: var(--root-spacing);
+}
+
+nav[aria-label="main"] {
+  margin: 0.25em 0;
+  font-size: x-large;
+}
+
+nav[aria-label="Hierarchy"] {
+  color: var(--color-grey);
+  font-size: var(--font-size-small);
+}
+nav[aria-label="Hierarchy"] li {
+  margin-right: 0;
+}
+nav[aria-label="Hierarchy"] li span[role="separator"] {
+  margin: 0 calc(var(--root-spacing) / 2);
+  color: var(--color-grey-light);
+}
+nav[aria-label="Hierarchy"] a {
+  color: var(--color-grey);
+  text-decoration-color: var(--color-grey-light);
+}
+nav[aria-label="Hierarchy"] a:hover {
+  color: var(--color-highlight-light);
+}
+
+@media all and (max-width: 500px) {
+  nav[aria-label="Hierarchy"] {
+    overflow-x: scroll;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+}

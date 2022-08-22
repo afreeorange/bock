@@ -1,0 +1,7 @@
+# Here because starting Flask in debugging/live-reloading mode fails
+# without it 🤷‍♂️
+
+from bock.cli import main
+
+if __name__ == "__main__":
+    main()
