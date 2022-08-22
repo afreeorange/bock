@@ -1,0 +1,16 @@
+{% extends "./__base.html" %}
+
+{% block main %}
+{% include "./__hierarchy.html" %}
+
+<h1>
+  {{ entity.name }} 
+  <span>Raw</span> 
+  <span><a href="/{{ entity.uri }}" title="See the rendered version of this article">See Rendered</a></span>
+</h1>
+
+<pre>
+<code>{{ raw | safe }}</code>
+</pre>
+
+{% endblock main %}

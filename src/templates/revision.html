@@ -1,0 +1,14 @@
+{% extends "./__base.html" %}
+
+{% block main %}
+{% include "./__hierarchy.html" %}
+
+<h1>{{ name }} <span>Revision {{ revisionData.shortId }}</span></h1>
+
+{{ revisionData.html | safe }}
+
+<hr />
+
+<pre><code>{{ revision.source | safe }}</code></pre>
+
+{% endblock main %}

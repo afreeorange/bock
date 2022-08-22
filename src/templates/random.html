@@ -1,0 +1,17 @@
+{% extends "./__base.html" %}
+
+{% block script %}
+<script type="text/javascript">
+  (() => {
+    const URIs = [
+      {%- for entity in listOfEntities %}
+      "{{ entity.uri }}",
+      {%- endfor %}
+    ];
+
+    setTimeout(() => {
+      window.location.href = `/${URIs[Math.floor(Math.random() * URIs.length)]}`;
+    }, 1000);
+  })();
+</script>
+{% endblock script %}

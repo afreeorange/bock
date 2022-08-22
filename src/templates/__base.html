@@ -1,0 +1,91 @@
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Nikhil Anand" />
+    <meta name="description" content="Nikhil's Personal Wiki" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:image" content="/img/logo512.png" />
+    <meta property="og:site_name" content="Nikhil's Personal Wiki" />
+
+    <link rel="icon" href="/img/favicon.png" />
+    <link rel="apple-touch-icon" href="/img/logo192.png" />
+    <link rel="og:image" href="/img/logo512.png" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/highlight.css" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <title>{{ name }}</title>
+
+    <script defer data-domain="wiki.nikhil.io" src="https://plausible.io/js/plausible.js"></script>
+  </head>
+  <body>
+    <noscript>👉 A few things won&#8217;t work if you have JavaScript disabled.</noscript>
+    <div class="container {{ type }}">
+      <header>
+        <nav>
+          <ul>
+            <li><a href="/search"{% if type === "search" %}class="active"{% endif %}><span>Search</span></a></li>
+            <li><a href="/"{% if type === "home" %}class="active"{% endif %}><span>Home</span></a></li>
+            <li><a href="/random"{% if type === "random" %}class="active"{% endif %}><span>Random</span></a></li>
+
+            {# See TemplateVariables in types.ts for a full list of things #}
+            {% if type === "article" or type === "home" %}
+            <li><a href="/{{ entity.uri }}/raw"{% if type === "raw" %}class="active"{% endif %}><span>Raw</span></a></li>
+            <li><a href="/{{ entity.uri }}/revisions"{% if type === "revision-list" %}class="active"{% endif %}><span>Revisions</span></a></li>
+            <li><a href="/{{ entity.uri }}/index.json"><span>JSON</span></a></li>
+            {% endif %}
+
+            {% if type === "raw" %}
+            <li><a href="/{{ entity.uri }}/raw" class="active"><span>Raw</span></a></li>
+            <li><a href="/{{ entity.uri }}/revisions"><span>Revisions</span></a></li>
+            <li><a href="/{{ entity.uri }}/index.json"><span>JSON</span></a></li>
+            {% endif %}
+
+            {% if type === "revision-list" %}
+            <li><a href="/{{ entity.uri }}/raw"><span>Raw</span></a></li>
+            <li><a href="/{{ entity.uri }}/revisions" class="active"><span>Revisions</span></a></li>
+            <li><a href="/{{ entity.uri }}/revisions/index.json"><span>JSON</span></a></li>
+            {% endif %}
+
+            {% if type === "revision" %}
+            <li><a href="/{{ entity.uri }}/revisions/{{ revisionData.shortId }}/index.json"><span>JSON</span></a></li>
+            {% endif %}
+
+            {% if type === "folder" %}
+            <li><a href="/{{ entity.uri }}//index.json"><span>JSON</span></a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </header>
+      <main>
+      {% block main %}{% endblock main %}
+      </main>
+      <footer>
+        {% if type === "home" %}
+        <p>{% block statistics %}{% endblock statistics %}</p>
+        {% endif %}
+        <ul>
+          {% if type === "article" or type === "home" or type === "raw" %}
+            {% if entity.sizeInBytes != 0 %}
+              <li>{{ entity.sizeInBytes | numeral("0,0") }} bytes</li>
+            {% endif %}
+            {% if entity.created %}
+              <li>Created on {{ entity.created | date("PPPP 'at' h:mm bbb") }}</li>
+            {% endif %}
+            {% if entity.modified %}
+              <li>Modified on {{ entity.modified | date("PPPP 'at' h:mm bbb") }}</li>
+            {% endif %}
+          {% endif %}
+          <li>
+            <a href="https://github.com/afreeorange/node-bock" title="Link to this project on Github">{{ packageInfo.name }} v{{ packageInfo.version }}</a>
+          </li>
+        </ul>
+      </footer>
+    </div>
+    {% block script %}{% endblock script %}
+  </body>
+</html>

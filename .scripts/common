@@ -1,0 +1,12 @@
+#!/bin/bash
+
+VERSION=$(grep current_version .bumpversion.cfg | head -n 1 | cut -d" " -f3)
+TIMESTAMP=$(date "+%Y-%m-%dT%H.%M.%S")
+
+export VERSION
+export TIMESTAMP
+export NODE_MODULES_TEMP="/tmp/node_modules.$TIMESTAMP"
+export RELEASE_ARTIFACT="dist/bock-${VERSION}-py3-none-any.whl"
+
+echo "⏱ Started at $TIMESTAMP"
+echo "🍺 Bock v$VERSION"

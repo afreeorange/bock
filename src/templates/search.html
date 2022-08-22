@@ -1,0 +1,28 @@
+{% extends "./__base.html" %}
+
+{% block main %}
+
+<h1>Search Articles <span>{{ articles | length }}</span></h1>
+
+<form role="search">
+  <input placeholder="3 or more characters" autofocus />
+</form>
+<ul data-content="results"></ul>
+<ul data-content="list-of-articles">
+  {% for article in articles %}
+  <li>
+    <a href="/{{ article.uri }}" title="Read {{ article.name }}">
+      {{ article.path | replace(".md", "") | replace("/", " &rarr; ") |
+      safe }}
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock main %}
+
+{% block script %}
+<script src="/js/nunjucks.min.js"></script>
+<script src="/js/sql-wasm.js"></script>
+<script src="/js/search.js"></script>
+{% endblock script %}

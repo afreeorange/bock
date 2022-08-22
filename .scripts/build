@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Separated out since we can use different CircleCI images for each.
+
+.scripts/build-ui
+.scripts/build-api
+.scripts/build-docker

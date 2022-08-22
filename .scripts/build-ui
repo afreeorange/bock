@@ -1,0 +1,15 @@
+#!/bin/bash
+
+source .scripts/common
+
+echo "🧹 Cleaning up"
+rm -rfv bock/ui/build
+
+echo "👷‍♀️ Building UI"
+export REACT_APP_CI=true
+pushd bock/ui >>/dev/null || exit
+    yarn
+    yarn build
+popd >>/dev/null || exit
+
+echo "🚀 Finished UI"

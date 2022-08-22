@@ -1,0 +1,22 @@
+{% extends "./__base.html" %}
+
+{% block main %}
+{% include "./__hierarchy.html" %}
+
+<h1>{{ entity.name }} <span>Revisions</span></h1>
+
+<ul>
+  {% for revision in entity.revisions %}
+  <li>
+    <code><a href="{{ revision.shortId }}" title="See revision {{ revision.shortId }}">{{ revision.shortId }}</a></a></code>
+    <br />
+    <small>
+      {{ revision.date | date("PPPP 'at' h:mm bbb") }}
+      <br />
+      by {{ revision.author.name }} <code>{{ revision.author.email }}</code>
+    </small>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock main %}

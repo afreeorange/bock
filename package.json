@@ -1,0 +1,66 @@
+{
+  "name": "bock",
+  "version": "1.7.3",
+  "author": "Nikhil Anand <mail@nikhil.io> (https://nikhil.io)",
+  "license": "MIT",
+  "main": "./dist/src/index.js",
+  "bin": {
+    "bock": "./dist/src/index.js"
+  },
+  "scripts": {
+    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "build": "tsc -p . && mkdir dist/src/templates && cp -rv src/templates/* dist/src/templates/",
+    "clean": "rm -rf dist *.tgz",
+    "make-executable": "pkg --public-packages \"*\" --public .",
+    "all": "yarn clean && yarn build",
+    "exe": "npx ts-node -T src/index.ts",
+    "deploy:manual": "rm -rf ~/personal/wiki.nikhil.io.articles.out/* && npx ts-node -T src/index.ts -a ~/personal/wiki.nikhil.io.articles -o ~/personal/wiki.nikhil.io.articles.out && pushd ~/personal/wiki.nikhil.io.articles.out && find . -type f -exec gzip -9 '{}' \\; -exec mv '{}.gz' '{}' \\;  && aws s3 sync . s3://wiki.nikhil.io/ --delete --exclude '*.DS_Store*' --content-encoding gzip && popd"
+  },
+  "pkg": {
+    "scripts": "dist/src/index.js",
+    "assets": [
+      "package.json",
+      "dist/src/templates/**/*"
+    ],
+    "targets": [
+      "node16-linux-x64",
+      "node16-macos-x64"
+    ],
+    "outputPath": "dist"
+  },
+  "dependencies": {
+    "chalk": "^5.0.0",
+    "chokidar": "^3.5.2",
+    "commander": "^8.3.0",
+    "date-fns": "^2.25.0",
+    "fast-glob": "^3.2.7",
+    "fast-sort": "^3.1.1",
+    "highlight.js": "^11.3.1",
+    "js-beautify": "^1.14.0",
+    "markdown-it": "^12.2.0",
+    "markdown-it-attribution": "^0.1.4",
+    "markdown-it-attrs": "^4.1.0",
+    "markdown-it-prism": "^2.2.1",
+    "ncp": "^2.0.0",
+    "numeral": "^2.0.6",
+    "nunjucks": "^3.2.3",
+    "sqlite3": "^5.0.2",
+    "systeminformation": "^5.9.17",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/cli-progress": "^3.9.2",
+    "@types/highlight.js": "^10.1.0",
+    "@types/js-beautify": "^1.13.3",
+    "@types/markdown-it": "^12.2.3",
+    "@types/ncp": "^2.0.5",
+    "@types/node": "^16.9.2",
+    "@types/numeral": "^2.0.2",
+    "@types/nunjucks": "^3.2.0",
+    "@types/sqlite3": "^3.1.7",
+    "@types/uuid": "^8.3.1",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}

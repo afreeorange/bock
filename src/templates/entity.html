@@ -1,0 +1,78 @@
+{% extends "./__base.html" %}
+
+{% block statistics %}
+
+There are {{ statistics.articleCount | numeral("0,0") }} articles in this wiki
+with {{ statistics.revisionCount | numeral("0,0") }} total revisions and an
+average of {{ statistics.revisionAverage | numeral("0,0") }} revisions per
+article. On {{ now | date("PPPP 'at' h:mm bbb") }}, it took around {{
+statistics.generationTimeInSeconds }} seconds to generate this whole mess on a
+system running {{ system.os.distro }} {{ system.os.release }} ({{
+system.os.arch }}) with a {{ system.cpu.cores }}-core {{ system.cpu.speed }}GHz
+{{ system.cpu.manufacturer }} {{ system.cpu.brand }} CPU and {{
+system.memory.total | numeral('0b')}} of memory.
+
+{% endblock statistics %}
+
+{% block main %}
+{% include "./__hierarchy.html" %}
+
+<h1>{{ entity.name }}</h1>
+
+{# This is an article #}
+{% if entity.type === "article" or entity.type === "home" %}
+  <article>{{ entity.html | safe }}</article>
+  
+  {% if entity.type === "home" %}
+  <h2>Recent Updates</h2>
+  <ul>
+  {% for entity in recent %}
+    <li>
+      <a href="/{{ entity.uri  }}" title="{{ entity.name }}">
+        {{ entity.name }}
+      </a>
+    </li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+
+{# This is a folder listing #}
+{% else %}
+  {% if entity.readme %}
+    <div class="readme">{{ entity.readme.html | safe }}</div>
+  {% endif %}
+
+  {% set subFolderLength = entity.children.folders | length %}
+  {% if subFolderLength > 0 %}
+  <h2>Folders
+    <span>{{ entity.children.folders | length }}</span>
+  </h2>
+  <ul>
+    {% for child in entity.children.folders %}
+      <li>
+        <a href="/{{ child.uri }}" title="{{ child.name }}">
+          {{ child.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% set subArticleLength = entity.children.articles | length %}
+  {% if subArticleLength > 0 %}
+  <h2>Articles
+    <span>{{ entity.children.articles | length }}</span>
+  </h2>
+  <ul>
+    {% for child in entity.children.articles %}
+      <li>
+        <a href="/{{ child.uri }}" title="{{ child.name }}">
+          {{ child.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+{% endif %}
+{% endblock main %}
