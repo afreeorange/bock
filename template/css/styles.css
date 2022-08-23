@@ -253,7 +253,7 @@ main h1,
 main h2,
 main h3,
 main h4 {
-  margin: 0.5em 0;
+  margin: calc(var(--root-spacing) * 1) 0;
 }
 main h1 {
   color: var(--color-highlight);
