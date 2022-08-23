@@ -6,15 +6,15 @@ import (
 	"github.com/flosch/pongo2/v5"
 )
 
-var t_archive, _ = templateSet.FromCache("template/archive.html")
-var t_article_raw, _ = templateSet.FromCache("template/article-raw.html")
-var t_article, _ = templateSet.FromCache("template/article.html")
-var t_folder, _ = templateSet.FromCache("template/folder.html")
-var t_index, _ = templateSet.FromCache("template/index.html")
-var t_not_found, _ = templateSet.FromCache("template/not-found.html")
-var t_revision_raw, _ = templateSet.FromCache("template/revision-raw.html")
-var t_revision, _ = templateSet.FromCache("template/revision.html")
-var t_revisionList, _ = templateSet.FromCache("template/revision-list.html")
+var t_archive, _ = templateSet.FromCache("template/archive.njk")
+var t_article_raw, _ = templateSet.FromCache("template/article-raw.njk")
+var t_article, _ = templateSet.FromCache("template/article.njk")
+var t_folder, _ = templateSet.FromCache("template/folder.njk")
+var t_index, _ = templateSet.FromCache("template/index.njk")
+var t_not_found, _ = templateSet.FromCache("template/not-found.njk")
+var t_revision_raw, _ = templateSet.FromCache("template/revision-raw.njk")
+var t_revision, _ = templateSet.FromCache("template/revision.njk")
+var t_revisionList, _ = templateSet.FromCache("template/revision-list.njk")
 
 func renderIndex() string {
 	html, _ := t_index.Execute(pongo2.Context{

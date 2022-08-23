@@ -1,10 +1,12 @@
-{% extends "base.html" %}
+{% extends "base.njk" %}
 
 {% block main %}
-  {% include "hierarchy.html" %}
+  {% include "hierarchy.njk" %}
+
   <h1>
     {{ title }}
     <span>Raw</span>
   </h1>
+
 <pre><code>{{ source | safe }}</code></pre>
 {% endblock main %}

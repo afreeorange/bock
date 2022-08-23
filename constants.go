@@ -71,3 +71,15 @@ var markdown = goldmark.New(
 var templatesContent embed.FS
 var pongoLoader = pongo2.NewFSLoader(templatesContent)
 var templateSet = pongo2.NewSet("template", pongoLoader)
+
+// var _ = pongo2.RegisterFilter("round", func(in, param *pongo2.Value) (out *pongo2.Value, err *pongo2.Error) {
+// 	var rounded *pongo2.Value
+
+// 	if s, err := strconv.ParseFloat(in.String(), 32); err == nil {
+// 		rounded = pongo2.AsSafeValue(math.Round(s))
+// 	} else {
+// 		return pongo2.AsSafeValue("!_COULD_NOT_ROUND_VALUE"), &pongo2.Error{OrigError: err}
+// 	}
+
+// 	return rounded, nil
+// })

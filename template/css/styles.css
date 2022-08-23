@@ -394,6 +394,7 @@ ul[data-content="results"] li:not(:last-child) {
   display: block;
   font-size: var(--font-size-base);
   color: var(--color-light);
+  font-weight: normal;
 }
 
 .not-found main {

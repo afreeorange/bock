@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-
-{% block main %}
-  {% include "hierarchy.html" %}
-  <h1>
-    {{ title }} <span>Revision {{ revision.ShortId }}</span> <span>{{ revision.Date | date:"Monday, 2 Jan 2006 at 15:04 MST" }}</span>
-  </h1>
-  {{ html | safe }}
-{% endblock main %}

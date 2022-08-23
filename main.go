@@ -23,13 +23,15 @@ func main() {
 	var generateJSON bool
 	var generateRaw bool
 	var useOnDiskFS bool
+	var minifyOutput bool
 
 	flag.BoolVar(&versionInfo, "v", false, "Version info")
 	flag.StringVar(&articleRoot, "a", "", "Article root")
 	flag.StringVar(&outputFolder, "o", "", "Output folder")
 	flag.BoolVar(&generateJSON, "j", false, "Create JSON source files")
 	flag.BoolVar(&generateRaw, "r", false, "Create Raw markdown source files")
-	flag.BoolVar(&useOnDiskFS, "d", false, "Use on-disk filesystem to clone article repository (cloned to memory by default)")
+	flag.BoolVar(&useOnDiskFS, "d", false, "Use on-disk filesystem to clone article repository (slower; cloned to memory by default)")
+	flag.BoolVar(&minifyOutput, "m", false, "Minify all output (HTML, JS, CSS)")
 
 	flag.Parse()
 
@@ -124,9 +126,11 @@ func main() {
 		fmt.Println("Could not write articles: ", err)
 	}
 
+	// Tock
 	end := time.Now()
 	generationTime := end.Sub(start)
 	config.meta.GenerationTime = generationTime
+	config.meta.GenerationTimeRounded = generationTime.Round(time.Second)
 
 	// Write the index page and other pages
 	fmt.Println("Writing index")
@@ -145,6 +149,6 @@ func main() {
 		"\nDone! Finished processing %d articles and %d revisions in %s\n",
 		config.meta.ArticleCount,
 		config.meta.RevisionCount,
-		time.Duration.Round(generationTime, time.Millisecond),
+		config.meta.GenerationTime,
 	)
 }

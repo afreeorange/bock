@@ -1,0 +1,15 @@
+{% extends "base.njk" %}
+
+{% block main %}
+  {% include "hierarchy.njk" %}
+
+  <h1>
+    {{ title }}
+    <br />
+    <span>Revision {{ revision.ShortId }}</span> <span>{{ revision.Date | date:"Monday, 2 January 2006 at 15:04 MST" }}</span>
+  </h1>
+
+  <pre>
+<code>{{ source | safe }}</code>
+</pre>
+{% endblock main %}

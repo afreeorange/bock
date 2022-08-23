@@ -55,16 +55,17 @@ type Folder struct {
 }
 
 type Meta struct {
-	Architecture   string        `json:"architecture"`
-	ArticleCount   int           `json:"articleCount"`
-	BuildDate      time.Time     `json:"buildTime"`
-	CPUCount       int           `json:"cpuCount"`
-	GenerateJSON   bool          `json:"generateJSON"`
-	GenerateRaw    bool          `json:"generateRaw"`
-	GenerationTime time.Duration `json:"generationTime"`
-	MemoryInGB     int           `json:"memoryInGB"`
-	Platform       string        `json:"platform"`
-	RevisionCount  int           `json:"revisionCount"`
+	Architecture          string        `json:"architecture"`
+	ArticleCount          int           `json:"articleCount"`
+	BuildDate             time.Time     `json:"buildTime"`
+	CPUCount              int           `json:"cpuCount"`
+	GenerateJSON          bool          `json:"generateJSON"`
+	GenerateRaw           bool          `json:"generateRaw"`
+	GenerationTime        time.Duration `json:"generationTime"`
+	GenerationTimeRounded time.Duration `json:"generationTimeRounded"`
+	MemoryInGB            int           `json:"memoryInGB"`
+	Platform              string        `json:"platform"`
+	RevisionCount         int           `json:"revisionCount"`
 }
 
 type BockConfig struct {

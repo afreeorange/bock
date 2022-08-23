@@ -59,6 +59,7 @@ rm -rf $HOME/Desktop/temp/*; time go run --tags "fts5" . -a $HOME/personal/wiki.
 * [gin](https://github.com/codegangsta/gin) for live-reloading
 * [Martini](https://github.com/go-martini/martini) for a web framework
 * [Gore](https://github.com/x-motemen/gore) for a REPL
+* [Minifier](https://github.com/tdewolff/minify) for HTML, CSS, XML, etc
 
 ## References
 
@@ -152,7 +153,7 @@ func main() {
 
 ## Templating
 
-Uses [pongo2](https://github.com/flosch/pongo2) for a Django/Nunjucks-style syntax since I don't yet like the Golang's [`text/template`](https://pkg.go.dev/text/template). There's a base template that's embedded in the built binary which isn't too bad-looking but I'll add a way to specify custom templates later.
+Uses [pongo2](https://github.com/flosch/pongo2) for a Django/Nunjucks-style syntax since I don't yet like the Golang's [`text/template`](https://pkg.go.dev/text/template). There's a base template that's embedded in the built binary which isn't too bad-looking but I'll add a way to specify custom templates later. Here are [all of Pongo2's filters](https://github.com/flosch/pongo2/blob/master/template_tests/filters.tpl).
 
 ### Template Types
 
