@@ -249,14 +249,14 @@ main nav ul li:last-of-type a[data-entity-type="article"] {
 
 /* End Navigation */
 
-main h1,
+main h1 {
+  color: var(--color-highlight);
+  margin: calc(var(--root-spacing) / 2) 0;
+}
 main h2,
 main h3,
 main h4 {
-  margin: calc(var(--root-spacing) * 1) 0;
-}
-main h1 {
-  color: var(--color-highlight);
+  margin: var(--root-spacing) 0;
 }
 main h1 span:nth-of-type(1),
 main h2 span:nth-of-type(1) {
