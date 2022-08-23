@@ -118,8 +118,13 @@ func main() {
 	config.database = db
 
 	// Copy static assets over
+	fmt.Print("Creating template assets")
 	copyTemplateAssets(&config)
+	fmt.Println("... done")
+
+	fmt.Print("Copying assets")
 	copyAssets(&config)
+	fmt.Println("... done")
 
 	// Process all articles
 	if process_error := writeArticles(&config); process_error != nil {
@@ -133,17 +138,21 @@ func main() {
 	config.meta.GenerationTimeRounded = generationTime.Round(time.Second)
 
 	// Write the index page and other pages
-	fmt.Println("Writing index")
+	fmt.Print("Writing index")
 	writeIndex(&config)
+	fmt.Println("... done")
 
-	fmt.Println("Writing 404 page")
+	fmt.Print("Writing 404 page")
 	write404(&config)
+	fmt.Println("... done")
 
-	fmt.Println("Writing archive")
+	fmt.Print("Writing archive")
 	writeArchive(&config)
+	fmt.Println("... done")
 
 	fmt.Print("Writing /Home: ")
 	writeHome(&config)
+	fmt.Println("... done")
 
 	fmt.Printf(
 		"\nDone! Finished processing %d articles and %d revisions in %s\n",

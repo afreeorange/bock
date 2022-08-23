@@ -2,13 +2,17 @@
   /* Measurements */
   --border-radius: 0.25em;
   --width: 70vw;
-  --max-width: 70em;
+  --max-width: 60em;
   --root-spacing: 1em;
 
-  /* Fonts */
+  /* Typography */
   --font-size-base: 16px;
   --font-size-small: calc(var(--font-size-base) / 1.25);
   --font-size-large: calc(var(--font-size-base) * 1.25);
+  --font-family-body: -apple-system, BlinkMacSystemFont, avenir next, avenir,
+    segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+  --font-family-monospace: Menlo, Consolas, Monaco, Liberation Mono,
+    Lucida Console, monospace;
   --line-height: 1.5;
 
   /* Colors */
@@ -32,10 +36,10 @@
 * {
   margin: 0;
 }
-body,
+/* body,
 html {
-  /*   height: 100%; */
-}
+  height: 100%;
+} */
 body {
   line-height: var(--line-height);
   -webkit-font-smoothing: antialiased;
@@ -69,8 +73,7 @@ p {
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
-  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
-    helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+  font-family: var(--font-family-body);
   font-size: var(--font-size-base);
 }
 
@@ -215,8 +218,8 @@ main nav ul li a[data-entity-type="folder"]::before {
   mask-image: url(/img/folder.svg);
 }
 main nav ul li a[data-entity-type="article"]::before {
-  -webkit-mask-image: url(/img/article.svg);
-  mask-image: url(/img/article.svg);
+  -webkit-mask-image: url(/img/article-breadcrumb.svg);
+  mask-image: url(/img/article-breadcrumb.svg);
 }
 main nav ul li a[data-entity-type="revision-list"]::before {
   -webkit-mask-image: url(/img/revisions.svg);
@@ -266,15 +269,14 @@ main h2 span:nth-of-type(1) {
   border-radius: var(--border-radius);
   font-size: var(--font-size-base);
   position: relative;
-  bottom: 0.125em;
+  bottom: 0.25em;
 }
 main h2 {
   border-bottom: 1px dotted var(--color-light);
 }
 main pre,
 main code {
-  font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console,
-    monospace;
+  font-family: var(--font-family-monospace);
 }
 main pre {
   padding: 0.5em;
@@ -377,6 +379,7 @@ ul[data-content="results"] li:not(:last-child) {
 }
 .revision-list main > ul li a {
   font-weight: bold;
+  font-family: var(--font-family-monospace);
 }
 .revision-list main > ul li:not(:last-of-type) {
   border-bottom: 1px dotted var(--color-light);
@@ -388,6 +391,10 @@ ul[data-content="results"] li:not(:last-child) {
 }
 .revision-list main > ul li small:nth-of-type(2) {
   color: var(--color-light);
+}
+.revision-list main > ul li small:nth-of-type(3) {
+  color: var(--color-light);
+  opacity: 0.75;
 }
 
 .revision h1 span:nth-of-type(2) {
@@ -406,6 +413,7 @@ ul[data-content="results"] li:not(:last-child) {
 footer {
   color: var(--color-light);
   font-size: var(--font-size-small);
+  margin-top: calc(var(--root-spacing) * 2);
   padding-bottom: calc(var(--root-spacing) * 4);
 }
 footer a {

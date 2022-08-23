@@ -30,8 +30,6 @@ func writeFile(name string, contents []byte) {
 }
 
 func copyTemplateAssets(config *BockConfig) {
-	fmt.Print("Creating template assets...")
-
 	// Copy all the css, js, etc
 	for _, a := range [3]string{"css", "img", "js"} {
 		d, err := templatesContent.ReadDir("template/" + a)
@@ -57,21 +55,15 @@ func copyTemplateAssets(config *BockConfig) {
 			os.WriteFile(config.outputFolder+"/"+de.Name(), f, os.ModePerm)
 		}
 	}
-
-	fmt.Println("done")
 }
 
 func copyAssets(config *BockConfig) {
-	fmt.Print("Copying assets... ")
-
 	if err := cp.Copy(
 		config.articleRoot+"/__assets",
 		config.outputFolder+"/assets",
 	); err != nil {
 		fmt.Print("Oops, could not copy assets: ", err)
 	}
-
-	fmt.Println("done")
 }
 
 func writeIndex(config *BockConfig) {
@@ -186,7 +178,8 @@ func writeArticle(
 		}
 	}
 
-	fmt.Println(relativePath, revisionsLabel)
+	fmt.Printf("\033[2K\r%s", relativePath+" "+revisionsLabel)
+
 	config.meta.ArticleCount += 1
 }
 
@@ -337,6 +330,12 @@ func writeArticles(config *BockConfig) error {
 	// coroutines as articles and gets really slow on machines with low memory.
 	//
 	// TODO: Use channels or buffered WaitGroups
+	// for i := 10; i >= 0; i-- {
+	// 	fmt.Printf("\033[2K\r%d", i)
+	// 	time.Sleep(1 * time.Second)
+	// }
+	// fmt.Println()
+
 	wg := new(sync.WaitGroup)
 	for _, e := range entityList {
 		wg.Add(1)
@@ -354,7 +353,8 @@ func writeArticles(config *BockConfig) error {
 
 	wg.Wait()
 
-	fmt.Println("")
+	fmt.Printf("\033[2K\r")
+	fmt.Println("Finished articles")
 	tx.Commit()
 
 	return err

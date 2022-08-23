@@ -60,6 +60,7 @@ rm -rf $HOME/Desktop/temp/*; time go run --tags "fts5" . -a $HOME/personal/wiki.
 * [Martini](https://github.com/go-martini/martini) for a web framework
 * [Gore](https://github.com/x-motemen/gore) for a REPL
 * [Minifier](https://github.com/tdewolff/minify) for HTML, CSS, XML, etc
+* [Awesome Go](https://awesome-go.com/)
 
 ## References
 
@@ -79,6 +80,7 @@ rm -rf $HOME/Desktop/temp/*; time go run --tags "fts5" . -a $HOME/personal/wiki.
 * [Go Routines Under the Hood](https://osmh.dev/posts/goroutines-under-the-hood)
 * [A million files in `git` repo](https://canvatechblog.com/we-put-half-a-million-files-in-one-git-repository-heres-what-we-learned-ec734a764181).
 * [A Crash Course on Concurrency & Parallelism in Go](https://levelup.gitconnected.com/a-crash-course-on-concurrency-parallelism-in-go-8ea935c9b0f8)
+* [How to have an in-place string that updates on stdout](https://stackoverflow.com/a/52367312)
 
 ### Concurrency/Parallelism
 
@@ -170,3 +172,52 @@ Uses [pongo2](https://github.com/flosch/pongo2) for a Django/Nunjucks-style synt
 ## Search
 
 Powered by [SQL.js](https://github.com/sql-js/sql.js/).
+
+## Simple Progress Bar
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+// Bar ...
+type Bar struct {
+	percent int64  // progress percentage
+	cur     int64  // current progress
+	total   int64  // total value for progress
+	rate    string // the actual progress bar to be printed
+	graph   string // the fill value for progress bar
+}
+
+func (bar *Bar) NewOption(start, total int64) {
+	bar.cur = start
+	bar.total = total
+	if bar.graph == "" {
+		bar.graph = "â–ˆ"
+	}
+	bar.percent = bar.getPercent()
+	for i := 0; i < int(bar.percent); i += 2 {
+		bar.rate += bar.graph // initial progress position
+	}
+}
+
+func (bar *Bar) getPercent() int64 {
+	return int64((float32(bar.cur) / float32(bar.total)) * 100)
+}
+
+func (bar *Bar) Play(cur int64) {
+	bar.cur = cur
+	last := bar.percent
+	bar.percent = bar.getPercent()
+	if bar.percent != last && bar.percent%2 == 0 {
+		bar.rate += bar.graph
+	}
+	fmt.Printf("\r[%-50s]%3d%% %8d/%d", bar.rate, bar.percent, bar.cur, bar.total)
+}
+
+func (bar *Bar) Finish() {
+	fmt.Println()
+}
+```
