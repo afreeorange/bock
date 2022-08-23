@@ -389,10 +389,8 @@ ul[data-content="results"] li:not(:last-child) {
   color: var(--color-light);
 }
 
-.not-found {
-  font-size: var(--font-size-large);
-}
 .not-found main {
+  font-size: var(--font-size-large);
   text-align: center;
   padding: calc(var(--root-spacing) * 6) 0;
 }
@@ -451,3 +449,4 @@ footer ul li a::before {
     padding: calc(var(--root-spacing) * 2) 0;
   }
 }
+
