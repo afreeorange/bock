@@ -1,12 +1,13 @@
 #!/bin/bash
 
 ARCH="$(uname -m)"
+OS="$(uname -s)"
 VERSION="$(cat VERSION)"
-ARTIFACT="dist/bock-linux-$ARCH"
+ARTIFACT="dist/bock-$OS-$ARCH"
 
-echo "Building v$VERSION for $ARCH"
+echo "Building bock v$VERSION"
 rm -rf dist/
 CGO_ENABLED=1 go build --tags "fts5" -o "$ARTIFACT" .
 
-echo "Done."
+echo "Done!"
 echo "See $ARTIFACT"
