@@ -11,5 +11,14 @@
     {% if type == "raw" %}
     <li><span>Raw</span></li>
     {% endif %}
+
+    {% if type == "revision" %}
+    <li><a data-entity-type="revision-list" href="{{ uri }}/revisions" title="Article revisions">Revisions</a></li>
+    <li><span>Revision {{ revision.ShortId }}</span></li>
+    {% endif %}
+
+    {% if type == "revision-list" %}
+    <li><span>Revisions</span></li>
+    {% endif %}
   </ul>
 </nav>

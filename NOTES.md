@@ -17,6 +17,7 @@ CGO_ENABLED=1 go build --tags "fts5" -o "dist/bock-$(uname)-$(uname -m)" .
 ### TODO
 
 * [ ] FIX THE NAVIGATION FFS
+* [x] Breadcrumbs > Revision
 * [ ] Table of Contents
 * [ ] Recent Changes (Global)
 * [ ] Syntax Highlighting
@@ -25,6 +26,7 @@ CGO_ENABLED=1 go build --tags "fts5" -o "dist/bock-$(uname)-$(uname -m)" .
 * [ ] STATS : Average number of revisions
 * [ ] STATS : Total words
 * [ ] STATS : Average words per article (length)
+* [ ] STATS : Recent articles
 * [ ] Compare Page
 * [ ] Fix timestamps; make them consistent
 * [x] Fix builds on cimg/go:1.18

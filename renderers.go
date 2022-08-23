@@ -36,7 +36,7 @@ func renderNotFound() string {
 
 func renderArticle(
 	source []byte,
-	context Article,
+	article Article,
 	entityType string,
 	config *BockConfig,
 ) (string, string) {
@@ -46,18 +46,18 @@ func renderArticle(
 	}
 
 	baseContext := pongo2.Context{
-		"created":     context.FileCreated,
-		"hierarchy":   context.Hierarchy,
+		"created":     article.FileCreated,
+		"hierarchy":   article.Hierarchy,
 		"html":        conversionBuffer.String(),
-		"id":          context.ID,
+		"id":          article.ID,
 		"meta":        config.meta,
-		"modified":    context.FileModified,
-		"revisions":   context.Revisions,
-		"sizeInBytes": context.Size,
-		"source":      context.Source,
-		"title":       context.Title,
-		"untracked":   context.Untracked,
-		"uri":         context.URI,
+		"modified":    article.FileModified,
+		"revisions":   article.Revisions,
+		"sizeInBytes": article.Size,
+		"source":      article.Source,
+		"title":       article.Title,
+		"untracked":   article.Untracked,
+		"uri":         article.URI,
 
 		"type":    entityType,
 		"version": VERSION,
@@ -76,13 +76,13 @@ func renderArticle(
 	return html, raw
 }
 
-func renderFolder(context Folder) string {
+func renderFolder(folder Folder) string {
 	html, _ := t_folder.Execute(pongo2.Context{
-		"children":  context.Children,
-		"hierarchy": context.Hierarchy,
-		"readme":    context.README,
-		"title":     context.Title,
-		"uri":       context.URI,
+		"children":  folder.Children,
+		"hierarchy": folder.Hierarchy,
+		"readme":    folder.README,
+		"title":     folder.Title,
+		"uri":       folder.URI,
 
 		"type":    "folder",
 		"version": VERSION,
@@ -107,6 +107,7 @@ func renderArchive(config *BockConfig) string {
 func renderRevisionList(article Article, revisions []Revision) string {
 	html, _ := t_revisionList.Execute(pongo2.Context{
 		"revisions": revisions,
+		"hierarchy": article.Hierarchy,
 		"title":     article.Title,
 		"uri":       article.URI,
 
@@ -124,11 +125,12 @@ func renderRevision(article Article, revision Revision) (string, string) {
 	}
 
 	baseContext := pongo2.Context{
-		"html":     conversionBuffer.String(),
-		"revision": revision,
-		"source":   revision.Content,
-		"title":    article.Title,
-		"uri":      article.URI,
+		"html":      conversionBuffer.String(),
+		"hierarchy": article.Hierarchy,
+		"revision":  revision,
+		"source":    revision.Content,
+		"title":     article.Title,
+		"uri":       article.URI,
 
 		"type":    "revision",
 		"version": VERSION,

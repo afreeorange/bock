@@ -1,7 +1,8 @@
 :root {
   /* Measurements */
   --border-radius: 0.25em;
-  --max-width: 45em;
+  --width: 70vw;
+  --max-width: 70em;
   --root-spacing: 1em;
 
   /* Fonts */
@@ -104,6 +105,7 @@ mark {
 }
 
 .container {
+  width: var(--width);
   max-width: var(--max-width);
   margin: 0 auto;
 }
@@ -216,6 +218,10 @@ main nav ul li a[data-entity-type="article"]::before {
   -webkit-mask-image: url(/img/article.svg);
   mask-image: url(/img/article.svg);
 }
+main nav ul li a[data-entity-type="revision-list"]::before {
+  -webkit-mask-image: url(/img/revisions.svg);
+  mask-image: url(/img/revisions.svg);
+}
 main nav ul li a[href="/ROOT"]::before {
   -webkit-mask-image: url(/img/root.svg);
   mask-image: url(/img/root.svg);
@@ -294,6 +300,7 @@ main table {
 main table thead tr th {
   padding: calc(var(--root-spacing) / 2);
   text-align: left;
+  vertical-align: top;
   border-bottom: 1px solid var(--color-light);
 }
 main table tbody tr td {
@@ -364,22 +371,22 @@ ul[data-content="results"] li:not(:last-child) {
   margin-bottom: calc(var(--root-spacing) * 2);
 }
 
-.revision-list main ul {
+.revision-list main > ul {
   padding: 0;
   list-style-type: none;
 }
-.revision-list main ul li a {
+.revision-list main > ul li a {
   font-weight: bold;
 }
-.revision-list main ul li:not(:last-of-type) {
+.revision-list main > ul li:not(:last-of-type) {
   border-bottom: 1px dotted var(--color-light);
   margin: 0;
   padding: var(--root-spacing) 0;
 }
-.revision-list main ul li small:nth-of-type(1) {
+.revision-list main > ul li small:nth-of-type(1) {
   color: var(--color-light-light);
 }
-.revision-list main ul li small:nth-of-type(2) {
+.revision-list main > ul li small:nth-of-type(2) {
   color: var(--color-light);
 }
 
@@ -432,7 +439,7 @@ footer ul li a::before {
 
 @media all and (max-width: 700px) {
   :root {
-    --max-width: 95%;
+    --width: 95%;
     --font-size-base: 18px;
   }
 
@@ -449,4 +456,3 @@ footer ul li a::before {
     padding: calc(var(--root-spacing) * 2) 0;
   }
 }
-
