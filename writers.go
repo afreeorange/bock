@@ -50,7 +50,7 @@ func copyTemplateAssets(config *BockConfig) {
 	// actual template HTML files!
 	d, _ := templatesContent.ReadDir("template")
 	for _, de := range d {
-		if filepath.Ext(de.Name()) != ".html" {
+		if filepath.Ext(de.Name()) != ".njk" {
 			f, _ := templatesContent.ReadFile("template/" + de.Name())
 			os.WriteFile(config.outputFolder+"/"+de.Name(), f, os.ModePerm)
 		}
