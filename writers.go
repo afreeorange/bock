@@ -308,21 +308,18 @@ func writeArticles(config *BockConfig) error {
 	err := filepath.Walk(
 		config.articleRoot,
 		func(path string, f os.FileInfo, err error) error {
-			if !IGNORED_FOLDERS_REGEX.MatchString(path) {
-				if !IGNORED_FILES_REGEX.MatchString(path) && filepath.Ext(path) == ".md" {
-					entityList = append(entityList, Entity{
-						path:     path,
-						fileInfo: f,
-					})
-				}
 
-				if f.IsDir() {
-					entityList = append(entityList, Entity{
-						path:     path,
-						fileInfo: f,
-					})
-				}
+			addToList := (!IGNORED_FOLDERS_REGEX.MatchString(path) &&
+				!IGNORED_FILES_REGEX.MatchString(path) &&
+				filepath.Ext(path) == ".md") || f.IsDir()
+
+			if addToList {
+				entityList = append(entityList, Entity{
+					path:     path,
+					fileInfo: f,
+				})
 			}
+
 			return nil
 		})
 
