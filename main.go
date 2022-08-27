@@ -90,9 +90,12 @@ func main() {
 		fmt.Println("WARN: Working tree is not clean!")
 	}
 
+	articleTree, _ := makeTree(articleRoot)
+
 	// App config
 	config := BockConfig{
 		articleRoot:  articleRoot,
+		articleTree:  articleTree,
 		database:     nil,
 		outputFolder: outputFolder,
 		meta: Meta{

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -143,4 +144,68 @@ func getArticleHistory(articlePath string, config *BockConfig) (ArticleHistory, 
 	ret.revisions = revisions
 
 	return ret, nil
+}
+
+// Adapted from
+// https://github.com/marcinwyszynski/directory_tree/blob/master/directory_tree.go
+func makeTree(articleRoot string) (*TreeEntity, error) {
+	var result *TreeEntity
+	absoluteRoot, err := filepath.Abs(articleRoot)
+
+	if err != nil {
+		return result, err
+	}
+
+	parents := make(map[string]*TreeEntity)
+
+	walkFunction := func(path string, e os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !IGNORED_FOLDERS_REGEX.MatchString(path) {
+			addToList :=
+				!IGNORED_FILES_REGEX.MatchString(path) &&
+					filepath.Ext(path) == ".md" || e.IsDir()
+
+			if addToList {
+				entityType := "article"
+				if e.IsDir() {
+					entityType = "folder"
+				}
+
+				parents[path] = &TreeEntity{
+					path: path,
+
+					Children: make([]*TreeEntity, 0),
+					Name:     e.Name(),
+					Title:    removeExtensionFrom(e.Name()),
+					Size:     e.Size(),
+					Type:     entityType,
+					URI:      makeURI(path, articleRoot),
+				}
+			}
+		}
+
+		return nil
+	}
+
+	if err = filepath.Walk(absoluteRoot, walkFunction); err != nil {
+		return result, err
+	}
+
+	for path, te := range parents {
+		parentPath := filepath.Dir(path)
+		parent, parentExists := parents[parentPath]
+
+		// If a parent does not exist, this is the root.
+		if !parentExists {
+			result = te
+		} else {
+			te.Parent = parent
+			parent.Children = append(parent.Children, te)
+		}
+	}
+
+	return result, err
 }

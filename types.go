@@ -54,6 +54,18 @@ type Folder struct {
 	URI       string               `json:"uri"`
 }
 
+type TreeEntity struct {
+	Name  string `json:"name"`
+	Size  int64  `json:"sizeInBytes"`
+	Title string `json:"title"`
+	Type  string `json:"type"`
+	URI   string `json:"uri"`
+
+	Children []*TreeEntity `json:"children"`
+	Parent   *TreeEntity   `json:"-"`
+	path     string
+}
+
 type Meta struct {
 	Architecture          string        `json:"architecture"`
 	ArticleCount          int           `json:"articleCount"`
@@ -70,6 +82,7 @@ type Meta struct {
 
 type BockConfig struct {
 	articleRoot    string
+	articleTree    *TreeEntity
 	database       *sql.DB
 	meta           Meta
 	outputFolder   string

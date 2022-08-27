@@ -1,13 +1,41 @@
 {% extends "base.njk" %}
 
 {% block main %}
+  {% macro drawList(entity) %}
+    <ul>
+      <li>
+        {% if entity.Type == "article" %}
+          <a href="{{ entity.URI }}" title="Go to {{ entity.Title }}" data-entity-type="{{ entity.Type }}">{{ entity.Title }}</a>
+          <span>{{ entity.Size }} bytes</span>
+        {% else %}
+          <a href="{{ entity.URI }}" title="Go to {{ entity.Title }}" data-entity-type="{{ entity.Type }}"><strong>{{ entity.Title }}</strong></a>
+        {% endif %}
+        {% if entity.Children | length > 0 %}
+          {% for child in entity.Children %}
+            {{ drawList(child) }}
+          {% endfor %}
+        {% endif %}
+      </li>
+    </ul>
+  {% endmacro %}
+
   <h1>Search {{ meta.ArticleCount }} articles</h1>
 
   <form role="search">
-    <input placeholder="3 or more characters" autofocus />
+    <input placeholder="3 or more characters" autofocus/>
   </form>
 
   <ul data-content="results"></ul>
+
+  <hr />
+
+  <p><small>This is a work in progress&hellip;</small></p>
+
+  <div class="article-tree">
+    {% for entity in tree.Children %}
+      {{ drawList(entity) }}
+    {% endfor %}
+  </div>
 {% endblock main %}
 
 {% block scripts %}

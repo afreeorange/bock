@@ -410,6 +410,52 @@ ul[data-content="results"] li:not(:last-child) {
   padding: calc(var(--root-spacing) * 6) 0;
 }
 
+.archive p small {
+  color: var(--color-light)
+}
+.article-tree ul {
+  list-style-type: none;
+}
+.article-tree > ul {
+  padding: 0;
+}
+.article-tree > ul li {
+  margin: 0;
+}
+.article-tree ul:last-of-type {
+  margin-bottom: var(--root-spacing);
+}
+.article-tree li a[data-entity-type="article"] + span {
+  color: var(--color-light);
+  margin-left: calc(var(--root-spacing) / 2);
+}
+.article-tree li a[data-entity-type="folder"] {
+  padding-top: var(--root-spacing);
+  display: block;
+}
+.article-tree li a[data-entity-type="article"]::before {
+  content: "";
+  width: 1.25em;
+  height: 1.25em;
+  display: inline-block;
+  margin-right: calc(var(--root-spacing) / 4);
+
+  background-color: var(--color-light-light);
+  -webkit-mask-image: url(/img/angle.svg);
+  mask-image: url(/img/angle.svg);
+}
+.article-tree li a[data-entity-type="folder"]::before {
+  content: "";
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  margin-right: calc(var(--root-spacing) / 2);
+
+  background-color: var(--color-highlight);
+  -webkit-mask-image: url(/img/folder.svg);
+  mask-image: url(/img/folder.svg);
+}
+
 footer {
   color: var(--color-light);
   font-size: var(--font-size-small);

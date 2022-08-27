@@ -44,7 +44,9 @@ var IGNORED_FOLDERS_REGEX = regexp.MustCompile(
 		"node_modules",
 	}, "|"))
 
-var IGNORED_FILES_REGEX = regexp.MustCompile("Home.md")
+var IGNORED_FILES_REGEX = regexp.MustCompile(strings.Join([]string{
+	"Home.md",
+}, "|"))
 
 // We use Goldmark as the Markdown converter. Configure it here.
 var markdown = goldmark.New(

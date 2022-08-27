@@ -95,6 +95,7 @@ func renderArchive(config *BockConfig) string {
 	html, _ := t_archive.Execute(pongo2.Context{
 		"meta":  config.meta,
 		"title": "Archive",
+		"tree":  config.articleTree,
 		"uri":   "/archive",
 
 		"type":    "archive",

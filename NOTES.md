@@ -58,7 +58,9 @@ rm -rf $HOME/Desktop/temp/*; time go run --tags "fts5" . -a $HOME/personal/wiki.
 * [Cobra](https://cobra.dev/) is a full-featured CLI app framework
 * [gin](https://github.com/codegangsta/gin) for live-reloading
 * [Martini](https://github.com/go-martini/martini) for a web framework
-* [Gore](https://github.com/x-motemen/gore) for a REPL
+* [Gore](https://github.co$$
+
+$$m/x-motemen/gore) for a REPL
 * [Minifier](https://github.com/tdewolff/minify) for HTML, CSS, XML, etc
 * [Awesome Go](https://awesome-go.com/)
 
