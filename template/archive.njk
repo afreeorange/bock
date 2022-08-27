@@ -2,21 +2,23 @@
 
 {% block main %}
   {% macro drawList(entity) %}
-    <ul>
-      <li>
-        {% if entity.Type == "article" %}
-          <a href="{{ entity.URI }}" title="Go to {{ entity.Title }}" data-entity-type="{{ entity.Type }}">{{ entity.Title }}</a>
-          <span>{{ entity.Size }} bytes</span>
-        {% else %}
-          <a href="{{ entity.URI }}" title="Go to {{ entity.Title }}" data-entity-type="{{ entity.Type }}"><strong>{{ entity.Title }}</strong></a>
-        {% endif %}
-        {% if entity.Children | length > 0 %}
-          {% for child in entity.Children %}
-            {{ drawList(child) }}
-          {% endfor %}
-        {% endif %}
-      </li>
-    </ul>
+    <li data-entity-type="{{ entity.Type }}">
+      <a href="{{ entity.URI }}" title="Go to {{ entity.Title }}">
+      {% if entity.Type == "article" %}
+        {{ entity.Title }}
+      {% else %}
+        <strong>{{ entity.Title }}</strong>
+      {% endif %}
+      </a>
+
+      {% if entity.Children | length > 0 %}
+        <ul>
+        {% for child in entity.Children %}
+          {{ drawList(child) }}
+        {% endfor %}
+        </ul>
+      {% endif %}
+    </li>
   {% endmacro %}
 
   <h1>Search {{ meta.ArticleCount }} articles</h1>
@@ -31,11 +33,18 @@
 
   <p><small>This is a work in progress&hellip;</small></p>
 
-  <div class="article-tree">
+  <ul class="article-tree">
+    <li data-entity-type="folder">
+      <a href="/ROOT" title="See article root">
+        <strong>
+          Root
+        </strong>
+      </a>
+    </li>
     {% for entity in tree.Children %}
       {{ drawList(entity) }}
     {% endfor %}
-  </div>
+  </ul>
 {% endblock main %}
 
 {% block scripts %}
