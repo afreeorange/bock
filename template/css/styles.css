@@ -446,6 +446,10 @@ ul[data-content="results"] li:not(:last-child) {
   -webkit-mask-image: url(/img/folder.svg);
   mask-image: url(/img/folder.svg);
 }
+.article-tree li[data-entity-type="article"] {
+  display: grid;
+  grid-template-columns: 1.25em auto;
+}
 .article-tree li[data-entity-type="folder"] {
   margin: calc(var(--root-spacing) / 2) 0;
 }
