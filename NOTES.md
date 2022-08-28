@@ -151,6 +151,8 @@ func main() {
 
 Uses [pongo2](https://github.com/flosch/pongo2) for a Django/Nunjucks-style syntax since I don't yet like the Golang's [`text/template`](https://pkg.go.dev/text/template). There's a base template that's embedded in the built binary which isn't too bad-looking but I'll add a way to specify custom templates later. Here are [all of Pongo2's filters](https://github.com/flosch/pongo2/blob/master/template_tests/filters.tpl).
 
+The base template uses [the Gruvbox palette](https://github.com/morhetz/gruvbox).
+
 ### Template Types
 
 - `archive`
