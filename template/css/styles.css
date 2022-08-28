@@ -264,6 +264,7 @@ main h2,
 main h3,
 main h4 {
   margin: var(--root-spacing) 0;
+  color: var(--color-highlight-light);
 }
 main h1 span:nth-of-type(1),
 main h2 span:nth-of-type(1) {
