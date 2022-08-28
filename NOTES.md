@@ -33,15 +33,7 @@ CGO_ENABLED=1 go build --tags "fts5" -o "dist/bock-$(uname)-$(uname -m)" .
 * [x] 404 Page
 * [ ] Template argument
 * [ ] [Markdown highlight in Raw view](https://www.zupzup.org/go-markdown-syntax-highlight-chroma/)
-* [ ] [Filtering logs with filename is very slow in `go-git`](https://github.com/go-git/go-git/issues/137)
-
-### Versioning
-
-Did this before I specified the version in `constants.go`. It has its advantages.
-
-```golang
-
-```
+* [ ] [Filtering logs with filename is very slow in `go-git`](https://github.com/go-git/go-git/issues/137)```
 
 ---
 

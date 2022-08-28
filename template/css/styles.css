@@ -165,7 +165,7 @@ header nav ul li a[href*="/raw"] {
   -webkit-mask-image: url(/img/raw.svg);
   mask-image: url(/img/raw.svg);
 }
-header nav ul li a[href*="/revisions"] {
+header nav ul li a[href$="/revisions"] {
   -webkit-mask-image: url(/img/revisions.svg);
   mask-image: url(/img/revisions.svg);
 }
