@@ -162,8 +162,8 @@ func getEntityInfo(config *BockConfig, info fs.FileInfo, path string) *TreeEntit
 	return &entity
 }
 
-// Adapted from
-// https://github.com/marcinwyszynski/directory_tree/blob/master/directory_tree.go
+// Recursively create a tree of entities (files and folders). Inspired by an
+// iterative version here: https://stackoverflow.com/a/32962550
 func makeTree(config *BockConfig, path string, tree *[]TreeEntity, ignoredPaths *regexp.Regexp) {
 	currentRootInfo, _ := os.Stat(path)
 	info := getEntityInfo(config, currentRootInfo, path)
