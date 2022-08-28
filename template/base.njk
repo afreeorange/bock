@@ -28,6 +28,7 @@
           <ul>
             <li><a href="/archive"{% if type == "archive" %}class="active"{% endif %} title="Archive"><span>Archive</span></a></li>
             <li><a href="/Home"{% if uri == "/Home" and type != "revision-list" %}class="active"{% endif %} title="Home"><span>Home</span></a></li>
+            <li><a href="/random"{% if uri == "/random" %}class="active"{% endif %} title="See a random article"><span>Random</span></a></li>
 
             {% if type == "article" or type == "revision" %}
             <li>

@@ -46,7 +46,9 @@ Did this before I specified the version in `constants.go`. It has its advantages
 ---
 
 ```bash
-rm -rf $HOME/Desktop/temp/*; time go run --tags "fts5" . -a $HOME/personal/wiki.nikhil.io.articles -o $HOME/Desktop/temp
+rm -rf $HOME/Desktop/temp/*;time go run --tags "fts5" . -a $HOME/personal/wiki.nikhil.io.articles -o $HOME/Desktop/temp
+pushd $HOME/Desktop/temp; find . -type f -exec gzip -9 '{}' \; -exec mv '{}.gz' '{}' \;; popd
+aws s3 sync $HOME/Desktop/temp/ s3://wiki.nikhil.io/ --delete --content-encoding gzip --size-only --profile nikhil.io
 ```
 
 ## Libraries

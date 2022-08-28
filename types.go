@@ -24,17 +24,17 @@ type HierarchicalObject struct {
 }
 
 type Article struct {
-	FileCreated  time.Time            `json:"created"`
-	FileModified time.Time            `json:"modified"`
-	Hierarchy    []HierarchicalObject `json:"hierarchy"`
-	Html         string               `json:"html"`
-	ID           string               `json:"id"`
-	Untracked    bool                 `json:"untracked"`
-	Revisions    []Revision           `json:"revisions"`
-	Size         int64                `json:"sizeInBytes"`
-	Source       string               `json:"source"`
-	Title        string               `json:"title"`
-	URI          string               `json:"uri"`
+	Created   time.Time            `json:"created"`
+	Hierarchy []HierarchicalObject `json:"hierarchy"`
+	Html      string               `json:"html"`
+	ID        string               `json:"id"`
+	Modified  time.Time            `json:"modified"`
+	Revisions []Revision           `json:"revisions"`
+	Size      int64                `json:"sizeInBytes"`
+	Source    string               `json:"source"`
+	Title     string               `json:"title"`
+	Untracked bool                 `json:"untracked"`
+	URI       string               `json:"uri"`
 
 	// You do NOT want to make this public!
 	path string
@@ -54,14 +54,15 @@ type Folder struct {
 	URI       string               `json:"uri"`
 }
 
-type TreeEntity struct {
-	IsFolder     bool          `json:"isFolder"`
-	Name         string        `json:"name"`
-	RelativePath string        `json:"relativePath"`
-	Size         int64         `json:"size"`
-	Title        string        `json:"title"`
-	URI          string        `json:"uri"`
-	Children     *[]TreeEntity `json:"children"`
+type Entity struct {
+	Children     *[]Entity `json:"children"`
+	IsFolder     bool      `json:"isFolder"`
+	Modified     time.Time `json:"modified"`
+	Name         string    `json:"name"`
+	RelativePath string    `json:"relativePath"`
+	Size         int64     `json:"size"`
+	Title        string    `json:"title"`
+	URI          string    `json:"uri"`
 
 	path string
 }
@@ -82,7 +83,8 @@ type Meta struct {
 
 type BockConfig struct {
 	articleRoot    string
-	articleTree    []TreeEntity
+	entityTree     []Entity
+	entityList     *[]Entity
 	database       *sql.DB
 	meta           Meta
 	outputFolder   string

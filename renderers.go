@@ -12,11 +12,12 @@ var t_article, _ = templateSet.FromCache("template/article.njk")
 var t_folder, _ = templateSet.FromCache("template/folder.njk")
 var t_index, _ = templateSet.FromCache("template/index.njk")
 var t_not_found, _ = templateSet.FromCache("template/not-found.njk")
+var t_random, _ = templateSet.FromCache("template/random.njk")
 var t_revision_raw, _ = templateSet.FromCache("template/revision-raw.njk")
 var t_revision, _ = templateSet.FromCache("template/revision.njk")
 var t_revisionList, _ = templateSet.FromCache("template/revision-list.njk")
 
-func renderIndex() string {
+func renderIndex(config *BockConfig) string {
 	html, _ := t_index.Execute(pongo2.Context{
 		"type":    "index",
 		"version": VERSION,
@@ -25,9 +26,19 @@ func renderIndex() string {
 	return html
 }
 
-func renderNotFound() string {
+func renderNotFound(config *BockConfig) string {
 	html, _ := t_not_found.Execute(pongo2.Context{
 		"type":    "not-found",
+		"version": VERSION,
+	})
+
+	return html
+}
+
+func renderRandom(config *BockConfig) string {
+	html, _ := t_random.Execute(pongo2.Context{
+		"list":    config.entityList,
+		"type":    "random",
 		"version": VERSION,
 	})
 
@@ -46,12 +57,12 @@ func renderArticle(
 	}
 
 	baseContext := pongo2.Context{
-		"created":     article.FileCreated,
+		"created":     article.Created,
 		"hierarchy":   article.Hierarchy,
 		"html":        conversionBuffer.String(),
 		"id":          article.ID,
 		"meta":        config.meta,
-		"modified":    article.FileModified,
+		"modified":    article.Modified,
 		"revisions":   article.Revisions,
 		"sizeInBytes": article.Size,
 		"source":      article.Source,
@@ -95,7 +106,7 @@ func renderArchive(config *BockConfig) string {
 	html, _ := t_archive.Execute(pongo2.Context{
 		"meta":  config.meta,
 		"title": "Archive",
-		"tree":  config.articleTree,
+		"tree":  config.entityTree,
 		"uri":   "/archive",
 
 		"type":    "archive",

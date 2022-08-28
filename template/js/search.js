@@ -34,9 +34,7 @@ const REMOTE_DATABASE = "/articles.db";
    `;
 
   const resultsSection = document.querySelector(`[data-content="results"]`);
-  // const listSection = document.querySelector(
-  //   `[data-content="list-of-articles"]`
-  // );
+  const treeSection = document.querySelector(`[data-content="tree"]`);
   const countSection = document.querySelector("h1");
   const oldCount = document.querySelector("h1").innerHTML;
 
@@ -73,7 +71,7 @@ const REMOTE_DATABASE = "/articles.db";
           : "No Results :/";
 
       countSection.innerHTML = term + " <span>" + summary + "</span>";
-      // listSection.style.display = "none";
+      treeSection.style.display = "none";
       resultsSection.style.display = "block";
       resultsSection.innerHTML = renderer.renderString(template, {
         count: rows.length,
@@ -82,7 +80,7 @@ const REMOTE_DATABASE = "/articles.db";
       });
     } else {
       countSection.innerHTML = oldCount;
-      // listSection.style.display = "block";
+      treeSection.style.display = "block";
       resultsSection.style.display = "none";
     }
   });

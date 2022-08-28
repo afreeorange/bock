@@ -67,11 +67,11 @@ func copyAssets(config *BockConfig) {
 }
 
 func writeIndex(config *BockConfig) {
-	writeFile(config.outputFolder+"/index.html", []byte(renderIndex()))
+	writeFile(config.outputFolder+"/index.html", []byte(renderIndex(config)))
 }
 
 func write404(config *BockConfig) {
-	writeFile(config.outputFolder+"/404.html", []byte(renderNotFound()))
+	writeFile(config.outputFolder+"/404.html", []byte(renderNotFound(config)))
 }
 
 func writeRevision(article Article, revision Revision, config *BockConfig) {
@@ -97,10 +97,10 @@ func writeRevision(article Article, revision Revision, config *BockConfig) {
 func writeArticle(
 	articlePath string,
 	config *BockConfig,
-	f os.FileInfo,
+	entity Entity,
 	stmt *sql.Stmt,
 ) {
-	fileName := f.Name()
+	fileName := entity.Name
 	title := removeExtensionFrom(fileName)
 	uri := makeURI(articlePath, config.articleRoot)
 	relativePath := makeRelativePath(articlePath, config.articleRoot)
@@ -116,18 +116,18 @@ func writeArticle(
 	}
 
 	article := Article{
-		FileCreated:  history.modified,
-		FileModified: history.created,
-		Hierarchy:    makeHierarchy(articlePath, config.articleRoot),
-		Html:         "",
-		ID:           makeID(articlePath),
-		path:         articlePath,
-		Revisions:    revisions,
-		Size:         f.Size(),
-		Source:       string(contents),
-		Title:        title,
-		Untracked:    untracked,
-		URI:          uri,
+		Created:   history.modified,
+		Modified:  history.created,
+		Hierarchy: makeHierarchy(articlePath, config.articleRoot),
+		Html:      "",
+		ID:        makeID(articlePath),
+		path:      articlePath,
+		Revisions: revisions,
+		Size:      entity.Size,
+		Source:    string(contents),
+		Title:     title,
+		Untracked: untracked,
+		URI:       uri,
 	}
 
 	// Insert just the article into Database
@@ -136,7 +136,7 @@ func writeArticle(
 		if _, s_err := stmt.Exec(
 			makeID(articlePath),
 			string(contents),
-			f.ModTime().UTC(),
+			entity.Modified.UTC(),
 			title,
 			uri,
 		); s_err != nil {
@@ -193,7 +193,8 @@ func writeHome(config *BockConfig) {
 	}
 
 	f, _ := os.Stat(homePath)
-	writeArticle(homePath, config, f, nil)
+	e := getEntityInfo(config, f, homePath)
+	writeArticle(homePath, config, *e, nil)
 }
 
 func writeArchive(config *BockConfig) {
@@ -297,43 +298,10 @@ func writeArticles(config *BockConfig) error {
 
 	defer stmt.Close()
 
-	type Entity struct {
-		path     string
-		fileInfo os.FileInfo
-	}
-
-	entityList := []Entity{}
-
-	// Make a list of entities
-	err := filepath.Walk(
-		config.articleRoot,
-		func(path string, f os.FileInfo, err error) error {
-			if !IGNORED_FOLDERS_REGEX.MatchString(path) {
-				addToList :=
-					!IGNORED_FILES_REGEX.MatchString(path) &&
-						filepath.Ext(path) == ".md" || f.IsDir()
-
-				if addToList {
-					entityList = append(entityList, Entity{
-						path:     path,
-						fileInfo: f,
-					})
-				}
-			}
-
-			return nil
-		})
+	entityList, err := makeListOfEntities(config)
 
 	// Process them in a simple waitgroup... for now. This creates as many
 	// coroutines as articles and gets really slow on machines with low memory.
-	//
-	// TODO: Use channels or buffered WaitGroups
-	// for i := 10; i >= 0; i-- {
-	// 	fmt.Printf("\033[2K\r%d", i)
-	// 	time.Sleep(1 * time.Second)
-	// }
-	// fmt.Println()
-
 	wg := new(sync.WaitGroup)
 	for _, e := range entityList {
 		wg.Add(1)
@@ -341,10 +309,10 @@ func writeArticles(config *BockConfig) error {
 		go func(e Entity, stmt *sql.Stmt, config *BockConfig) {
 			defer wg.Done()
 
-			if e.fileInfo.IsDir() {
+			if e.IsFolder {
 				writeFolder(e.path, config)
 			} else {
-				writeArticle(e.path, config, e.fileInfo, stmt)
+				writeArticle(e.path, config, e, stmt)
 			}
 		}(e, stmt, config)
 	}
@@ -356,4 +324,14 @@ func writeArticles(config *BockConfig) error {
 	tx.Commit()
 
 	return err
+}
+
+func writeTree(config *BockConfig) {
+	s, _ := jsonMarshal(config.entityTree)
+	writeFile(config.outputFolder+"/tree.json", s)
+}
+
+func writeRandom(config *BockConfig) {
+	html := renderRandom(config)
+	writeFile(config.outputFolder+"/random/index.html", []byte(html))
 }

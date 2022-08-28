@@ -148,15 +148,17 @@ func getArticleHistory(articlePath string, config *BockConfig) (ArticleHistory, 
 	return ret, nil
 }
 
-func getEntityInfo(config *BockConfig, info fs.FileInfo, path string) *TreeEntity {
-	entity := TreeEntity{
-		Title:    removeExtensionFrom(info.Name()),
-		URI:      makeURI(path, config.articleRoot),
-		Size:     info.Size(),
-		Name:     info.Name(),
-		IsFolder: info.IsDir(),
-		path:     path,
-		Children: &[]TreeEntity{},
+func getEntityInfo(config *BockConfig, info fs.FileInfo, path string) *Entity {
+	entity := Entity{
+		Children:     &[]Entity{},
+		IsFolder:     info.IsDir(),
+		Modified:     info.ModTime(),
+		Name:         info.Name(),
+		path:         path,
+		RelativePath: makeRelativePath(path, config.articleRoot),
+		Size:         info.Size(),
+		Title:        removeExtensionFrom(info.Name()),
+		URI:          makeURI(path, config.articleRoot),
 	}
 
 	return &entity
@@ -164,7 +166,12 @@ func getEntityInfo(config *BockConfig, info fs.FileInfo, path string) *TreeEntit
 
 // Recursively create a tree of entities (files and folders). Inspired by an
 // iterative version here: https://stackoverflow.com/a/32962550
-func makeTree(config *BockConfig, path string, tree *[]TreeEntity, ignoredPaths *regexp.Regexp) {
+func makeTreeOfEntities(
+	config *BockConfig,
+	path string,
+	tree *[]Entity,
+	ignoredPaths *regexp.Regexp,
+) {
 	currentRootInfo, _ := os.Stat(path)
 	info := getEntityInfo(config, currentRootInfo, path)
 
@@ -188,7 +195,35 @@ func makeTree(config *BockConfig, path string, tree *[]TreeEntity, ignoredPaths 
 		*tree = append(*tree, *child)
 
 		if c.IsDir() {
-			makeTree(config, child.path, (*tree)[i].Children, ignoredPaths)
+			makeTreeOfEntities(
+				config,
+				child.path,
+				(*tree)[i].Children,
+				ignoredPaths,
+			)
 		}
 	}
+}
+
+func makeListOfEntities(config *BockConfig) ([]Entity, error) {
+	entityList := []Entity{}
+
+	// Make a list of entities
+	err := filepath.Walk(
+		config.articleRoot,
+		func(path string, entityInfo os.FileInfo, err error) error {
+			if !IGNORED_FOLDERS_REGEX.MatchString(path) {
+				addToList :=
+					!IGNORED_FILES_REGEX.MatchString(path) &&
+						filepath.Ext(path) == ".md" || entityInfo.IsDir()
+
+				if addToList {
+					entityList = append(entityList, *getEntityInfo(config, entityInfo, path))
+				}
+			}
+
+			return nil
+		})
+
+	return entityList, err
 }

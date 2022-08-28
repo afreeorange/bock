@@ -93,7 +93,8 @@ func main() {
 	// App config
 	config := BockConfig{
 		articleRoot:  articleRoot,
-		articleTree:  nil,
+		entityTree:   nil,
+		entityList:   nil,
 		database:     nil,
 		outputFolder: outputFolder,
 		meta: Meta{
@@ -113,9 +114,14 @@ func main() {
 		workTreeStatus: &status,
 	}
 
-	var articleTree []TreeEntity
-	makeTree(&config, articleRoot, &articleTree, IGNORED_FOLDERS_REGEX)
-	config.articleTree = articleTree
+	// Make a hierarchical tree of entries
+	var entityTree []Entity
+	makeTreeOfEntities(&config, articleRoot, &entityTree, IGNORED_FOLDERS_REGEX)
+	config.entityTree = entityTree
+
+	// Make a flat list of entities
+	entityList, _ := makeListOfEntities(&config)
+	config.entityList = &entityList
 
 	// Database setup
 	db := makeDatabase(&config)
@@ -143,7 +149,7 @@ func main() {
 	config.meta.GenerationTimeRounded = generationTime.Round(time.Second)
 
 	// Write the index page and other pages
-	fmt.Print("Writing index")
+	fmt.Print("Writing index page")
 	writeIndex(&config)
 	fmt.Println("... done")
 
@@ -151,8 +157,16 @@ func main() {
 	write404(&config)
 	fmt.Println("... done")
 
-	fmt.Print("Writing archive")
+	fmt.Print("Writing archive page")
 	writeArchive(&config)
+	fmt.Println("... done")
+
+	fmt.Print("Writing tree")
+	writeTree(&config)
+	fmt.Println("... done")
+
+	fmt.Print("Writing random page")
+	writeRandom(&config)
 	fmt.Println("... done")
 
 	fmt.Print("Writing /Home: ")
