@@ -225,6 +225,10 @@ main nav ul li a[data-entity-type="revision-list"]::before {
   -webkit-mask-image: url(/img/revisions.svg);
   mask-image: url(/img/revisions.svg);
 }
+main nav ul li a[data-entity-type="revision"]::before {
+  -webkit-mask-image: url(/img/revisions.svg);
+  mask-image: url(/img/revisions.svg);
+}
 main nav ul li a[href="/ROOT"]::before {
   -webkit-mask-image: url(/img/root.svg);
   mask-image: url(/img/root.svg);
