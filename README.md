@@ -13,7 +13,7 @@ git clone https://github.com/afreeorange/bockgo.git
 go run --tags "fts5" . -a /path/to/repo -o /path/to/output -r -j
 ```
 
-* You can organize your articles into folders. You cannot use `raw`, `revisions` and `archive` as folder names.
+* You can organize your articles into folders. You cannot use `raw`, `revisions`, `random`, and `archive` as folder names.
 * You can place static assets in `__assets` in your article repository. You can reference all assets in there prefixed with `/assets` (e.g. `__assets/some-file.jpg` &rarr; `/assets/some-file.jpg`).
 
 The command will generate the following:
@@ -24,6 +24,7 @@ The command will generate the following:
 - Each folder's structure in HTML and JSON ([example](https://wiki.nikhil.io/Food/))
 - An archive page that lets you search your articles
 - A Homepage (if it doesn't exist as `Home.md`) at `/Home`
+- A page that redirects to some random article at `/random`
 - An index page that redirects to `/Home`
 - A 404 Page at `/404.html`
 
