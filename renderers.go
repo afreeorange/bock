@@ -61,7 +61,6 @@ func renderArticle(
 		"hierarchy":   article.Hierarchy,
 		"html":        conversionBuffer.String(),
 		"id":          article.ID,
-		"meta":        config.meta,
 		"modified":    article.Modified,
 		"revisions":   article.Revisions,
 		"sizeInBytes": article.Size,
@@ -70,6 +69,7 @@ func renderArticle(
 		"untracked":   article.Untracked,
 		"uri":         article.URI,
 
+		"meta":    config.meta,
 		"type":    entityType,
 		"version": VERSION,
 	}
@@ -104,11 +104,11 @@ func renderFolder(folder Folder) string {
 
 func renderArchive(config *BockConfig) string {
 	html, _ := t_archive.Execute(pongo2.Context{
-		"meta":  config.meta,
 		"title": "Archive",
 		"tree":  config.entityTree,
 		"uri":   "/archive",
 
+		"meta":    config.meta,
 		"type":    "archive",
 		"version": VERSION,
 	})

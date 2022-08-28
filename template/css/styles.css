@@ -397,7 +397,8 @@ ul[data-content="results"] li:not(:last-child) {
   opacity: 0.75;
 }
 
-.revision h1 span:nth-of-type(2) {
+.revision h1 span:nth-of-type(2),
+.revision-raw h1 span:nth-of-type(2) {
   display: block;
   font-size: var(--font-size-base);
   color: var(--color-light);

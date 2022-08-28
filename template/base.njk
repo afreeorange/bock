@@ -30,7 +30,9 @@
             <li><a href="/Home"{% if uri == "/Home" and type != "revision-list" %}class="active"{% endif %} title="Home"><span>Home</span></a></li>
             <li><a href="/random"{% if uri == "/random" %}class="active"{% endif %} title="See a random article"><span>Random</span></a></li>
 
-            {% if type == "article" or type == "revision" %}
+            {# TODO: This is messy. Fix later. #}
+
+            {% if type == "article" %}
             <li>
               <a href="{{ uri }}/raw"{% if type == "raw" or type == "revision-raw" %}class="active"{% endif %} title="View Source">
                 <span>Raw</span>
@@ -38,9 +40,25 @@
             </li>
             {% endif %}
 
-            {% if type == "raw" or type == "revision-raw" or type == "revision-list" %}
+            {% if type == "revision" %}
+            <li>
+              <a href="{{ uri }}/revisions/{{ revision.ShortId }}/raw"{% if type == "raw" or type == "revision-raw" %}class="active"{% endif %} title="View Source">
+                <span>Raw</span>
+              </a>
+            </li>
+            {% endif %}
+
+            {% if type == "raw" or type == "revision-list" %}
             <li>
               <a href="{{ uri }}" title="View Article">
+                <span>Current Revision</span>
+              </a>
+            </li>
+            {% endif %}
+
+            {% if type == "revision-raw" %}
+            <li>
+              <a href="{{ uri }}/revisions/{{ revision.ShortId }}" title="View Article">
                 <span>Current Revision</span>
               </a>
             </li>
@@ -58,6 +76,12 @@
               {% if uri == "" %}
               <li>
                 <a href="/ROOT/index.json" title="View JSON Object">
+                  <span>JSON</span>
+                </a>
+              </li>
+              {% elif type == "revision" or type == "revision-raw" %}
+              <li>
+                <a href="{{ uri }}/revisions/{{ revision.ShortId }}/index.json" title="View JSON Object">
                   <span>JSON</span>
                 </a>
               </li>

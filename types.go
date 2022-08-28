@@ -23,6 +23,11 @@ type HierarchicalObject struct {
 	URI  string `json:"uri"`
 }
 
+type Children struct {
+	Articles []HierarchicalObject `json:"articles"`
+	Folders  []HierarchicalObject `json:"folders"`
+}
+
 type Article struct {
 	Created   time.Time            `json:"created"`
 	Hierarchy []HierarchicalObject `json:"hierarchy"`
@@ -38,11 +43,6 @@ type Article struct {
 
 	// You do NOT want to make this public!
 	path string
-}
-
-type Children struct {
-	Articles []HierarchicalObject `json:"articles"`
-	Folders  []HierarchicalObject `json:"folders"`
 }
 
 type Folder struct {
@@ -83,7 +83,7 @@ type Meta struct {
 
 type BockConfig struct {
 	articleRoot    string
-	entityTree     []Entity
+	entityTree     *[]Entity
 	entityList     *[]Entity
 	database       *sql.DB
 	meta           Meta

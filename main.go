@@ -117,7 +117,7 @@ func main() {
 	// Make a hierarchical tree of entries
 	var entityTree []Entity
 	makeTreeOfEntities(&config, articleRoot, &entityTree, IGNORED_FOLDERS_REGEX)
-	config.entityTree = entityTree
+	config.entityTree = &entityTree
 
 	// Make a flat list of entities
 	entityList, _ := makeListOfEntities(&config)
