@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -146,66 +148,47 @@ func getArticleHistory(articlePath string, config *BockConfig) (ArticleHistory, 
 	return ret, nil
 }
 
+func getEntityInfo(config *BockConfig, info fs.FileInfo, path string) *TreeEntity {
+	entity := TreeEntity{
+		Title:    removeExtensionFrom(info.Name()),
+		URI:      makeURI(path, config.articleRoot),
+		Size:     info.Size(),
+		Name:     info.Name(),
+		IsFolder: info.IsDir(),
+		path:     path,
+		Children: &[]TreeEntity{},
+	}
+
+	return &entity
+}
+
 // Adapted from
 // https://github.com/marcinwyszynski/directory_tree/blob/master/directory_tree.go
-func makeTree(articleRoot string) (*TreeEntity, error) {
-	var result *TreeEntity
-	absoluteRoot, err := filepath.Abs(articleRoot)
+func makeTree(config *BockConfig, path string, tree *[]TreeEntity, ignoredPaths *regexp.Regexp) {
+	currentRootInfo, _ := os.Stat(path)
+	info := getEntityInfo(config, currentRootInfo, path)
 
-	if err != nil {
-		return result, err
-	}
+	// Make list of the child entities in the path and then filter out any
+	// children on the ignored paths list. Note that it is less code to use
+	// `ioutil.ReadDir` since it returns the `fs.FileInfo` type but it's
+	// deprecated.
+	_children, _ := os.ReadDir(path)
+	var children []fs.FileInfo
 
-	parents := make(map[string]*TreeEntity)
+	for _, de := range _children {
+		child, _ := de.Info()
 
-	walkFunction := func(path string, e os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if !IGNORED_FOLDERS_REGEX.MatchString(path) {
-			addToList :=
-				!IGNORED_FILES_REGEX.MatchString(path) &&
-					filepath.Ext(path) == ".md" || e.IsDir()
-
-			if addToList {
-				entityType := "article"
-				if e.IsDir() {
-					entityType = "folder"
-				}
-
-				parents[path] = &TreeEntity{
-					path: path,
-
-					Children: make([]*TreeEntity, 0),
-					Name:     e.Name(),
-					Title:    removeExtensionFrom(e.Name()),
-					Size:     e.Size(),
-					Type:     entityType,
-					URI:      makeURI(path, articleRoot),
-				}
-			}
-		}
-
-		return nil
-	}
-
-	if err = filepath.Walk(absoluteRoot, walkFunction); err != nil {
-		return result, err
-	}
-
-	for path, te := range parents {
-		parentPath := filepath.Dir(path)
-		parent, parentExists := parents[parentPath]
-
-		// If a parent does not exist, this is the root.
-		if !parentExists {
-			result = te
-		} else {
-			te.Parent = parent
-			parent.Children = append(parent.Children, te)
+		if !ignoredPaths.MatchString(child.Name()) {
+			children = append(children, child)
 		}
 	}
 
-	return result, err
+	for i, c := range children {
+		child := getEntityInfo(config, c, filepath.Join(info.path, c.Name()))
+		*tree = append(*tree, *child)
+
+		if c.IsDir() {
+			makeTree(config, child.path, (*tree)[i].Children, ignoredPaths)
+		}
+	}
 }

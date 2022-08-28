@@ -55,15 +55,15 @@ type Folder struct {
 }
 
 type TreeEntity struct {
-	Name  string `json:"name"`
-	Size  int64  `json:"sizeInBytes"`
-	Title string `json:"title"`
-	Type  string `json:"type"`
-	URI   string `json:"uri"`
+	IsFolder     bool          `json:"isFolder"`
+	Name         string        `json:"name"`
+	RelativePath string        `json:"relativePath"`
+	Size         int64         `json:"size"`
+	Title        string        `json:"title"`
+	URI          string        `json:"uri"`
+	Children     *[]TreeEntity `json:"children"`
 
-	Children []*TreeEntity `json:"children"`
-	Parent   *TreeEntity   `json:"-"`
-	path     string
+	path string
 }
 
 type Meta struct {
@@ -82,7 +82,7 @@ type Meta struct {
 
 type BockConfig struct {
 	articleRoot    string
-	articleTree    *TreeEntity
+	articleTree    []TreeEntity
 	database       *sql.DB
 	meta           Meta
 	outputFolder   string

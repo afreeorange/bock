@@ -58,9 +58,7 @@ rm -rf $HOME/Desktop/temp/*; time go run --tags "fts5" . -a $HOME/personal/wiki.
 * [Cobra](https://cobra.dev/) is a full-featured CLI app framework
 * [gin](https://github.com/codegangsta/gin) for live-reloading
 * [Martini](https://github.com/go-martini/martini) for a web framework
-* [Gore](https://github.co$$
-
-$$m/x-motemen/gore) for a REPL
+* [Gore](https://github.com/x-motemen/gore) for a REPL
 * [Minifier](https://github.com/tdewolff/minify) for HTML, CSS, XML, etc
 * [Awesome Go](https://awesome-go.com/)
 
@@ -221,5 +219,112 @@ func (bar *Bar) Play(cur int64) {
 
 func (bar *Bar) Finish() {
 	fmt.Println()
+}
+```
+
+### Tree Generating Reference
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/fs"
+	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
+)
+
+var articleRoot = "/Users/nikhil/personal/wiki.nikhil.io.articles"
+
+// var articleRoot = "/Users/nikhil/haha"
+
+var IGNORED_PATHS_REGEX = regexp.MustCompile(
+	strings.Join([]string{
+		"__a",
+		"__assets",
+		"_a",
+		"_assets",
+		".circleci",
+		".git",
+		"css",
+		"img",
+		"js",
+		"node_modules",
+	}, "|"))
+
+type Entity struct {
+	IsDir        bool   `json:"isDir"`
+	IsSymlink    bool   `json:"isSymlink"`
+	LinksTo      string `json:"linksTo"`
+	Name         string `json:"name"`
+	Path         string `json:"path"`
+	RelativePath string `json:"relativePath"`
+	Size         int64  `json:"size"`
+	URI          string `json:"uri"`
+
+	Children *[]Entity `json:"children"`
+}
+
+/*
+Recursively create a tree of entities (files and folders)
+
+Inspired by an iterative version here: https://stackoverflow.com/a/32962550
+*/
+func makeTree(path string, tree *[]Entity, ignoredPaths *regexp.Regexp) {
+	currentRoot, _ := os.Stat(path)
+	entityInfo := getEntityInfo(currentRoot, path)
+
+	// Make list of the child entities in the path and then filter out any
+	// children on the ignored paths list. Note that it is less code to use
+	// `ioutil.ReadDir` since it returns the `fs.FileInfo` type but it's
+	// deprecated.
+	_children, _ := os.ReadDir(path)
+	var children []fs.FileInfo
+
+	for _, de := range _children {
+		child, _ := de.Info()
+
+		if !ignoredPaths.MatchString(child.Name()) {
+			children = append(children, child)
+		}
+	}
+
+	for i, c := range children {
+		child := getEntityInfo(c, filepath.Join(entityInfo.Path, c.Name()))
+		*tree = append(*tree, *child)
+
+		if c.IsDir() {
+			makeTree(child.Path, (*tree)[i].Children, ignoredPaths)
+		}
+	}
+}
+
+func getEntityInfo(entityInfo fs.FileInfo, path string) *Entity {
+	entity := Entity{
+		IsDir:    entityInfo.IsDir(),
+		Size:     entityInfo.Size(),
+		Name:     entityInfo.Name(),
+		Path:     path,
+		Children: &[]Entity{},
+	}
+
+	// Follow symlinks
+	if entityInfo.Mode()&os.ModeSymlink == os.ModeSymlink {
+		entity.IsSymlink = true
+		entity.LinksTo, _ = filepath.EvalSymlinks(filepath.Join(path, entityInfo.Name()))
+	}
+
+	return &entity
+}
+
+func main() {
+	var tree []Entity
+	makeTree(articleRoot, &tree, IGNORED_PATHS_REGEX)
+
+	s, _ := json.MarshalIndent(tree, "", "   ")
+	fmt.Println(string(s))
 }
 ```

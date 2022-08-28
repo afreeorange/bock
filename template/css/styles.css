@@ -410,10 +410,6 @@ ul[data-content="results"] li:not(:last-child) {
   padding: calc(var(--root-spacing) * 6) 0;
 }
 
-.archive p small {
-  color: var(--color-light)
-}
-
 .article-tree,
 .article-tree ul {
   list-style-type: none;
@@ -421,6 +417,7 @@ ul[data-content="results"] li:not(:last-child) {
 }
 .article-tree {
   padding: 0;
+  margin-top: var(--root-spacing);
 }
 .article-tree li {
   margin: 0;

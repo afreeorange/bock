@@ -32,21 +32,23 @@ const (
 
 // Things to ignore when walking the article repository. NOTE: In Golang, only
 // primitive types (like `int`, `string`, etc) can be constants.
-var IGNORED_FOLDERS_REGEX = regexp.MustCompile(
-	strings.Join([]string{
-		"__assets",
-		"_assets",
-		"\\.circleci",
-		"\\.git",
-		"css",
-		"img",
-		"js",
-		"node_modules",
-	}, "|"))
+var IGNORED_FOLDERS = strings.Join([]string{
+	"__assets",
+	"_assets",
+	".circleci",
+	".git",
+	"css",
+	"img",
+	"js",
+	"node_modules",
+}, "|")
+var IGNORED_FOLDERS_REGEX = regexp.MustCompile(IGNORED_FOLDERS)
 
-var IGNORED_FILES_REGEX = regexp.MustCompile(strings.Join([]string{
+// Here since we process the Homepage separately
+var IGNORED_FILES = strings.Join([]string{
 	"Home.md",
-}, "|"))
+}, "|")
+var IGNORED_FILES_REGEX = regexp.MustCompile(IGNORED_FILES)
 
 // We use Goldmark as the Markdown converter. Configure it here.
 var markdown = goldmark.New(
