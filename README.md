@@ -4,6 +4,10 @@
 
 A small personal Markdown and `git`-powered wiki I wrote to teach myself Go. [You can see it in action here](https://wiki.nikhil.io/).
 
+## Usage
+
+See [the releases page](https://github.com/afreeorange/bock/releases) for a few pre-built binaries.
+
 ```bash
 # Clone repo
 git clone https://github.com/afreeorange/bockgo.git
@@ -13,23 +17,20 @@ git clone https://github.com/afreeorange/bockgo.git
 go run --tags "fts5" . -a /path/to/repo -o /path/to/output -r -j
 ```
 
-* You can organize your articles into folders. You cannot use `raw`, `revisions`, `random`, and `archive` as folder names.
-* You can place static assets in `__assets` in your article repository. You can reference all assets in there prefixed with `/assets` (e.g. `__assets/some-file.jpg` &rarr; `/assets/some-file.jpg`).
+* You can organize your articles into folders.
+* You cannot use `raw`, `revisions`, `random`, and `archive` as folder names.
+* You can place static assets in `__assets` in your article repository. You can reference all assets in there in your Markdown files prefixed with `/assets` (e.g. `__assets/some-file.jpg` &rarr; `/assets/some-file.jpg`).
 
 The command will generate the following:
 
-- Every Markdown article in your repository rendered as Raw Source, HTML, and JSON
-- Each article's revision rendered as Raw Source, HTML, and JSON
-- A listing of all revisions for each article (if applicable)
-- Each folder's structure in HTML and JSON ([example](https://wiki.nikhil.io/Food/))
-- An archive page that lets you search your articles
-- A Homepage (if it doesn't exist as `Home.md`) at `/Home`
-- A page that redirects to some random article at `/random`
-- An index page that redirects to `/Home`
-- A 404 Page at `/404.html`
+* Every Markdown article in your repository rendered as Raw Source, HTML, and JSON
+* Each article's revision rendered as Raw Source, HTML, and JSON
+* A listing of all revisions for each article (if applicable)
+* Each folder's structure in HTML and JSON ([example](https://wiki.nikhil.io/Food/))
+* An archive page that lets you search your articles
+* A Homepage (if it doesn't exist as `Home.md`) at `/Home`
+* A page that redirects to some random article at `/random`
+* An index page that redirects to `/Home`
+* A 404 Page at `/404.html`
 
-A giant work in progress but works pretty well for me so far. Uses a baby implementation of Go's [WaitGroups](https://gobyexample.com/waitgroups) so will be slow on older machines.
-
-## Releases
-
-See [the releases page](https://github.com/afreeorange/bock/releases) for a few pre-built binaries.
+A giant work in progress but works pretty well for me so far. Uses a baby implementation of Go's [WaitGroups](https://gobyexample.com/waitgroups) so will be slow on older machines or those with less memory.
