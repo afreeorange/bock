@@ -24,6 +24,7 @@ func main() {
 	var generateRaw bool
 	var useOnDiskFS bool
 	var minifyOutput bool
+	var createRevisions bool
 
 	flag.BoolVar(&versionInfo, "v", false, "Version info")
 	flag.StringVar(&articleRoot, "a", "", "Article root")
@@ -32,6 +33,7 @@ func main() {
 	flag.BoolVar(&generateRaw, "r", false, "Create Raw markdown source files")
 	flag.BoolVar(&useOnDiskFS, "d", false, "Use on-disk filesystem to clone article repository (slower; cloned to memory by default)")
 	flag.BoolVar(&minifyOutput, "m", false, "Minify all output (HTML, JS, CSS)")
+	flag.BoolVar(&createRevisions, "R", true, "Create article revisions based on git history (default: true)")
 
 	flag.Parse()
 
@@ -92,11 +94,11 @@ func main() {
 
 	// App config
 	config := BockConfig{
-		articleRoot:  articleRoot,
-		entityTree:   nil,
-		entityList:   nil,
-		database:     nil,
-		outputFolder: outputFolder,
+		articleRoot:    articleRoot,
+		entityTree:     nil,
+		listOfArticles: nil,
+		database:       nil,
+		outputFolder:   outputFolder,
 		meta: Meta{
 			Architecture:   runtime.GOARCH,
 			ArticleCount:   0,
@@ -114,14 +116,14 @@ func main() {
 		workTreeStatus: &status,
 	}
 
-	// Make a hierarchical tree of entries
-	var entityTree []Entity
-	makeTreeOfEntities(&config, articleRoot, &entityTree, IGNORED_FOLDERS_REGEX)
-	config.entityTree = &entityTree
+	// Make a flat list of absolute article paths
+	listOfArticles, _ := makeListOfArticles(&config)
+	config.listOfArticles = &listOfArticles
 
-	// Make a flat list of entities
-	entityList, _ := makeListOfEntities(&config)
-	config.entityList = &entityList
+	fmt.Println("Found", len(*config.listOfArticles), "articles")
+
+	entityTree := makeEntityTree(config.listOfArticles)
+	config.entityTree = &entityTree
 
 	// Database setup
 	db := makeDatabase(&config)
@@ -134,8 +136,12 @@ func main() {
 	fmt.Println("... done")
 
 	fmt.Print("Copying assets")
-	copyAssets(&config)
-	fmt.Println("... done")
+	cp_err := copyAssets(&config)
+	if cp_err != nil {
+		fmt.Println("; could not find '__assets' in repository. Ignoring.")
+	} else {
+		fmt.Println("... done")
+	}
 
 	// Process all articles
 	if process_error := writeArticles(&config); process_error != nil {

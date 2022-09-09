@@ -37,7 +37,7 @@ func renderNotFound(config *BockConfig) string {
 
 func renderRandom(config *BockConfig) string {
 	html, _ := t_random.Execute(pongo2.Context{
-		"list":    config.entityList,
+		"list":    config.listOfArticles,
 		"type":    "random",
 		"version": VERSION,
 	})
@@ -88,16 +88,23 @@ func renderArticle(
 }
 
 func renderFolder(folder Folder) string {
+	var conversionBuffer bytes.Buffer
+	if err := markdown.Convert([]byte(folder.README), &conversionBuffer); err != nil {
+		panic(err)
+	}
+
 	html, _ := t_folder.Execute(pongo2.Context{
 		"children":  folder.Children,
 		"hierarchy": folder.Hierarchy,
-		"readme":    folder.README,
+		"readme":    conversionBuffer.String(),
 		"title":     folder.Title,
 		"uri":       folder.URI,
 
 		"type":    "folder",
 		"version": VERSION,
 	})
+
+	conversionBuffer.Reset()
 
 	return html
 }

@@ -60,11 +60,11 @@ type Entity struct {
 	Modified     time.Time `json:"modified"`
 	Name         string    `json:"name"`
 	RelativePath string    `json:"relativePath"`
-	Size         int64     `json:"size"`
+	SizeInBytes  int64     `json:"sizeInBytes"`
 	Title        string    `json:"title"`
 	URI          string    `json:"uri"`
 
-	path string
+	Path string `json:"path"`
 }
 
 type Meta struct {
@@ -84,7 +84,7 @@ type Meta struct {
 type BockConfig struct {
 	articleRoot    string
 	entityTree     *[]Entity
-	entityList     *[]Entity
+	listOfArticles *[]Entity
 	database       *sql.DB
 	meta           Meta
 	outputFolder   string

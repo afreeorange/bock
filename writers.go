@@ -57,13 +57,13 @@ func copyTemplateAssets(config *BockConfig) {
 	}
 }
 
-func copyAssets(config *BockConfig) {
-	if err := cp.Copy(
+func copyAssets(config *BockConfig) error {
+	err := cp.Copy(
 		config.articleRoot+"/__assets",
 		config.outputFolder+"/assets",
-	); err != nil {
-		fmt.Print("Oops, could not copy assets: ", err)
-	}
+	)
+
+	return err
 }
 
 func writeIndex(config *BockConfig) {
@@ -123,7 +123,7 @@ func writeArticle(
 		ID:        makeID(articlePath),
 		path:      articlePath,
 		Revisions: revisions,
-		Size:      entity.Size,
+		Size:      entity.SizeInBytes,
 		Source:    string(contents),
 		Title:     title,
 		Untracked: untracked,
@@ -298,7 +298,7 @@ func writeArticles(config *BockConfig) error {
 
 	defer stmt.Close()
 
-	entityList, err := makeListOfEntities(config)
+	entityList, err := makeListOfArticles(config)
 
 	// Process them in a simple waitgroup... for now. This creates as many
 	// coroutines as articles and gets really slow on machines with low memory.
@@ -310,9 +310,9 @@ func writeArticles(config *BockConfig) error {
 			defer wg.Done()
 
 			if e.IsFolder {
-				writeFolder(e.path, config)
+				writeFolder(e.Path, config)
 			} else {
-				writeArticle(e.path, config, e, stmt)
+				writeArticle(e.Path, config, e, stmt)
 			}
 		}(e, stmt, config)
 	}
@@ -329,6 +329,10 @@ func writeArticles(config *BockConfig) error {
 func writeTree(config *BockConfig) {
 	s, _ := jsonMarshal(config.entityTree)
 	writeFile(config.outputFolder+"/tree.json", s)
+
+	// v, _ := json.MarshalIndent(config.entityTree, "", " ")
+
+	// fmt.Println(">>>", string(v))
 }
 
 func writeRandom(config *BockConfig) {

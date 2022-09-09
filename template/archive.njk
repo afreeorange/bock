@@ -36,18 +36,9 @@
   <ul data-content="results"></ul>
 
   <ul data-content="tree">
-    <li data-entity-type="folder">
-      <a href="/ROOT" title="See article root">
-        <strong>
-          Root
-        </strong>
-      </a>
-      <ul>
-      {% for entity in tree %}
-        {{ drawList(entity) }}
-      {% endfor %}
-      </ul>
-    </li>
+    {% for entity in tree %}
+      {{ drawList(entity) }}
+    {% endfor %}
   </ul>
 {% endblock main %}
 

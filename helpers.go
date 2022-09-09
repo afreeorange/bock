@@ -8,7 +8,6 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
-	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -154,9 +153,9 @@ func getEntityInfo(config *BockConfig, info fs.FileInfo, path string) *Entity {
 		IsFolder:     info.IsDir(),
 		Modified:     info.ModTime(),
 		Name:         info.Name(),
-		path:         path,
+		Path:         path,
 		RelativePath: makeRelativePath(path, config.articleRoot),
-		Size:         info.Size(),
+		SizeInBytes:  info.Size(),
 		Title:        removeExtensionFrom(info.Name()),
 		URI:          makeURI(path, config.articleRoot),
 	}
@@ -164,66 +163,106 @@ func getEntityInfo(config *BockConfig, info fs.FileInfo, path string) *Entity {
 	return &entity
 }
 
-// Recursively create a tree of entities (files and folders). Inspired by an
-// iterative version here: https://stackoverflow.com/a/32962550
-func makeTreeOfEntities(
-	config *BockConfig,
-	path string,
-	tree *[]Entity,
-	ignoredPaths *regexp.Regexp,
-) {
-	currentRootInfo, _ := os.Stat(path)
-	info := getEntityInfo(config, currentRootInfo, path)
-
-	// Make list of the child entities in the path and then filter out any
-	// children on the ignored paths list. Note that it is less code to use
-	// `ioutil.ReadDir` since it returns the `fs.FileInfo` type but it's
-	// deprecated.
-	_children, _ := os.ReadDir(path)
-	var children []fs.FileInfo
-
-	for _, de := range _children {
-		child, _ := de.Info()
-
-		if !ignoredPaths.MatchString(child.Name()) {
-			children = append(children, child)
+// Return the array index of entity with the given name if exists in another
+// entity's list of children. If it doesn't exist, return -1. Helper function
+// for `makeEntityTree`.
+func findChildWithName(children *[]Entity, name string) int {
+	for index, c := range *children {
+		if c.Name == name {
+			return index
 		}
 	}
 
-	for i, c := range children {
-		child := getEntityInfo(config, c, filepath.Join(info.path, c.Name()))
-		*tree = append(*tree, *child)
-
-		if c.IsDir() {
-			makeTreeOfEntities(
-				config,
-				child.path,
-				(*tree)[i].Children,
-				ignoredPaths,
-			)
-		}
-	}
+	return -1
 }
 
-func makeListOfEntities(config *BockConfig) ([]Entity, error) {
-	entityList := []Entity{}
+func makeEntityTree(listOfArticles *[]Entity) []Entity {
+	tree := []Entity{}
 
-	// Make a list of entities
-	err := filepath.Walk(
-		config.articleRoot,
-		func(path string, entityInfo os.FileInfo, err error) error {
-			if !IGNORED_FOLDERS_REGEX.MatchString(path) {
-				addToList :=
-					!IGNORED_FILES_REGEX.MatchString(path) &&
-						filepath.Ext(path) == ".md" || entityInfo.IsDir()
+	// Bootstrap: create adn append the root entity (a folder)
+	tree = append(tree, Entity{
+		Children:     &[]Entity{},
+		IsFolder:     true,
+		Modified:     time.Now(),
+		Name:         "ROOT",
+		RelativePath: ".",
+		SizeInBytes:  0,
+		Title:        "Root",
+		URI:          "/ROOT",
+		Path:         ".",
+	})
 
-				if addToList {
-					entityList = append(entityList, *getEntityInfo(config, entityInfo, path))
+	// These loops took me an embarrassingly LONG while to write :/
+
+	for _, article := range *listOfArticles {
+		pathFragments := strings.Split(article.RelativePath, "/")
+
+		// Use this to build the URI. Reset with each iteration.
+		uri := ""
+
+		// Start at the root entity for each iteration
+		subEntity := tree[0]
+
+		for index, fragment := range pathFragments {
+			maybeChildIndex := findChildWithName(subEntity.Children, fragment)
+			uri = uri + "/" + fragment
+
+			// This path fragment does not exist in the current entity. We need
+			// to create something. It could be an article or a folder.
+			//
+			if maybeChildIndex == -1 {
+				if index+1 == len(pathFragments) {
+					// This is the last element of the path fragments: We have an
+					// article. Just append its metadata.
+					//
+					*subEntity.Children = append(*subEntity.Children, article)
+				} else {
+					// We need to create a new folder here.
+					//
+					*subEntity.Children = append(*subEntity.Children, Entity{
+						Children:     &[]Entity{},
+						IsFolder:     true,
+						Modified:     time.Now(),
+						Name:         fragment,
+						RelativePath: strings.TrimPrefix(uri, "/"),
+						SizeInBytes:  0,
+						Title:        fragment,
+						URI:          uri,
+						Path:         article.Path,
+					})
 				}
 			}
 
-			return nil
-		})
+			// Now recompute the index and update the sub entity we're dealing with.
+			// It's some child of the entity we started with!
+			childIndex := findChildWithName(subEntity.Children, fragment)
+			subEntity = (*subEntity.Children)[childIndex]
+		}
+	}
 
-	return entityList, err
+	return tree
+}
+
+func makeListOfArticles(config *BockConfig) ([]Entity, error) {
+	list := []Entity{}
+
+	walkFunction := func(path string, entityInfo os.FileInfo, err error) error {
+		relativePath := makeRelativePath(path, config.articleRoot)
+
+		isValidArticle := (!entityInfo.IsDir() &&
+			!IGNORED_FILES_REGEX.MatchString(path) &&
+			!strings.HasPrefix(relativePath, ".") &&
+			filepath.Ext(path) == ".md")
+
+		if isValidArticle {
+			list = append(list, *getEntityInfo(config, entityInfo, path))
+		}
+
+		return nil
+	}
+
+	// Make a list of articles and return it
+	// TODO: Sort?
+	err := filepath.Walk(config.articleRoot, walkFunction)
+	return list, err
 }

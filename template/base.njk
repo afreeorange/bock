@@ -32,20 +32,22 @@
 
             {# TODO: This is messy. Fix later. #}
 
-            {% if type == "article" %}
-            <li>
-              <a href="{{ uri }}/raw"{% if type == "raw" or type == "revision-raw" %}class="active"{% endif %} title="View Source">
-                <span>Raw</span>
-              </a>
-            </li>
-            {% endif %}
+            {% if meta.GenerateRaw %}
+              {% if type == "article" %}
+              <li>
+                <a href="{{ uri }}/raw"{% if type == "raw" or type == "revision-raw" %}class="active"{% endif %} title="View Source">
+                  <span>Raw</span>
+                </a>
+              </li>
+              {% endif %}
 
-            {% if type == "revision" %}
-            <li>
-              <a href="{{ uri }}/revisions/{{ revision.ShortId }}/raw"{% if type == "raw" or type == "revision-raw" %}class="active"{% endif %} title="View Source">
-                <span>Raw</span>
-              </a>
-            </li>
+              {% if type == "revision" %}
+              <li>
+                <a href="{{ uri }}/revisions/{{ revision.ShortId }}/raw"{% if type == "raw" or type == "revision-raw" %}class="active"{% endif %} title="View Source">
+                  <span>Raw</span>
+                </a>
+              </li>
+              {% endif %}
             {% endif %}
 
             {% if type == "raw" or type == "revision-list" %}
@@ -72,25 +74,27 @@
             </li>
             {% endif %}
 
-            {% if type == "article" or type == "folder" or type == "revision" or type == "raw" or type == "revision-raw" or type == "revision-list" %}
-              {% if uri == "" %}
-              <li>
-                <a href="/ROOT/index.json" title="View JSON Object">
-                  <span>JSON</span>
-                </a>
-              </li>
-              {% elif type == "revision" or type == "revision-raw" %}
-              <li>
-                <a href="{{ uri }}/revisions/{{ revision.ShortId }}/index.json" title="View JSON Object">
-                  <span>JSON</span>
-                </a>
-              </li>
-              {% else %}
-              <li>
-                <a href="{{ uri }}/index.json" title="View JSON Object">
-                  <span>JSON</span>
-                </a>
-              </li>
+            {% if meta.GenerateJSON %}
+              {% if type == "article" or type == "folder" or type == "revision" or type == "raw" or type == "revision-raw" or type == "revision-list" %}
+                {% if uri == "" %}
+                <li>
+                  <a href="/ROOT/index.json" title="View JSON Object">
+                    <span>JSON</span>
+                  </a>
+                </li>
+                {% elif type == "revision" or type == "revision-raw" %}
+                <li>
+                  <a href="{{ uri }}/revisions/{{ revision.ShortId }}/index.json" title="View JSON Object">
+                    <span>JSON</span>
+                  </a>
+                </li>
+                {% else %}
+                <li>
+                  <a href="{{ uri }}/index.json" title="View JSON Object">
+                    <span>JSON</span>
+                  </a>
+                </li>
+                {% endif %}
               {% endif %}
             {% endif %}
           </ul>

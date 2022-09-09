@@ -32,6 +32,8 @@ CGO_ENABLED=1 go build --tags "fts5" -o "dist/bock-$(uname)-$(uname -m)" .
 * [x] Fix builds on cimg/go:1.18
 * [x] 404 Page
 * [ ] Template argument
+* [ ] Revisions argument
+* [ ] Use `context` in lieu of `config` struct? What are the dis/advantages?
 * [ ] [Markdown highlight in Raw view](https://www.zupzup.org/go-markdown-syntax-highlight-chroma/)
 * [ ] [Filtering logs with filename is very slow in `go-git`](https://github.com/go-git/go-git/issues/137)```
 
@@ -58,6 +60,7 @@ aws s3 sync $HOME/Desktop/temp/ s3://wiki.nikhil.io/ --delete --content-encoding
 
 ## References
 
+* [Go Proverbs](https://go-proverbs.github.io/) - Based on a talk by Rob Pike at GopherFest 2015
 * [Go Maps in Action](https://go.dev/blog/maps)
 * https://maelvls.dev/go111module-everywhere/
 * https://github.com/flosch/pongo2/issues/68
@@ -160,6 +163,7 @@ The base template uses [the Gruvbox palette](https://github.com/morhetz/gruvbox)
 - `folder`
 - `index`
 - `not-found`
+- `random`
 - `raw`
 - `revision`
 - `revision-list`

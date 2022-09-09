@@ -39,16 +39,12 @@ var IGNORED_FOLDERS_REGEX = regexp.MustCompile(strings.Join([]string{
 	"img",
 	"js",
 	"node_modules",
-
-	// NOTE: It's **vitally** important to escape the period! Else, this won't
-	// work on Linux.
-	"\\.circleci",
-	"\\.git",
+	// NOTE: Folders beginning with `.` are automatically excluded
 }, "|"))
 
 // Here since we process the Homepage separately
 var IGNORED_FILES_REGEX = regexp.MustCompile(strings.Join([]string{
-	"Home.md",
+	"Lol.md",
 }, "|"))
 
 // We use Goldmark as the Markdown converter. Configure it here.

@@ -6,7 +6,7 @@
   <h1>{{ title }}</h1>
 
   {% if readme %}
-    {{ readme }}
+    {{ readme | safe }}
   {% endif %}
 
   {% set subFolderLength = children.Folders | length %}

@@ -34,3 +34,12 @@ The command will generate the following:
 * A 404 Page at `/404.html`
 
 A giant work in progress but works pretty well for me so far. Uses a baby implementation of Go's [WaitGroups](https://gobyexample.com/waitgroups) so will be slow on older machines or those with less memory.
+
+## Upcoming Features
+
+- [ ] Categories/Tags
+- [ ] Frontmatter support
+- [ ] Live-watcher of articles
+- [ ] Customizable Templates
+- [ ] Option to disable revision histories
+- [ ] Better/finer concurrency control
