@@ -64,7 +64,8 @@ type Entity struct {
 	Title        string    `json:"title"`
 	URI          string    `json:"uri"`
 
-	Path string `json:"path"`
+	// You do NOT want to make this public!
+	path string
 }
 
 type Meta struct {
@@ -72,6 +73,7 @@ type Meta struct {
 	ArticleCount          int           `json:"articleCount"`
 	BuildDate             time.Time     `json:"buildTime"`
 	CPUCount              int           `json:"cpuCount"`
+	GenerateRevisions     bool          `json:"generateRevisions"`
 	GenerateJSON          bool          `json:"generateJSON"`
 	GenerateRaw           bool          `json:"generateRaw"`
 	GenerationTime        time.Duration `json:"generationTime"`

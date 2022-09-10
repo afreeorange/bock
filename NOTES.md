@@ -17,6 +17,8 @@ CGO_ENABLED=1 go build --tags "fts5" -o "dist/bock-$(uname)-$(uname -m)" .
 ### TODO
 
 * [x] FIX THE NAVIGATION FFS
+* [ ] FIX THE PATH GENERATION PROBLEM FFS
+* [ ] FIX FOLDER generation
 * [x] Breadcrumbs > Revision
 * [ ] Table of Contents
 * [ ] Recent Changes (Global)
@@ -33,6 +35,9 @@ CGO_ENABLED=1 go build --tags "fts5" -o "dist/bock-$(uname)-$(uname -m)" .
 * [x] 404 Page
 * [ ] Template argument
 * [ ] Revisions argument
+* [ ] Better, less buggy tree
+* [ ] Gist of recursive tree generation!
+- [ ] Fix issue with apostrophes 🤦‍♀️
 * [ ] Use `context` in lieu of `config` struct? What are the dis/advantages?
 * [ ] [Markdown highlight in Raw view](https://www.zupzup.org/go-markdown-syntax-highlight-chroma/)
 * [ ] [Filtering logs with filename is very slow in `go-git`](https://github.com/go-git/go-git/issues/137)```
@@ -327,4 +332,20 @@ func main() {
 	s, _ := json.MarshalIndent(tree, "", "   ")
 	fmt.Println(string(s))
 }
+```
+
+### Pongo2 Custom Filter Sample
+
+```golang
+var _ = pongo2.RegisterFilter("round", func(in, param *pongo2.Value) (out *pongo2.Value, err *pongo2.Error) {
+	var rounded *pongo2.Value
+
+	if s, err := strconv.ParseFloat(in.String(), 32); err == nil {
+		rounded = pongo2.AsSafeValue(math.Round(s))
+	} else {
+		return pongo2.AsSafeValue("!_COULD_NOT_ROUND_VALUE"), &pongo2.Error{OrigError: err}
+	}
+
+	return rounded, nil
+})
 ```

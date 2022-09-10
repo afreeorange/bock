@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"path"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -153,7 +154,7 @@ func getEntityInfo(config *BockConfig, info fs.FileInfo, path string) *Entity {
 		IsFolder:     info.IsDir(),
 		Modified:     info.ModTime(),
 		Name:         info.Name(),
-		Path:         path,
+		path:         path,
 		RelativePath: makeRelativePath(path, config.articleRoot),
 		SizeInBytes:  info.Size(),
 		Title:        removeExtensionFrom(info.Name()),
@@ -176,7 +177,7 @@ func findChildWithName(children *[]Entity, name string) int {
 	return -1
 }
 
-func makeEntityTree(listOfArticles *[]Entity) []Entity {
+func makeEntityTree(config *BockConfig) []Entity {
 	tree := []Entity{}
 
 	// Bootstrap: create adn append the root entity (a folder)
@@ -189,12 +190,12 @@ func makeEntityTree(listOfArticles *[]Entity) []Entity {
 		SizeInBytes:  0,
 		Title:        "Root",
 		URI:          "/ROOT",
-		Path:         ".",
+		path:         ".",
 	})
 
 	// These loops took me an embarrassingly LONG while to write :/
 
-	for _, article := range *listOfArticles {
+	for _, article := range *config.listOfArticles {
 		pathFragments := strings.Split(article.RelativePath, "/")
 
 		// Use this to build the URI. Reset with each iteration.
@@ -227,8 +228,8 @@ func makeEntityTree(listOfArticles *[]Entity) []Entity {
 						RelativePath: strings.TrimPrefix(uri, "/"),
 						SizeInBytes:  0,
 						Title:        fragment,
-						URI:          uri,
-						Path:         article.Path,
+						URI:          makeURI(uri, config.articleRoot),
+						path:         article.path,
 					})
 				}
 			}
@@ -243,26 +244,80 @@ func makeEntityTree(listOfArticles *[]Entity) []Entity {
 	return tree
 }
 
-func makeListOfArticles(config *BockConfig) ([]Entity, error) {
-	list := []Entity{}
+func uniqueStringsInList(list []string) []string {
+	var uniqueList []string
+	tempMap := make(map[string]bool)
 
-	walkFunction := func(path string, entityInfo os.FileInfo, err error) error {
-		relativePath := makeRelativePath(path, config.articleRoot)
+	for _, e := range list {
+		if _, ok := tempMap[e]; !ok {
+			tempMap[e] = true
+			uniqueList = append(uniqueList, e)
+		}
+	}
+
+	return uniqueList
+}
+
+func makeListOfEntities(config *BockConfig) (
+	listOfArticles []Entity,
+	listOfFolders []string,
+	err error,
+) {
+	walkFunction := func(entityPath string, entityInfo os.FileInfo, walkErr error) error {
+		relativePath := makeRelativePath(entityPath, config.articleRoot)
 
 		isValidArticle := (!entityInfo.IsDir() &&
-			!IGNORED_FILES_REGEX.MatchString(path) &&
+			!IGNORED_ENTITIES_REGEX.MatchString(entityPath) &&
 			!strings.HasPrefix(relativePath, ".") &&
-			filepath.Ext(path) == ".md")
+			filepath.Ext(entityPath) == ".md")
 
 		if isValidArticle {
-			list = append(list, *getEntityInfo(config, entityInfo, path))
+			listOfArticles = append(
+				listOfArticles,
+				*getEntityInfo(config, entityInfo, entityPath),
+			)
+
+			folderPath := path.Dir(entityPath)
+
+			/*
+			   For example,
+
+			   /article/root/sso-react
+			   /article/root/sso-react/build/refresh
+			   /article/root/sso-react/public/refresh
+			   /article/root/sso-react/src/i18n
+
+			   should be
+
+			   /article/root/sso-react
+			   /article/root/sso-react/build
+			   /article/root/sso-react/build/refresh
+			   /article/root/sso-react/public
+			   /article/root/sso-react/public/refresh
+			   /article/root/sso-react/src
+			   /article/root/sso-react/src/i18n
+
+			   That's what we're doing here.
+			*/
+			folderSplits := strings.Split(makeRelativePath(folderPath, config.articleRoot), "/")
+			p := ""
+			if len(folderSplits) > 1 {
+				for _, s := range folderSplits {
+					p += "/" + s
+					listOfFolders = append(listOfFolders, config.articleRoot+p)
+				}
+			} else {
+				listOfFolders = append(listOfFolders, folderPath)
+			}
 		}
 
 		return nil
 	}
 
-	// Make a list of articles and return it
-	// TODO: Sort?
-	err := filepath.Walk(config.articleRoot, walkFunction)
-	return list, err
+	// It strikes me that error-handling in Go is a bit strange... looks like
+	// things can just fall through.
+	err = filepath.Walk(config.articleRoot, walkFunction)
+	listOfFolders = uniqueStringsInList(listOfFolders)
+
+	return listOfArticles, listOfFolders, err
 }

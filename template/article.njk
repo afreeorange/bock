@@ -17,5 +17,5 @@
 {% endblock footerElements %}
 
 {% block statistics %}
-  There are {{ meta.ArticleCount }} articles and {{ meta.RevisionCount }} revisions in this wiki. On {{ meta.BuildDate | date:"Monday, 2 January 2006 at 15:04 MST" }}, it took {{ meta.GenerationTimeRounded }} to generate it on a {{ meta.CPUCount }}-core {{ meta.Platform }}/{{ meta.Architecture }} system with {{ meta.MemoryInGB }}GiB RAM
+  There are {{ meta.ArticleCount }} articles and {{ meta.RevisionCount }} revisions in this wiki. It took {{ meta.GenerationTimeRounded }} to generate it on a {{ meta.CPUCount }}-core {{ meta.Platform }}/{{ meta.Architecture }} system with {{ meta.MemoryInGB }}GiB RAM on {{ meta.BuildDate | date:"Monday, 2 January 2006 at 15:04 MST" }}
 {% endblock statistics %}

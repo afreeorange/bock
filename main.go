@@ -17,23 +17,23 @@ import (
 )
 
 func main() {
-	var versionInfo bool
 	var articleRoot string
-	var outputFolder string
 	var generateJSON bool
 	var generateRaw bool
-	var useOnDiskFS bool
+	var generateRevisions bool
 	var minifyOutput bool
-	var createRevisions bool
+	var outputFolder string
+	var useOnDiskFS bool
+	var versionInfo bool
 
-	flag.BoolVar(&versionInfo, "v", false, "Version info")
 	flag.StringVar(&articleRoot, "a", "", "Article root")
-	flag.StringVar(&outputFolder, "o", "", "Output folder")
 	flag.BoolVar(&generateJSON, "j", false, "Create JSON source files")
 	flag.BoolVar(&generateRaw, "r", false, "Create Raw markdown source files")
-	flag.BoolVar(&useOnDiskFS, "d", false, "Use on-disk filesystem to clone article repository (slower; cloned to memory by default)")
+	flag.BoolVar(&generateRevisions, "R", true, "Create article revisions based on git history (default: true)")
 	flag.BoolVar(&minifyOutput, "m", false, "Minify all output (HTML, JS, CSS)")
-	flag.BoolVar(&createRevisions, "R", true, "Create article revisions based on git history (default: true)")
+	flag.StringVar(&outputFolder, "o", "", "Output folder")
+	flag.BoolVar(&useOnDiskFS, "d", false, "Use on-disk filesystem to clone article repository (slower; cloned to memory by default)")
+	flag.BoolVar(&versionInfo, "v", false, "Version info")
 
 	flag.Parse()
 
@@ -100,29 +100,32 @@ func main() {
 		database:       nil,
 		outputFolder:   outputFolder,
 		meta: Meta{
-			Architecture:   runtime.GOARCH,
-			ArticleCount:   0,
-			BuildDate:      time.Now().UTC(),
-			CPUCount:       runtime.NumCPU(),
-			GenerateJSON:   generateJSON,
-			GenerateRaw:    generateRaw,
-			GenerationTime: 0,
-			MemoryInGB:     int(v.Total / (1024 * 1024 * 1024)),
-			Platform:       runtime.GOOS,
-			RevisionCount:  0,
+			Architecture:      runtime.GOARCH,
+			ArticleCount:      0,
+			BuildDate:         time.Now().UTC(),
+			CPUCount:          runtime.NumCPU(),
+			GenerateJSON:      generateJSON,
+			GenerateRaw:       generateRaw,
+			GenerateRevisions: generateRevisions,
+			GenerationTime:    0,
+			MemoryInGB:        int(v.Total / (1024 * 1024 * 1024)),
+			Platform:          runtime.GOOS,
+			RevisionCount:     0,
 		},
 		started:        time.Now(),
 		repository:     repository,
 		workTreeStatus: &status,
 	}
 
-	// Make a flat list of absolute article paths
-	listOfArticles, _ := makeListOfArticles(&config)
+	// Make a flat list of absolute article paths. Use these to build the entity
+	// tree. We do this to prevent unnecessary and empty folders from being
+	// created.
+	listOfArticles, _, _ := makeListOfEntities(&config)
 	config.listOfArticles = &listOfArticles
-
 	fmt.Println("Found", len(*config.listOfArticles), "articles")
 
-	entityTree := makeEntityTree(config.listOfArticles)
+	// Make a tree of entities: articles and folders
+	entityTree := makeEntityTree(&config)
 	config.entityTree = &entityTree
 
 	// Database setup

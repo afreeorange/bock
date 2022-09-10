@@ -202,91 +202,97 @@ func writeArchive(config *BockConfig) {
 	writeFile(config.outputFolder+"/archive/index.html", []byte(html))
 }
 
-func writeFolder(path string, config *BockConfig) Children {
-	l, _ := os.ReadDir(path)
+func writeFolder(absolutePath string, config *BockConfig) {
+	relativePath := makeRelativePath(absolutePath, config.articleRoot)
+	pathFragments := strings.Split(relativePath, "/")
 
-	folders := []HierarchicalObject{}
-	articles := []HierarchicalObject{}
-	title := strings.TrimLeft(strings.Replace(path, config.articleRoot, "", -1), "/")
+	folder := (*config.entityTree)[0]
+	var folderIndex int
+	var folderName string
+	var folders []HierarchicalObject
+	var articles []HierarchicalObject
 
-	// Build all the children of this folder if any
-	for _, f := range l {
-		if !IGNORED_FOLDERS_REGEX.MatchString(f.Name()) {
-			if f.IsDir() {
-				folders = append(folders, HierarchicalObject{
-					Name: removeExtensionFrom(f.Name()),
-					Type: "folder",
-					URI: makeURI(
-						path, config.articleRoot) + "/" + makeURI(f.Name(),
-						config.articleRoot,
-					),
-				})
-			} else {
-				articles = append(articles, HierarchicalObject{
-					Name: removeExtensionFrom(f.Name()),
-					Type: "article",
-					URI: makeURI(
-						path, config.articleRoot) + "/" + makeURI(f.Name(),
-						config.articleRoot,
-					),
-				})
-			}
+	// Iterate through the list and get the children of the folder
+	for _, fragment := range pathFragments {
+		folderIndex = findChildWithName(folder.Children, fragment)
+
+		// Else, this is the ROOT folder
+		if folderIndex != -1 {
+			folder = (*folder.Children)[folderIndex]
+		}
+
+		folderName = fragment
+	}
+
+	// Make the folder's children
+	for _, f := range *folder.Children {
+		if f.IsFolder {
+			folders = append(folders, HierarchicalObject{
+				Name: removeExtensionFrom(f.Name),
+				Type: "folder",
+				URI: makeURI(
+					absolutePath, config.articleRoot) + "/" + makeURI(f.Name,
+					config.articleRoot,
+				),
+			})
+		} else {
+			articles = append(articles, HierarchicalObject{
+				Name: removeExtensionFrom(f.Name),
+				Type: "article",
+				URI: makeURI(
+					absolutePath, config.articleRoot) + "/" + makeURI(f.Name,
+					config.articleRoot,
+				),
+			})
 		}
 	}
 
 	// Check if the folder has a readme
-	readme := ""
-	r, err := os.ReadFile(path + "/README.md")
-	if err == nil {
-		readme = string(r)
+	README := ""
+	if r, err := os.ReadFile(absolutePath + "/README.md"); err == nil {
+		README = string(r)
 	}
 
-	folder := Folder{
-		ID:    makeID(path),
-		URI:   makeURI(path, config.articleRoot),
-		Title: title,
-		Children: Children{
-			Articles: articles,
-			Folders:  folders,
-		},
-		Hierarchy: makeHierarchy(path, config.articleRoot),
-		README:    readme,
-	}
+	// Make the folder struct and render it.
+	html := renderFolder(
+		Folder{
+			ID:    makeID(absolutePath),
+			URI:   makeURI(absolutePath, config.articleRoot),
+			Title: folderName,
+			Children: Children{
+				Articles: articles,
+				Folders:  folders,
+			},
+			Hierarchy: makeHierarchy(absolutePath, config.articleRoot),
+			README:    README,
+		})
 
-	html := renderFolder(folder)
+	// Small little local helper to keep things short
+	_writeFolder := func(isRoot bool) {
+		prefix := config.outputFolder + makeURI(absolutePath, config.articleRoot)
+		if isRoot {
+			prefix += "/ROOT"
+		}
 
-	if path != config.articleRoot {
-		writeFile(
-			config.outputFolder+"/"+makeURI(path, config.articleRoot)+"/index.html",
-			[]byte(html),
-		)
+		writeFile(prefix+"/index.html", []byte(html))
 
 		if config.meta.GenerateJSON {
 			jsonData, _ := jsonMarshal(folder)
-			writeFile(
-				config.outputFolder+"/"+makeURI(path, config.articleRoot)+"/index.json",
-				jsonData,
-			)
+			writeFile(prefix+"/index.json", jsonData)
 		}
+	}
+
+	if absolutePath == config.articleRoot {
+		_writeFolder(true)
 	} else {
-		writeFile(config.outputFolder+"/ROOT/index.html", []byte(html))
-
-		if config.meta.GenerateJSON {
-			jsonData, _ := jsonMarshal(folder)
-			writeFile(config.outputFolder+"/ROOT/index.json", jsonData)
-		}
-	}
-
-	return Children{
-		Articles: articles,
-		Folders:  folders,
+		_writeFolder(false)
 	}
 }
 
 func writeArticles(config *BockConfig) error {
 	tx, _ := config.database.Begin()
 	stmt, _ := tx.Prepare(`
-  INSERT INTO articles (
+    INSERT INTO articles (
       id,
       content,
       modified,
@@ -298,29 +304,37 @@ func writeArticles(config *BockConfig) error {
 
 	defer stmt.Close()
 
-	entityList, err := makeListOfArticles(config)
+	// articleList, folderList, err := makeListOfEntities(config)
+	articleList, folderList, err := makeListOfEntities(config)
 
-	// Process them in a simple waitgroup... for now. This creates as many
+	// Process entities in simple waitgroups... for now. This creates as many
 	// coroutines as articles and gets really slow on machines with low memory.
-	wg := new(sync.WaitGroup)
-	for _, e := range entityList {
-		wg.Add(1)
+	entityWaitGroup := new(sync.WaitGroup)
+
+	fmt.Println("Will write", len(articleList), "articles")
+	for _, e := range articleList {
+		entityWaitGroup.Add(1)
 
 		go func(e Entity, stmt *sql.Stmt, config *BockConfig) {
-			defer wg.Done()
-
-			if e.IsFolder {
-				writeFolder(e.Path, config)
-			} else {
-				writeArticle(e.Path, config, e, stmt)
-			}
+			defer entityWaitGroup.Done()
+			writeArticle(e.path, config, e, stmt)
 		}(e, stmt, config)
 	}
 
-	wg.Wait()
+	fmt.Println("Will write", len(folderList), "folders")
+	for _, e := range folderList {
+		entityWaitGroup.Add(1)
+
+		go func(e string, stmt *sql.Stmt, config *BockConfig) {
+			defer entityWaitGroup.Done()
+			writeFolder(e, config)
+		}(e, stmt, config)
+	}
+
+	entityWaitGroup.Wait()
 
 	fmt.Printf("\033[2K\r")
-	fmt.Println("Finished articles")
+	fmt.Println("Finished writing all entities")
 	tx.Commit()
 
 	return err
@@ -329,10 +343,6 @@ func writeArticles(config *BockConfig) error {
 func writeTree(config *BockConfig) {
 	s, _ := jsonMarshal(config.entityTree)
 	writeFile(config.outputFolder+"/tree.json", s)
-
-	// v, _ := json.MarshalIndent(config.entityTree, "", " ")
-
-	// fmt.Println(">>>", string(v))
 }
 
 func writeRandom(config *BockConfig) {

@@ -17,6 +17,10 @@ git clone https://github.com/afreeorange/bockgo.git
 go run --tags "fts5" . -a /path/to/repo -o /path/to/output -r -j
 ```
 
+## Terminology et al
+
+An "Entity" is either an "Article" (a Markdown file somewhere in your article repository) or a "Folder" (which is exactly what you think it is). A "Revision" is a `git` commit that modifies an Article.
+
 * You can organize your articles into folders.
 * You cannot use `raw`, `revisions`, `random`, and `archive` as folder names.
 * You can place static assets in `__assets` in your article repository. You can reference all assets in there in your Markdown files prefixed with `/assets` (e.g. `__assets/some-file.jpg` &rarr; `/assets/some-file.jpg`).
@@ -27,7 +31,7 @@ The command will generate the following:
 * Each article's revision rendered as Raw Source, HTML, and JSON
 * A listing of all revisions for each article (if applicable)
 * Each folder's structure in HTML and JSON ([example](https://wiki.nikhil.io/Food/))
-* An archive page that lets you search your articles
+* An archive page that lets you search your articles thanks to SQLite and [SQL.js](https://github.com/sql-js/sql.js/)
 * A Homepage (if it doesn't exist as `Home.md`) at `/Home`
 * A page that redirects to some random article at `/random`
 * An index page that redirects to `/Home`
