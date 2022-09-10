@@ -1,6 +1,7 @@
 {% extends "base.njk" %}
 
 {% block main %}
+
   {% include "hierarchy.njk" %}
 
   <h1>{{ title }}</h1>
@@ -9,37 +10,23 @@
     {{ readme | safe }}
   {% endif %}
 
-  {% set subFolderLength = children.Folders | length %}
-  {% if subFolderLength > 0 %}
-  <h2>Folders
-    <span>{{ children.Folders | length }}</span>
-  </h2>
-  <ul>
+  <ul data-content="tree">
     {% for child in children.Folders %}
-      <li>
+      <li data-entity-type="folder">
         <strong>
           <a href="{{ child.URI }}" title="{{ child.Name }}">
             {{ child.Name }}
           </a>
-      </strong>
+        </strong>
       </li>
     {% endfor %}
-  </ul>
-  {% endif %}
-
-  {% set subArticleLength = children.Articles | length %}
-  {% if subArticleLength > 0 %}
-  <h2>Articles
-    <span>{{ children.Articles | length }}</span>
-  </h2>
-  <ul>
     {% for child in children.Articles %}
-      <li>
+      <li data-entity-type="article">
         <a href="{{ child.URI }}" title="{{ child.Name }}">
           {{ child.Name }}
         </a>
       </li>
     {% endfor %}
   </ul>
-  {% endif %}
+
 {% endblock main %}

@@ -454,7 +454,6 @@ ul[data-content="tree"] ul {
 ul[data-content="tree"] {
   padding: var(--root-spacing) 0;
   margin-top: var(--root-spacing);
-  border-top: 1px dotted var(--color-light);
 }
 ul[data-content="tree"] li {
   margin: 0;

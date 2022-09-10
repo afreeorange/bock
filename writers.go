@@ -222,6 +222,10 @@ func writeFolder(absolutePath string, config *BockConfig) {
 		folderName = fragment
 	}
 
+	if folderName == "" {
+		folderName = "Root"
+	}
+
 	// Make the folder's children
 	for _, f := range *folder.Children {
 		if f.IsFolder {
