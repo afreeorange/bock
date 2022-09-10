@@ -262,14 +262,24 @@ func uniqueStringsInList(list []string) []string {
 // whatsoever. So for example, this will not return a valid path:
 //
 //	/article/root/Tech Notes/Linux/.hidden/My Article.md
-func hasNoDotEntities(somePath string) bool {
-	for _, f := range strings.Split(somePath, "/") {
-		if strings.HasPrefix(f, ".") {
-			return false
+func hasDotEntities(relativePath string) bool {
+	fragments := strings.Split(relativePath, "/")
+
+	if len(fragments) > 1 {
+		for _, f := range strings.Split(relativePath, "/") {
+			if strings.HasPrefix(f, ".") {
+				return true
+			}
+		}
+	} else {
+		// Note that `path.Dir` will return "." instead of an empty "" if you have
+		// an article at the basedir.
+		if strings.HasPrefix(relativePath, ".") && relativePath != "." {
+			return true
 		}
 	}
 
-	return true
+	return false
 }
 
 func makeListOfEntities(config *BockConfig) (
@@ -282,7 +292,7 @@ func makeListOfEntities(config *BockConfig) (
 
 		isValidArticle := (!entityInfo.IsDir() &&
 			!IGNORED_ENTITIES_REGEX.MatchString(entityPath) &&
-			hasNoDotEntities(path.Dir(relativePath)) &&
+			!hasDotEntities(path.Dir(relativePath)) &&
 			filepath.Ext(entityPath) == ".md")
 
 		if isValidArticle {
