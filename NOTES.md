@@ -349,3 +349,9 @@ var _ = pongo2.RegisterFilter("round", func(in, param *pongo2.Value) (out *pongo
 	return rounded, nil
 })
 ```
+
+### Local Builds
+
+```bash
+docker run -ti -v /Users/nikhil/personal/bock:/home/circleci/project cimg/go:1.18 /home/circleci/project/.scripts/build.sh
+```
