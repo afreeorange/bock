@@ -258,6 +258,20 @@ func uniqueStringsInList(list []string) []string {
 	return uniqueList
 }
 
+// Ascertain that we don't have ANY dotfolders or dotfiles in a given path
+// whatsoever. So for example, this will not return a valid path:
+//
+//	/article/root/Tech Notes/Linux/.hidden/My Article.md
+func hasNoDotEntities(somePath string) bool {
+	for _, f := range strings.Split(somePath, "/") {
+		if strings.HasPrefix(f, ".") {
+			return false
+		}
+	}
+
+	return true
+}
+
 func makeListOfEntities(config *BockConfig) (
 	listOfArticles []Entity,
 	listOfFolders []string,
@@ -268,10 +282,12 @@ func makeListOfEntities(config *BockConfig) (
 
 		isValidArticle := (!entityInfo.IsDir() &&
 			!IGNORED_ENTITIES_REGEX.MatchString(entityPath) &&
-			!strings.HasPrefix(relativePath, ".") &&
+			hasNoDotEntities(path.Dir(relativePath)) &&
 			filepath.Ext(entityPath) == ".md")
 
 		if isValidArticle {
+			fmt.Println(">", relativePath)
+
 			listOfArticles = append(
 				listOfArticles,
 				*getEntityInfo(config, entityInfo, entityPath),

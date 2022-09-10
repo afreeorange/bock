@@ -52,7 +52,7 @@ func main() {
 		os.Exit(EXIT_NO_OUTPUT_FOLDER)
 	}
 
-	// Some bookkeeping
+	// Some bookkeeping. Tick.
 	start := time.Now()
 	v, _ := mem.VirtualMemory()
 
@@ -64,17 +64,23 @@ func main() {
 
 	// Check if it can be read as a git repository
 	var repository *git.Repository
-	var err error
-	fs := memfs.New()
+	var repoErr error
+
 	if useOnDiskFS {
-		repository, err = git.PlainOpen(articleRoot)
+		repository, repoErr = git.PlainOpen(articleRoot)
 	} else {
-		repository, err = git.Clone(memory.NewStorage(), fs, &git.CloneOptions{
-			URL: articleRoot,
-		})
+		fs := memfs.New()
+
+		repository, repoErr = git.Clone(
+			memory.NewStorage(),
+			fs,
+			&git.CloneOptions{
+				URL: articleRoot,
+			},
+		)
 	}
 
-	if err != nil {
+	if repoErr != nil {
 		fmt.Println("That article root does not appear to be a git repository.")
 		os.Exit(EXIT_NOT_A_GIT_REPO)
 	}
@@ -120,9 +126,23 @@ func main() {
 	// Make a flat list of absolute article paths. Use these to build the entity
 	// tree. We do this to prevent unnecessary and empty folders from being
 	// created.
-	listOfArticles, _, _ := makeListOfEntities(&config)
+	listOfArticles, listOfFolders, _ := makeListOfEntities(&config)
+
+	// Do we even build anything?
+	if len(listOfArticles) == 0 {
+		fmt.Println("! I could not find any articles to render :/")
+		fmt.Println("Quitting.")
+
+		os.Exit(EXIT_NO_ARTICLES_TO_RENDER)
+	}
+
+	// We have things to build. Continue configuring.
 	config.listOfArticles = &listOfArticles
-	fmt.Println("Found", len(*config.listOfArticles), "articles")
+	config.listOfFolders = &listOfFolders
+	config.meta.ArticleCount = len(listOfArticles)
+	config.meta.FolderCount = len(listOfFolders)
+
+	fmt.Println("Found", config.meta.ArticleCount, "articles")
 
 	// Make a tree of entities: articles and folders
 	entityTree := makeEntityTree(&config)
@@ -139,23 +159,15 @@ func main() {
 	fmt.Println("... done")
 
 	fmt.Print("Copying assets")
-	cp_err := copyAssets(&config)
-	if cp_err != nil {
+	copyError := copyAssets(&config)
+	if copyError != nil {
 		fmt.Println("; could not find '__assets' in repository. Ignoring.")
 	} else {
 		fmt.Println("... done")
 	}
 
-	// Process all articles
-	if process_error := writeArticles(&config); process_error != nil {
-		fmt.Println("Could not write articles: ", err)
-	}
-
-	// Tock
-	end := time.Now()
-	generationTime := end.Sub(start)
-	config.meta.GenerationTime = generationTime
-	config.meta.GenerationTimeRounded = generationTime.Round(time.Second)
+	// Process all articles. TODO: Errors?
+	writeEntities(&config)
 
 	// Write the index page and other pages
 	fmt.Print("Writing index page")
@@ -178,13 +190,20 @@ func main() {
 	writeRandom(&config)
 	fmt.Println("... done")
 
+	// Tock
+	end := time.Now()
+	generationTime := end.Sub(start)
+	config.meta.GenerationTime = generationTime
+	config.meta.GenerationTimeRounded = generationTime.Round(time.Second)
+
 	fmt.Print("Writing /Home: ")
 	writeHome(&config)
 	fmt.Println("... done")
 
 	fmt.Printf(
-		"\nDone! Finished processing %d articles and %d revisions in %s\n",
+		"\nDone! Finished processing %d articles, %d folders, and %d revisions in %s\n",
 		config.meta.ArticleCount,
+		config.meta.FolderCount,
 		config.meta.RevisionCount,
 		config.meta.GenerationTime,
 	)

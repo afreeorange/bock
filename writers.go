@@ -165,8 +165,8 @@ func writeArticle(
 	revisionsLabel := "(No revisions)"
 	if revisions != nil {
 		revisionsLabel = "(One revision)"
-		rc := len(revisions)
-		if rc > 1 {
+
+		if rc := len(revisions); rc > 1 {
 			revisionsLabel = "(" + fmt.Sprint(rc) + " revisions)"
 		}
 
@@ -179,8 +179,6 @@ func writeArticle(
 	}
 
 	fmt.Printf("\033[2K\r%s", relativePath+" "+revisionsLabel)
-
-	config.meta.ArticleCount += 1
 }
 
 func writeHome(config *BockConfig) {
@@ -289,7 +287,7 @@ func writeFolder(absolutePath string, config *BockConfig) {
 	}
 }
 
-func writeArticles(config *BockConfig) error {
+func writeEntities(config *BockConfig) {
 	tx, _ := config.database.Begin()
 	stmt, _ := tx.Prepare(`
     INSERT INTO articles (
@@ -304,15 +302,12 @@ func writeArticles(config *BockConfig) error {
 
 	defer stmt.Close()
 
-	// articleList, folderList, err := makeListOfEntities(config)
-	articleList, folderList, err := makeListOfEntities(config)
-
 	// Process entities in simple waitgroups... for now. This creates as many
 	// coroutines as articles and gets really slow on machines with low memory.
 	entityWaitGroup := new(sync.WaitGroup)
 
-	fmt.Println("Will write", len(articleList), "articles")
-	for _, e := range articleList {
+	fmt.Println("Will write", config.meta.ArticleCount, "articles")
+	for _, e := range *config.listOfArticles {
 		entityWaitGroup.Add(1)
 
 		go func(e Entity, stmt *sql.Stmt, config *BockConfig) {
@@ -321,8 +316,8 @@ func writeArticles(config *BockConfig) error {
 		}(e, stmt, config)
 	}
 
-	fmt.Println("Will write", len(folderList), "folders")
-	for _, e := range folderList {
+	fmt.Println("Will write", config.meta.FolderCount, "folders")
+	for _, e := range *config.listOfFolders {
 		entityWaitGroup.Add(1)
 
 		go func(e string, stmt *sql.Stmt, config *BockConfig) {
@@ -336,8 +331,6 @@ func writeArticles(config *BockConfig) error {
 	fmt.Printf("\033[2K\r")
 	fmt.Println("Finished writing all entities")
 	tx.Commit()
-
-	return err
 }
 
 func writeTree(config *BockConfig) {

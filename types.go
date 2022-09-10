@@ -73,9 +73,10 @@ type Meta struct {
 	ArticleCount          int           `json:"articleCount"`
 	BuildDate             time.Time     `json:"buildTime"`
 	CPUCount              int           `json:"cpuCount"`
-	GenerateRevisions     bool          `json:"generateRevisions"`
+	FolderCount           int           `json:"folderCount"`
 	GenerateJSON          bool          `json:"generateJSON"`
 	GenerateRaw           bool          `json:"generateRaw"`
+	GenerateRevisions     bool          `json:"generateRevisions"`
 	GenerationTime        time.Duration `json:"generationTime"`
 	GenerationTimeRounded time.Duration `json:"generationTimeRounded"`
 	MemoryInGB            int           `json:"memoryInGB"`
@@ -87,6 +88,7 @@ type BockConfig struct {
 	articleRoot    string
 	entityTree     *[]Entity
 	listOfArticles *[]Entity
+	listOfFolders  *[]string
 	database       *sql.DB
 	meta           Meta
 	outputFolder   string
