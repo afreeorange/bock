@@ -17,8 +17,8 @@ CGO_ENABLED=1 go build --tags "fts5" -o "dist/bock-$(uname)-$(uname -m)" .
 ### TODO
 
 * [x] FIX THE NAVIGATION FFS
-* [ ] FIX THE PATH GENERATION PROBLEM FFS
-* [ ] FIX FOLDER generation
+* [x] FIX THE PATH GENERATION PROBLEM FFS
+* [x] FIX FOLDER generation
 * [x] Breadcrumbs > Revision
 * [ ] Table of Contents
 * [ ] Recent Changes (Global)
@@ -35,7 +35,7 @@ CGO_ENABLED=1 go build --tags "fts5" -o "dist/bock-$(uname)-$(uname -m)" .
 * [x] 404 Page
 * [ ] Template argument
 * [ ] Revisions argument
-* [ ] Better, less buggy tree
+* [x] Better, less buggy tree
 * [ ] Gist of recursive tree generation!
 - [ ] Fix issue with apostrophes 🤦‍♀️
 * [ ] Use `context` in lieu of `config` struct? What are the dis/advantages?
