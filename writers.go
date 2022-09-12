@@ -108,14 +108,14 @@ func writeArticle(
 	contents, _ := os.ReadFile(articlePath)
 	untracked := true
 
-	var revisions []Revision
 	var history ArticleHistory
+	var historyError error
 
 	if config.meta.GenerateRevisions {
-		history, h_err := getArticleHistory(articlePath, config)
-		if h_err == nil {
+		history, historyError = getArticleHistory(articlePath, config)
+
+		if historyError == nil {
 			untracked = false
-			revisions = history.revisions
 		}
 	}
 
@@ -126,7 +126,7 @@ func writeArticle(
 		Html:      "",
 		ID:        makeID(articlePath),
 		path:      articlePath,
-		Revisions: revisions,
+		Revisions: history.revisions,
 		Size:      entity.SizeInBytes,
 		Source:    string(contents),
 		Title:     title,
@@ -166,23 +166,25 @@ func writeArticle(
 	}
 
 	// Create revisions if applicable (i.e. at least one commit exists for article)
-	revisionsLabel := "(No revisions)"
-	if revisions != nil {
-		revisionsLabel = "(One revision)"
+	if config.meta.GenerateRevisions {
+		revisionsLabel := "(No revisions)"
+		if history.revisions != nil {
+			revisionsLabel = "(One revision)"
 
-		if rc := len(revisions); rc > 1 {
-			revisionsLabel = "(" + fmt.Sprint(rc) + " revisions)"
+			if rc := len(history.revisions); rc > 1 {
+				revisionsLabel = "(" + fmt.Sprint(rc) + " revisions)"
+			}
+
+			revisionListHTML := renderRevisionList(article, history.revisions)
+			writeFile(config.outputFolder+uri+"/revisions/index.html", []byte(revisionListHTML))
+
+			for _, r := range history.revisions {
+				writeRevision(article, r, config)
+			}
 		}
 
-		revisionListHTML := renderRevisionList(article, history.revisions)
-		writeFile(config.outputFolder+uri+"/revisions/index.html", []byte(revisionListHTML))
-
-		for _, r := range history.revisions {
-			writeRevision(article, r, config)
-		}
+		fmt.Printf("\033[2K\r%s", relativePath+" "+revisionsLabel)
 	}
-
-	fmt.Printf("\033[2K\r%s", relativePath+" "+revisionsLabel)
 }
 
 func writeHome(config *BockConfig) {

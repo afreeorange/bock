@@ -66,6 +66,8 @@ func main() {
 	// revisions
 	var repository *git.Repository
 	var repoErr error
+	var repoStatus git.Status
+
 	if generateRevisions {
 		if useOnDiskFS {
 			repository, repoErr = git.PlainOpen(articleRoot)
@@ -86,6 +88,14 @@ func main() {
 			fmt.Println("You can try running me again with '-R=false' and I won't check if it's a git repository.")
 			os.Exit(EXIT_NOT_A_GIT_REPO)
 		}
+
+		// Get the working tree's status
+		workingTree, _ := repository.Worktree()
+		repoStatus, _ = workingTree.Status()
+
+		if !repoStatus.IsClean() {
+			fmt.Println("WARN: Working tree is not clean!")
+		}
 	} else {
 		fmt.Println("I am not going to generate article revisions.")
 	}
@@ -95,13 +105,6 @@ func main() {
 	outputFolder = strings.TrimRight(outputFolder, "/")
 	fmt.Println("Making", outputFolder, "if it doesn't exist")
 	os.MkdirAll(outputFolder, os.ModePerm)
-
-	// Get the working tree's status
-	worktree, _ := repository.Worktree()
-	status, _ := worktree.Status()
-	if !status.IsClean() {
-		fmt.Println("WARN: Working tree is not clean!")
-	}
 
 	// App config
 	config := BockConfig{
@@ -125,7 +128,7 @@ func main() {
 		},
 		started:        time.Now(),
 		repository:     repository,
-		workTreeStatus: &status,
+		workTreeStatus: &repoStatus,
 	}
 
 	// Make a flat list of absolute article paths. Use these to build the entity
