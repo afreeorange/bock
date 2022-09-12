@@ -62,27 +62,32 @@ func main() {
 		os.Exit(EXIT_BAD_ARTICLE_ROOT)
 	}
 
-	// Check if it can be read as a git repository
+	// Check if it can be read as a git repository only if we're generating
+	// revisions
 	var repository *git.Repository
 	var repoErr error
+	if generateRevisions {
+		if useOnDiskFS {
+			repository, repoErr = git.PlainOpen(articleRoot)
+		} else {
+			fs := memfs.New()
 
-	if useOnDiskFS {
-		repository, repoErr = git.PlainOpen(articleRoot)
+			repository, repoErr = git.Clone(
+				memory.NewStorage(),
+				fs,
+				&git.CloneOptions{
+					URL: articleRoot,
+				},
+			)
+		}
+
+		if repoErr != nil {
+			fmt.Println("That article root does not appear to be a git repository.")
+			fmt.Println("You can try running me again with '-R=false' and I won't check if it's a git repository.")
+			os.Exit(EXIT_NOT_A_GIT_REPO)
+		}
 	} else {
-		fs := memfs.New()
-
-		repository, repoErr = git.Clone(
-			memory.NewStorage(),
-			fs,
-			&git.CloneOptions{
-				URL: articleRoot,
-			},
-		)
-	}
-
-	if repoErr != nil {
-		fmt.Println("That article root does not appear to be a git repository.")
-		os.Exit(EXIT_NOT_A_GIT_REPO)
+		fmt.Println("I am not going to generate article revisions.")
 	}
 
 	// Gather basic things. Create the output folder first.

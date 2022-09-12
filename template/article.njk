@@ -3,7 +3,7 @@
 {% block main %}
   {% include "hierarchy.njk" %}
 
-  <h1>{{ title }} {% if untracked %}<span>Untracked</span>{% endif %}</h1>
+  <h1>{{ title }} {% if meta.GenerateRevisions and untracked %}<span>Untracked</span>{% endif %}</h1>
 
   {{ html | safe }}
 {% endblock main %}

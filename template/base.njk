@@ -66,12 +66,14 @@
             </li>
             {% endif %}
 
-            {% if type == "article" or type == "revision" or type == "raw" or type == "revision-raw" or type == "revision-list" %}
-            <li>
-              <a href="{{ uri }}/revisions"{% if type == "revision-list" %}class="active"{% endif %}>
-                <span>Revisions</span>
-              </a>
-            </li>
+            {% if meta.GenerateRevisions %}
+              {% if type == "article" or type == "revision" or type == "raw" or type == "revision-raw" or type == "revision-list" %}
+              <li>
+                <a href="{{ uri }}/revisions"{% if type == "revision-list" %}class="active"{% endif %}>
+                  <span>Revisions</span>
+                </a>
+              </li>
+              {% endif %}
             {% endif %}
 
             {% if meta.GenerateJSON %}

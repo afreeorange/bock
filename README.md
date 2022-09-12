@@ -15,13 +15,17 @@ git clone https://github.com/afreeorange/bockgo.git
 # Now point it at a git repository full of Markdown files
 # and tell it where to generate the output
 go run --tags "fts5" . -a /path/to/repo -o /path/to/output -r -j
+
+# You can just point it at a folder full of Markdown files (not a git repo)
+# and it will generate stuff.
+go run --tags "fts5" . -a /path/to/repo -o /path/to/output -r -j -R=false
 ```
 
 ## Terminology and Setup
 
-An "**Entity**" is either 
+An "**Entity**" is either
 
-- An "**Article**", a Markdown file ending in `.md` somewhere in your article repository, or 
+- An "**Article**", a Markdown file ending in `.md` somewhere in your article repository, or
 - A "**Folder**, which is exactly what you think it is. You can organize your articles into folders at any depth.
 
 A "**Revision**" is a `git` commit that modifies an Article.
@@ -35,8 +39,8 @@ Other stuff:
   - You'll be warned if you don't have one.
 - The paths `raw`, `revisions`, `random`, and `archive` are reserved. So, for example, don't create a `raw.md` anywhere. It will be overwritten.
 - You can place static assets in `__assets` in your article repository. You can reference all assets in there in your Markdown files prefixed with `/assets` (e.g. `__assets/some-file.jpg` &rarr; `/assets/some-file.jpg`).
-- Any dotfiles or dotfolders are ignored when generating the entity-tree. 
-  - This includes `node_modules`. See [this file](https://github.com/afreeorange/bock/blob/master/constants.go) for other things. It's a small list. 
+- Any dotfiles or dotfolders are ignored when generating the entity-tree.
+  - This includes `node_modules`. See [this file](https://github.com/afreeorange/bock/blob/master/constants.go) for other things. It's a small list.
 
 That's really about it.
 
@@ -62,5 +66,5 @@ A giant work in progress but works pretty well for me so far. Uses a baby implem
 - [ ] Frontmatter support
 - [ ] Live-watcher of articles
 - [ ] Customizable Templates
-- [ ] Option to disable revision histories
+- [x] Option to disable revision histories
 - [ ] Better/finer concurrency control

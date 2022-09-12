@@ -107,12 +107,16 @@ func writeArticle(
 
 	contents, _ := os.ReadFile(articlePath)
 	untracked := true
-	revisions := []Revision{}
-	history, h_err := getArticleHistory(articlePath, config)
 
-	if h_err == nil {
-		untracked = false
-		revisions = history.revisions
+	var revisions []Revision
+	var history ArticleHistory
+
+	if config.meta.GenerateRevisions {
+		history, h_err := getArticleHistory(articlePath, config)
+		if h_err == nil {
+			untracked = false
+			revisions = history.revisions
+		}
 	}
 
 	article := Article{
