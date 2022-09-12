@@ -1,15 +1,10 @@
 {% extends "base.njk" %}
-
 {% block main %}
-
   {% include "hierarchy.njk" %}
-
   <h1>{{ title }}</h1>
-
   {% if readme %}
     {{ readme | safe }}
   {% endif %}
-
   <ul data-content="tree">
     {% for child in children.Folders %}
       <li data-entity-type="folder">
@@ -28,5 +23,4 @@
       </li>
     {% endfor %}
   </ul>
-
 {% endblock main %}

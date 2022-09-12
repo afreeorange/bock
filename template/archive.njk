@@ -1,47 +1,38 @@
 {% extends "base.njk" %}
-
 {% block main %}
-
   {% macro drawList(entity) %}
     {% set type = "article" %}
     {% if entity.IsFolder == true %}
       {% set type = "folder" %}
     {% endif %}
-
     <li data-entity-type="{{ type }}">
       <a href="{{ entity.URI }}" title="Go to {{ entity.Title }}">
-      {% if type == "article" %}
-        {{ entity.Title }}
-      {% else %}
-        <strong>{{ entity.Title }}</strong>
-      {% endif %}
+        {% if type == "article" %}
+          {{ entity.Title }}
+        {% else %}
+          <strong>{{ entity.Title }}</strong>
+        {% endif %}
       </a>
-
       {% if entity.Children | length > 0 %}
         <ul>
-        {% for child in entity.Children %}
-          {{ drawList(child) }}
-        {% endfor %}
+          {% for child in entity.Children %}
+            {{ drawList(child) }}
+          {% endfor %}
         </ul>
       {% endif %}
     </li>
   {% endmacro %}
-
   <h1>Search {{ meta.ArticleCount }} articles</h1>
-
   <form role="search">
     <input placeholder="3 or more characters" autofocus/>
   </form>
-
   <ul data-content="results"></ul>
-
   <ul data-content="tree">
     {% for entity in tree %}
       {{ drawList(entity) }}
     {% endfor %}
   </ul>
 {% endblock main %}
-
 {% block scripts %}
   <script src="/js/nunjucks.min.js"></script>
   <script src="/js/sql-wasm.js"></script>

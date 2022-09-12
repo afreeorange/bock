@@ -1,26 +1,21 @@
 {% extends "base.njk" %}
-
 {% block main %}
   <h1>Random article!</h1>
   <div></div>
 {% endblock main %}
-
 {% block scripts %}
-<script type="text/javascript">
-(() => {
-  const list = [
-    {%- for entity in list -%}
-      {
-        uri: "{{ entity.URI }}",
-        isFolder: {% if entity.IsFolder %}true{% else %}false{% endif %}
-      },
-    {%- endfor -%}
-  ]
-  .filter(_ => !_.isFolder)
-  .map(_ => _.uri);
-
-  const randomIndex = Math.floor(Math.random() * list.length);
-  setTimeout(() => window.location.assign(list[randomIndex]), 3000);
-})();
-</script>
+  <script type="text/javascript">
+    (() => {
+      const list = [{%- for entity in list -%}
+          {
+            uri: "{{ entity.URI }}",
+            isFolder:{% if entity.IsFolder %}
+              true
+            {% else %}
+              false{% endif %}
+          },{%- endfor -%}].filter(_ => !_.isFolder).map(_ => _.uri);
+      const randomIndex = Math.floor(Math.random() * list.length);
+      setTimeout(() => window.location.assign(list[randomIndex]), 3000);
+    })();
+  </script>
 {% endblock scripts %}

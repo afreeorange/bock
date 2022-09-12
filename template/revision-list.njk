@@ -1,31 +1,31 @@
 {% extends "base.njk" %}
-
 {% block main %}
   {% include "hierarchy.njk" %}
-
   {% set label = "Revision" %}
   {% set count = revisions | length %}
   {% if count > 1 or count == 0 %}
     {% set label = "Revisions" %}
   {% endif %}
-
   <h1>
-    {{ title }} <span>{{ revisions | length }} {{ label }}</span>
+    {{ title }}
+    <span>{{ revisions | length }}
+      {{ label }}</span>
   </h1>
-
   <ul>
-  {% for revision in revisions %}
-    <li>
-      <a href="{{ revision.ShortId }}" title="View revision {{ revision.ShortId }}">{{ revision.ShortId }}</a>
-      <br />
-      <small>{{ revision.Date | date:"Monday, 2 January 2006 at 15:04 MST" }}</small>
-      {% if revision.Subject %}
-      <br />
-      <small>{{ revision.Subject }}</small>
-      {% endif %}
-      <br />
-      <small>{{ revision.AuthorName }} <code>&lt;{{ revision.AuthorEmail }}&gt;</code></small>
-    </li>
-  {% endfor %}
+    {% for revision in revisions %}
+      <li>
+        <a href="{{ revision.ShortId }}" title="View revision {{ revision.ShortId }}">{{ revision.ShortId }}</a>
+        <br/>
+        <small>{{ revision.Date | date:"Monday, 2 January 2006 at 15:04 MST" }}</small>
+        {% if revision.Subject %}
+          <br/>
+          <small>{{ revision.Subject }}</small>
+        {% endif %}
+        <br/>
+        <small>{{ revision.AuthorName }}
+          <code>&lt;{{ revision.AuthorEmail }}&gt;</code>
+        </small>
+      </li>
+    {% endfor %}
   </ul>
 {% endblock main %}

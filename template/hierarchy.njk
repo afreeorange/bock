@@ -1,30 +1,43 @@
 <nav>
   <ul>
     {% for node in hierarchy %}
-    <li>
-      <a data-entity-type="{{ node.Type }}" href="{%- if node.Name == "ROOT" -%}/ROOT{%- else -%}/{{ node.URI }}{%- endif -%}" title="{{ node.Name }}">
-      {%- if node.Name == "ROOT" -%}Root{%- else -%}{{ node.Name}}{%- endif -%}
-      </a>
-    </li>
+      <li>
+        <a data-entity-type="{{ node.Type }}" href="{%- if node.Name == "ROOT" -%}/ROOT{%- else -%}/{{ node.URI }}{%- endif -%}" title="{{ node.Name }}">
+          {%- if node.Name == "ROOT" -%}Root
+          {%- else -%}
+            {{ node.Name }}
+          {%- endif -%}
+        </a>
+      </li>
     {% endfor %}
-
     {% if type == "raw" %}
-    <li><span>Raw</span></li>
+      <li>
+        <span>Raw</span>
+      </li>
     {% endif %}
-
     {% if type == "revision" %}
-    <li><a data-entity-type="revision-list" href="{{ uri }}/revisions" title="Article revisions">Revisions</a></li>
-    <li><span>Revision {{ revision.ShortId }}</span></li>
+      <li>
+        <a data-entity-type="revision-list" href="{{ uri }}/revisions" title="Article revisions">Revisions</a>
+      </li>
+      <li>
+        <span>Revision {{ revision.ShortId }}</span>
+      </li>
     {% endif %}
-
     {% if type == "revision-raw" %}
-    <li><a data-entity-type="revision-list" href="{{ uri }}/revisions" title="Article revisions">Revisions</a></li>
-    <li><a data-entity-type="revision" href="{{ uri }}/revisions/{{ revision.ShortId }}" title="View revision {{ revision.ShortId }}">Revision {{ revision.ShortId }}</a></li>
-    <li><span>Raw</span></li>
+      <li>
+        <a data-entity-type="revision-list" href="{{ uri }}/revisions" title="Article revisions">Revisions</a>
+      </li>
+      <li>
+        <a data-entity-type="revision" href="{{ uri }}/revisions/{{ revision.ShortId }}" title="View revision {{ revision.ShortId }}">Revision {{ revision.ShortId }}</a>
+      </li>
+      <li>
+        <span>Raw</span>
+      </li>
     {% endif %}
-
     {% if type == "revision-list" %}
-    <li><span>Revisions</span></li>
+      <li>
+        <span>Revisions</span>
+      </li>
     {% endif %}
   </ul>
 </nav>

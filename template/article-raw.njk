@@ -1,9 +1,8 @@
 {% extends "base.njk" %}
-
 {% block main %}
   {% include "hierarchy.njk" %}
-
-  <h1>{{ title }} <span>Raw</span></h1>
-
-<pre><code>{{ source | safe }}</code></pre>
+  <h1>{{ title }}
+    <span>Raw</span>
+  </h1>
+  <pre><code>{{ source | safe }}</code></pre>
 {% endblock main %}
