@@ -40,7 +40,7 @@ Other stuff:
 
 That's really about it.
 
----
+## What It Does
 
 The command in the "Usage" section will generate the following (using [this article](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time) as an example):
 
