@@ -19,12 +19,14 @@ func writeFile(name string, contents []byte) {
 	if m_err := os.MkdirAll(dirName, os.ModePerm); m_err != nil {
 		fmt.Println("ERROR: Could not make folder", dirName, ":", m_err)
 		fmt.Println("Halting.")
+
 		os.Exit(EXIT_GENERAL_IO_ERROR)
 	}
 
 	if f_err := os.WriteFile(name, contents, os.ModePerm); f_err != nil {
 		fmt.Println("ERROR: Could not make file", name, ":", f_err)
 		fmt.Println("Halting.")
+
 		os.Exit(EXIT_GENERAL_IO_ERROR)
 	}
 }
@@ -213,8 +215,8 @@ func writeFolder(absolutePath string, config *BockConfig) {
 	folder := (*config.entityTree)[0]
 	var folderIndex int
 	var folderName string
-	var folders []HierarchicalObject
-	var articles []HierarchicalObject
+	var folders []HierarchicalEntity
+	var articles []HierarchicalEntity
 
 	// Iterate through the list and get the children of the folder
 	for _, fragment := range pathFragments {
@@ -235,7 +237,7 @@ func writeFolder(absolutePath string, config *BockConfig) {
 	// Make the folder's children
 	for _, f := range *folder.Children {
 		if f.IsFolder {
-			folders = append(folders, HierarchicalObject{
+			folders = append(folders, HierarchicalEntity{
 				Name: removeExtensionFrom(f.Name),
 				Type: "folder",
 				URI: makeURI(
@@ -244,7 +246,7 @@ func writeFolder(absolutePath string, config *BockConfig) {
 				),
 			})
 		} else {
-			articles = append(articles, HierarchicalObject{
+			articles = append(articles, HierarchicalEntity{
 				Name: removeExtensionFrom(f.Name),
 				Type: "article",
 				URI: makeURI(

@@ -17,20 +17,20 @@ type Revision struct {
 	Content     string    `json:"content"`
 }
 
-type HierarchicalObject struct {
+type HierarchicalEntity struct {
 	Name string `json:"name"`
 	Type string `json:"type"`
 	URI  string `json:"uri"`
 }
 
 type Children struct {
-	Articles []HierarchicalObject `json:"articles"`
-	Folders  []HierarchicalObject `json:"folders"`
+	Articles []HierarchicalEntity `json:"articles"`
+	Folders  []HierarchicalEntity `json:"folders"`
 }
 
 type Article struct {
 	Created   time.Time            `json:"created"`
-	Hierarchy []HierarchicalObject `json:"hierarchy"`
+	Hierarchy []HierarchicalEntity `json:"hierarchy"`
 	Html      string               `json:"html"`
 	ID        string               `json:"id"`
 	Modified  time.Time            `json:"modified"`
@@ -47,7 +47,7 @@ type Article struct {
 
 type Folder struct {
 	Children  Children             `json:"children"`
-	Hierarchy []HierarchicalObject `json:"hierarchy"`
+	Hierarchy []HierarchicalEntity `json:"hierarchy"`
 	ID        string               `json:"id"`
 	README    string               `json:"readme"`
 	Title     string               `json:"title"`

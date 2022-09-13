@@ -48,10 +48,10 @@ func removeExtensionFrom(path string) string {
 	return strings.TrimSuffix(path, filepath.Ext(path))
 }
 
-func makeHierarchy(path string, articleRoot string) []HierarchicalObject {
+func makeHierarchy(path string, articleRoot string) []HierarchicalEntity {
 	a := strings.Replace(path, articleRoot, "", -1)
 	b := strings.Split(a, "/")
-	c := []HierarchicalObject{}
+	c := []HierarchicalEntity{}
 
 	uriPath := ""
 
@@ -59,7 +59,7 @@ func makeHierarchy(path string, articleRoot string) []HierarchicalObject {
 		uri := strings.ReplaceAll(strings.TrimSuffix(p, filepath.Ext(p)), " ", "_")
 
 		if p == "" {
-			c = append(c, HierarchicalObject{
+			c = append(c, HierarchicalEntity{
 				Name: "ROOT",
 				Type: "folder",
 				URI:  "/ROOT",
@@ -74,7 +74,7 @@ func makeHierarchy(path string, articleRoot string) []HierarchicalObject {
 				type_ = "article"
 			}
 
-			c = append(c, HierarchicalObject{
+			c = append(c, HierarchicalEntity{
 				Name: name,
 				Type: type_,
 				URI:  uriPath,
@@ -296,8 +296,6 @@ func makeListOfEntities(config *BockConfig) (
 			filepath.Ext(entityPath) == ".md")
 
 		if isValidArticle {
-			fmt.Println(">", relativePath)
-
 			listOfArticles = append(
 				listOfArticles,
 				*getEntityInfo(config, entityInfo, entityPath),
