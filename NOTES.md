@@ -62,6 +62,7 @@ aws s3 sync $HOME/Desktop/temp/ s3://wiki.nikhil.io/ --delete --content-encoding
 * [Gore](https://github.com/x-motemen/gore) for a REPL
 * [Minifier](https://github.com/tdewolff/minify) for HTML, CSS, XML, etc
 * [Awesome Go](https://awesome-go.com/)
+* [go-flags](https://github.com/jessevdk/go-flags) for CLI opt parsing. A bit heavy but appears to get the job done.
 
 ## References
 
@@ -83,6 +84,7 @@ aws s3 sync $HOME/Desktop/temp/ s3://wiki.nikhil.io/ --delete --content-encoding
 * [A million files in `git` repo](https://canvatechblog.com/we-put-half-a-million-files-in-one-git-repository-heres-what-we-learned-ec734a764181).
 * [A Crash Course on Concurrency & Parallelism in Go](https://levelup.gitconnected.com/a-crash-course-on-concurrency-parallelism-in-go-8ea935c9b0f8)
 * [How to have an in-place string that updates on stdout](https://stackoverflow.com/a/52367312)
+* [Intro to Golang logging](https://www.honeybadger.io/blog/golang-logging/)
 
 ### Concurrency/Parallelism
 
@@ -91,10 +93,11 @@ If you understand this enough you can roll your own with WaitGroup and channels.
 * https://github.com/remeh/sizedwaitgroup
 * https://github.com/nozzle/throttler
 
-### Books
+### Books and Other Media
 
 * [Learning Go](https://miek.nl/go/learninggo.html)
 * [Lexical Scanning in Go](https://www.youtube.com/watch?v=HxaD_trXwRE)
+* Head-First Go is awesome
 
 ### Afero Experiment
 
@@ -355,3 +358,5 @@ var _ = pongo2.RegisterFilter("round", func(in, param *pongo2.Value) (out *pongo
 ```bash
 docker run -ti -v /Users/nikhil/personal/bock:/home/circleci/project cimg/go:1.18 /home/circleci/project/.scripts/build.sh
 ```
+
+
