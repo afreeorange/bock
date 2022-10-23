@@ -4,6 +4,8 @@
 
 A small personal Markdown and `git`-powered wiki I wrote to teach myself Go. [You can see it in action here](https://wiki.nikhil.io/).
 
+I have old [Node](https://github.com/afreeorange/bock/tree/node) and [Python](https://github.com/afreeorange/bock/tree/python) versions of this as well for giggles.
+
 ## Usage
 
 See [the releases page](https://github.com/afreeorange/bock/releases) for a few pre-built binaries.
