@@ -71,3 +71,5 @@ A giant work in progress but works pretty well for me so far. Uses a baby implem
 - [ ] Customizable Templates
 - [x] Option to disable revision histories
 - [ ] Better/finer concurrency control
+- [ ] [Table of Contents](https://github.com/abhinav/goldmark-toc)
+- [ ] [Treeviews in CSS](https://iamkate.com/code/tree-views/)
