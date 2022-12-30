@@ -11,128 +11,146 @@
     <link rel="apple-touch-icon" href="/img/logo192.png"/>
     <link rel="stylesheet" href="/css/styles.css"/>
     <link rel="stylesheet" href="/css/highlight.css"/>
-    <title>{{ title }}</title>
-    <script defer data-domain="wiki.nikhil.io" src="https://plausible.io/js/plausible.js"></script>
-  </head>
-  <body>
-    <noscript>
-      👉 A few things won&#8217;t work if you have JavaScript disabled.
-    </noscript>
-    <div class="container{% if type %} {{ type }}{% endif %}">
-      <header>
-        <nav>
-          <ul>
-            <li>
-              <a href="/archive" {% if type == "archive" %} class="active" {% endif %} title="Archive">
-                <span>Archive</span>
-              </a>
-            </li>
-            <li>
-              <a href="/Home" {% if uri == "/Home" and type != "revision-list" %} class="active" {% endif %} title="Home">
-                <span>Home</span>
-              </a>
-            </li>
-            <li>
-              <a href="/random" {% if uri == "/random" %} class="active" {% endif %} title="See a random article">
-                <span>Random</span>
-              </a>
-            </li>
-            {# TODO: This is messy. Fix later. #}
-            {% if meta.GenerateRaw %}
-              {% if type == "article" %}
-                <li>
-                  <a href="{{ uri }}/raw" {% if type == "raw" or type == "revision-raw" %} class="active" {% endif %} title="View Source">
-                    <span>Raw</span>
-                  </a>
-                </li>
-              {% endif %}
-              {% if type == "revision" %}
-                <li>
-                  <a href="{{ uri }}/revisions/{{ revision.ShortId }}/raw" {% if type == "raw" or type == "revision-raw" %} class="active" {% endif %} title="View Source">
-                    <span>Raw</span>
-                  </a>
-                </li>
-              {% endif %}
-            {% endif %}
-            {% if type == "raw" or type == "revision-list" %}
+    <title>{{ title }} &ndash; Nikhil's Personal Wiki</title>
+    <script type="text/javascript" id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+      <script defer data-domain="wiki.nikhil.io" src="https://plausible.io/js/plausible.js"></script>
+    </head>
+    <body>
+      <noscript>
+        👉 A few things won&#8217;t work if you have JavaScript disabled.
+      </noscript>
+      <div class="container{% if type %} {{ type }}{% endif %}">
+        <header>
+          <nav>
+            <ul>
               <li>
-                <a href="{{ uri }}" title="View Article">
-                  <span>Current Revision</span>
+                <a href="/archive" {% if type == "archive" %} class="active" {% endif %} title="Archive">
+                  <span>Archive</span>
                 </a>
               </li>
-            {% endif %}
-            {% if type == "revision-raw" %}
               <li>
-                <a href="{{ uri }}/revisions/{{ revision.ShortId }}" title="View Article">
-                  <span>Current Revision</span>
+                <a href="/Home" {% if uri == "/Home" and type != "revision-list" %} class="active" {% endif %} title="Home">
+                  <span>Home</span>
                 </a>
               </li>
-            {% endif %}
-            {% if meta.GenerateRevisions %}
-              {% if type == "article" or type == "revision" or type == "raw" or type == "revision-raw" or type == "revision-list" %}
-                <li>
-                  <a href="{{ uri }}/revisions" {% if type == "revision-list" %} class="active" {% endif %}>
-                    <span>Revisions</span>
-                  </a>
-                </li>
-              {% endif %}
-            {% endif %}
-            {% if meta.GenerateJSON %}
-              {% if type == "article" or type == "folder" or type == "revision" or type == "raw" or type == "revision-raw" or type == "revision-list" %}
-                {% if uri == "" %}
+              <li>
+                <a href="/random" {% if uri == "/random" %} class="active" {% endif %} title="See a random article">
+                  <span>Random</span>
+                </a>
+              </li>
+              {# TODO: This is messy. Fix later. #}
+              {% if meta.GenerateRaw %}
+                {% if type == "article" %}
                   <li>
-                    <a href="/ROOT/index.json" title="View JSON Object">
-                      <span>JSON</span>
+                    <a href="{{ uri }}/raw" {% if type == "raw" or type == "revision-raw" %} class="active" {% endif %} title="View Source">
+                      <span>Raw</span>
                     </a>
                   </li>
-                {% elif type == "revision" or type == "revision-raw" %}
+                {% endif %}
+                {% if type == "revision" %}
                   <li>
-                    <a href="{{ uri }}/revisions/{{ revision.ShortId }}/index.json" title="View JSON Object">
-                      <span>JSON</span>
-                    </a>
-                  </li>
-                {% else %}
-                  <li>
-                    <a href="{{ uri }}/index.json" title="View JSON Object">
-                      <span>JSON</span>
+                    <a href="{{ uri }}/revisions/{{ revision.ShortId }}/raw" {% if type == "raw" or type == "revision-raw" %} class="active" {% endif %} title="View Source">
+                      <span>Raw</span>
                     </a>
                   </li>
                 {% endif %}
               {% endif %}
+              {% if type == "raw" or type == "revision-list" %}
+                <li>
+                  <a href="{{ uri }}" title="View Article">
+                    <span>Current Revision</span>
+                  </a>
+                </li>
+              {% endif %}
+              {% if type == "revision-raw" %}
+                <li>
+                  <a href="{{ uri }}/revisions/{{ revision.ShortId }}" title="View Article">
+                    <span>Current Revision</span>
+                  </a>
+                </li>
+              {% endif %}
+              {% if meta.GenerateRevisions %}
+                {% if type == "article" or type == "revision" or type == "raw" or type == "revision-raw" or type == "revision-list" %}
+                  <li>
+                    <a href="{{ uri }}/revisions" {% if type == "revision-list" %} class="active" {% endif %}>
+                      <span>Revisions</span>
+                    </a>
+                  </li>
+                {% endif %}
+              {% endif %}
+              {% if meta.GenerateJSON %}
+                {% if type == "article" or type == "folder" or type == "revision" or type == "raw" or type == "revision-raw" or type == "revision-list" %}
+                  {% if uri == "" %}
+                    <li>
+                      <a href="/ROOT/index.json" title="View JSON Object">
+                        <span>JSON</span>
+                      </a>
+                    </li>
+                  {% elif type == "revision" or type == "revision-raw" %}
+                    <li>
+                      <a href="{{ uri }}/revisions/{{ revision.ShortId }}/index.json" title="View JSON Object">
+                        <span>JSON</span>
+                      </a>
+                    </li>
+                  {% else %}
+                    <li>
+                      <a href="{{ uri }}/index.json" title="View JSON Object">
+                        <span>JSON</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            </ul>
+          </nav>
+        </header>
+        <main>
+          {% block main %}{% endblock main %}
+        </main>
+        <footer>
+          <p>
+            {% if type == "article" and uri == "/Home" %}
+              {% block statistics %}{% endblock statistics %}
             {% endif %}
+          </p>
+          <ul>
+            {% block footerElements %}{% endblock footerElements %}
+            <li>
+              <a href="https://github.com/afreeorange/bock" title="View the project that generates this wiki on Github">bock
+              {{ version }}</a>
+            </li>
           </ul>
-        </nav>
-      </header>
-      <main>
-        {% block main %}{% endblock main %}
-      </main>
-      <footer>
-        <p>
-          {% if type == "article" and uri == "/Home" %}
-            {% block statistics %}{% endblock statistics %}
-          {% endif %}
-        </p>
-        <ul>
-          {% block footerElements %}{% endblock footerElements %}
-          <li>
-            <a href="https://github.com/afreeorange/bock" title="View the project that generates this wiki on Github">bock
-            {{ version }}</a>
-          </li>
-        </ul>
-      </footer>
-    </div>
-    {% block scripts %}{% endblock scripts %}
-    {% if type != "archive" %}
-      <script type="text/javascript">
+        </footer>
+      </div>
+      {% block scripts %}{% endblock scripts %}
+      {% if type != "archive" %}
+        <script type="text/javascript">
         /**
-       * Quick shortcut to take me to the search box which is 90% of how I navigate
-       * this wiki anyway.
-       */
-        document.body.addEventListener(
-          "keypress", (e) => e.key === "f"
-          ? window.location.assign("/archive")
-          : null);
-      </script>
-    {% endif %}
-  </body>
+         * Quick shortcut to take me to the search box which is 90% of how I navigate
+         * this wiki anyway.
+         */
+          document.body.addEventListener(
+            "keypress", (e) => e.key === "f"
+            ? window.location.assign("/archive")
+            : null);
+
+          window.MathJax = {
+            tex: {
+              inlineMath: [
+                [
+                  '$', '$'
+                ],
+                [
+                  '\\(', '\\)'
+                ]
+              ]
+            },
+            svg: {
+              fontCache: 'global'
+            }
+          };
+        </script>
+      {% endif %}
+    </body>
+  </head>
 </html>

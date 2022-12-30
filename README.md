@@ -19,7 +19,8 @@ git clone https://github.com/afreeorange/bock.git
 go run --tags "fts5" . -a /path/to/repo -o /path/to/output -r -j
 
 # You can just point it at a folder full of Markdown files (not a git repo)
-# and it will generate stuff.
+# and it will generate stuff. Note that `-R` refers to article revisions and
+# only applies if we're dealing with git repositories
 go run --tags "fts5" . -a /path/to/repo -o /path/to/output -r -j -R=false
 ```
 
@@ -73,3 +74,5 @@ A giant work in progress but works pretty well for me so far. Uses a baby implem
 - [ ] Better/finer concurrency control
 - [ ] [Table of Contents](https://github.com/abhinav/goldmark-toc)
 - [ ] [Treeviews in CSS](https://iamkate.com/code/tree-views/)
+- [x] MathJAX Support
+  - [ ] Self-hosted MathJAX
