@@ -30,6 +30,8 @@ const (
 	EXIT_NO_OUTPUT_FOLDER
 	EXIT_NOT_A_GIT_REPO
 	EXIT_NO_ARTICLES_TO_RENDER
+  EXIT_COULD_NOT_GENERATE_LIST_OF_ENTITIES
+  EXIT_COULD_NOT_WRITE_ENTITY_TREE
 )
 
 // Things to ignore when walking the article repository. NOTE: In Golang, only
@@ -37,12 +39,12 @@ const (
 // beginning with `.` are automatically excluded in the function that uses this
 // pattern.
 var IGNORED_ENTITIES_REGEX = regexp.MustCompile(strings.Join([]string{
-	"__assets",
-	"css",
-	"Home.md", // This is dealt with separately
-	"img",
-	"js",
-	"node_modules",
+  "__assets",
+  "css",
+  "Home.md", // This is dealt with separately
+  "img",
+  "js",
+  "node_modules",
 }, "|"))
 
 // We use Goldmark as the Markdown converter. Configure it here.

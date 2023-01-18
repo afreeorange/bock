@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/fs"
+	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -85,12 +85,6 @@ func makeHierarchy(path string, articleRoot string) []HierarchicalEntity {
 	return c
 }
 
-type ArticleHistory struct {
-	created   time.Time
-	modified  time.Time
-	revisions []Revision
-}
-
 func getArticleHistory(articlePath string, config *BockConfig) (ArticleHistory, error) {
 	relativePath := makeRelativePath(articlePath, config.articleRoot)
 	revisions := []Revision{}
@@ -107,7 +101,7 @@ func getArticleHistory(articlePath string, config *BockConfig) (ArticleHistory, 
 		fc, err := c.Files()
 
 		if err != nil {
-			fmt.Println("Could not get files for commit: ", c.Hash)
+			log.Println("Could not get files for commit: ", c.Hash)
 		} else {
 			fc.ForEach(func(f *object.File) error {
 				if f.Name == relativePath {
@@ -176,70 +170,70 @@ func findChildWithName(children *[]Entity, name string) int {
 	return -1
 }
 
-func makeEntityTree(config *BockConfig) []Entity {
-	tree := []Entity{}
+// func makeEntityTree(config *BockConfig) []Entity {
+// 	tree := []Entity{}
 
-	// Bootstrap: create adn append the root entity (a folder)
-	tree = append(tree, Entity{
-		Children:     &[]Entity{},
-		IsFolder:     true,
-		Name:         "ROOT",
-		RelativePath: ".",
-		SizeInBytes:  0,
-		Title:        "Root",
-		URI:          "/ROOT",
-		path:         ".",
-	})
+// 	// Bootstrap: create adn append the root entity (a folder)
+// 	tree = append(tree, Entity{
+// 		Children:     &[]Entity{},
+// 		IsFolder:     true,
+// 		Name:         "ROOT",
+// 		RelativePath: ".",
+// 		SizeInBytes:  0,
+// 		Title:        "Root",
+// 		URI:          "/ROOT",
+// 		path:         ".",
+// 	})
 
-	// These loops took me an embarrassingly LONG while to write :/
+// 	// These loops took me an embarrassingly LONG while to write :/
 
-	for _, article := range *config.listOfArticlePaths {
-		pathFragments := strings.Split(article.RelativePath, "/")
+// 	for _, article := range *config.listOfArticlePaths {
+// 		pathFragments := strings.Split(article.RelativePath, "/")
 
-		// Use this to build the URI. Reset with each iteration.
-		uri := ""
+// 		// Use this to build the URI. Reset with each iteration.
+// 		uri := ""
 
-		// Start at the root entity for each iteration
-		subEntity := tree[0]
+// 		// Start at the root entity for each iteration
+// 		subEntity := tree[0]
 
-		for index, fragment := range pathFragments {
-			maybeChildIndex := findChildWithName(subEntity.Children, fragment)
-			uri = uri + "/" + fragment
+// 		for index, fragment := range pathFragments {
+// 			maybeChildIndex := findChildWithName(subEntity.Children, fragment)
+// 			uri = uri + "/" + fragment
 
-			// This path fragment does not exist in the current entity. We need
-			// to create something. It could be an article or a folder.
-			//
-			if maybeChildIndex == -1 {
-				if index+1 == len(pathFragments) {
-					// This is the last element of the path fragments: We have an
-					// article. Just append its metadata.
-					//
-					*subEntity.Children = append(*subEntity.Children, article)
-				} else {
-					// We need to create a new folder here.
-					//
-					*subEntity.Children = append(*subEntity.Children, Entity{
-						Children:     &[]Entity{},
-						IsFolder:     true,
-						Name:         fragment,
-						RelativePath: strings.TrimPrefix(uri, "/"),
-						SizeInBytes:  0,
-						Title:        fragment,
-						URI:          makeURI(uri, config.articleRoot),
-						path:         article.path,
-					})
-				}
-			}
+// 			// This path fragment does not exist in the current entity. We need
+// 			// to create something. It could be an article or a folder.
+// 			//
+// 			if maybeChildIndex == -1 {
+// 				if index+1 == len(pathFragments) {
+// 					// This is the last element of the path fragments: We have an
+// 					// article. Just append its metadata.
+// 					//
+// 					*subEntity.Children = append(*subEntity.Children, article)
+// 				} else {
+// 					// We need to create a new folder here.
+// 					//
+// 					*subEntity.Children = append(*subEntity.Children, Entity{
+// 						Children:     &[]Entity{},
+// 						IsFolder:     true,
+// 						Name:         fragment,
+// 						RelativePath: strings.TrimPrefix(uri, "/"),
+// 						SizeInBytes:  0,
+// 						Title:        fragment,
+// 						URI:          makeURI(uri, config.articleRoot),
+// 						path:         article.path,
+// 					})
+// 				}
+// 			}
 
-			// Now recompute the index and update the sub entity we're dealing with.
-			// It's some child of the entity we started with!
-			childIndex := findChildWithName(subEntity.Children, fragment)
-			subEntity = (*subEntity.Children)[childIndex]
-		}
-	}
+// 			// Now recompute the index and update the sub entity we're dealing with.
+// 			// It's some child of the entity we started with!
+// 			childIndex := findChildWithName(subEntity.Children, fragment)
+// 			subEntity = (*subEntity.Children)[childIndex]
+// 		}
+// 	}
 
-	return tree
-}
+// 	return tree
+// }
 
 func uniqueStringsInList(list []string) []string {
 	var uniqueList []string
@@ -258,7 +252,9 @@ func uniqueStringsInList(list []string) []string {
 // Ascertain that we don't have ANY dotfolders or dotfiles in a given path
 // whatsoever. So for example, this will not return a valid path:
 //
-//	/article/root/Tech Notes/Linux/.hidden/My Article.md
+//    /article/root/Tech Notes/Linux/.hidden/My Article.md
+//
+//
 func hasDotEntities(relativePath string) bool {
 	fragments := strings.Split(relativePath, "/")
 
@@ -279,18 +275,22 @@ func hasDotEntities(relativePath string) bool {
 	return false
 }
 
-// makeListOfEntities returns relative paths to the list of all valid articles
+// makeListsOfEntities returns relative paths to the list of all valid articles
 // folders found in the supplied absolute or relative article path. A 'valid'
 // article is something that ends in '.md', is not a dotfile, and does not
 // match any of the excluded paths specified in constants.go. Folders are
 // derived from valid article paths: any folder that contains an *invalid*
 // article path will not be in the returned list.
-func makeListOfEntities(config *BockConfig) (
-	listOfArticlePaths []Entity,
+func makeListsOfEntities(config *BockConfig) (
+	listOfArticlePaths []string,
 	listOfFolderPaths []string,
 	err error,
 ) {
-	walkFunction := func(entityPath string, entityInfo os.FileInfo, walkErr error) error {
+	walkFunction := func(
+    entityPath string,
+    entityInfo os.FileInfo,
+    walkErr error,
+  ) error {
 		relativePath := makeRelativePath(entityPath, config.articleRoot)
 
 		isValidArticle := (!entityInfo.IsDir() &&
@@ -299,33 +299,29 @@ func makeListOfEntities(config *BockConfig) (
 			filepath.Ext(entityPath) == ".md")
 
 		if isValidArticle {
-			listOfArticlePaths = append(
-				listOfArticlePaths,
-				*getEntityInfo(config, entityInfo, entityPath),
-			)
-
-			folderPath := path.Dir(entityPath)
+			listOfArticlePaths = append(listOfArticlePaths, entityPath)
 
 			/*
-			   For example,
+        Now process folder lists. For example,
 
-			   /article/root/sso-react
-			   /article/root/sso-react/build/refresh
-			   /article/root/sso-react/public/refresh
-			   /article/root/sso-react/src/i18n
+        /article/root/sso-react
+        /article/root/sso-react/build/refresh
+        /article/root/sso-react/public/refresh
+        /article/root/sso-react/src/i18n
 
-			   should be
+        should be
 
-			   /article/root/sso-react
-			   /article/root/sso-react/build
-			   /article/root/sso-react/build/refresh
-			   /article/root/sso-react/public
-			   /article/root/sso-react/public/refresh
-			   /article/root/sso-react/src
-			   /article/root/sso-react/src/i18n
+        /article/root/sso-react
+        /article/root/sso-react/build
+        /article/root/sso-react/build/refresh
+        /article/root/sso-react/public
+        /article/root/sso-react/public/refresh
+        /article/root/sso-react/src
+        /article/root/sso-react/src/i18n
 
-			   That's what we're doing here.
+        That's what we're doing here.
 			*/
+      folderPath := path.Dir(entityPath)
 			folderSplits := strings.Split(makeRelativePath(folderPath, config.articleRoot), "/")
 			p := ""
 
@@ -348,4 +344,16 @@ func makeListOfEntities(config *BockConfig) (
 	listOfFolderPaths = uniqueStringsInList(listOfFolderPaths)
 
 	return listOfArticlePaths, listOfFolderPaths, err
+}
+
+func getRoundedGenerationTime(generationTime time.Duration) time.Duration {
+	// Round the generation time. If it takes milliseconds to generate this wiki
+	// (e.g. when revision-generation is turned off), the `Round()` function will
+	// show "0s". Be a little smart about this.
+	roundingFactor := time.Millisecond
+	if generationTime.Milliseconds() >= 1000 {
+		roundingFactor = time.Second
+	}
+
+	return generationTime.Round(roundingFactor)
 }

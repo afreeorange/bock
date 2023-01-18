@@ -14,7 +14,6 @@ import (
 	"github.com/shirou/gopsutil/v3/mem"
 )
 
-// TODO: Can this be embedded?
 func init() {
 	fmt.Println("     __               __       ")
 	fmt.Println("    / /_  ____  _____/ /__     ")
@@ -45,6 +44,7 @@ func main() {
 	flag.StringVar(&outputFolder, "o", "", "Output folder")
 	flag.BoolVar(&useOnDiskFS, "d", false, "Use on-disk filesystem to clone article repository (slower; cloned to memory by default)")
 	flag.BoolVar(&versionInfo, "v", false, "Version info")
+
 	flag.Parse()
 
 	// Some bookkeeping. Tick.
@@ -56,29 +56,34 @@ func main() {
 		os.Exit(0)
 	}
 
-	// Set up the App config. We pass a reference to this baby around and keep
-	// everything in one place <3
+	// Set up the App config. We pass a reference to this around and keep
+	// everything in one place <3 This is mutated a lot by (a) the bootstrap
+	// functions and (b) the helper functions, and no others.
 	config := BockConfig{
 		articleRoot:        strings.TrimRight(articleRoot, "/"),
 		database:           nil,
 		entityTree:         nil,
 		listOfArticlePaths: nil,
+		listOfArticles:     nil,
 		listOfFolderPaths:  nil,
+		listOfFolders:      nil,
 		meta: Meta{
-			Architecture:               runtime.GOARCH,
-			ArticleCount:               0,
-			BuildDate:                  time.Now().UTC(),
-			CPUCount:                   runtime.NumCPU(),
-			GenerateDatabase:           generateDatabase,
-			GenerateJSON:               generateJSON,
-			GenerateRaw:                generateRaw,
-			GenerateRevisions:          generateRevisions,
-			GenerationTime:             0,
-			IsRepository:               false,
-			MemoryInGB:                 int(v.Total / (1024 * 1024 * 1024)),
-			Platform:                   runtime.GOOS,
-			RevisionCount:              0,
-			UsingOnDiskFSForRepository: useOnDiskFS,
+      Architecture:               runtime.GOARCH,
+      ArticleCount:               0,
+      BuildDate:                  time.Now().UTC(),
+      CPUCount:                   runtime.NumCPU(),
+      FolderCount:                0,
+      GenerateDatabase:           generateDatabase,
+      GenerateJSON:               generateJSON,
+      GenerateRaw:                generateRaw,
+      GenerateRevisions:          generateRevisions,
+      GenerationTime:             0,
+      GenerationTimeRounded:      0,
+      IsRepository:               false,
+      MemoryInGB:                 int(v.Total / (1024 * 1024 * 1024)),
+      Platform:                   runtime.GOOS,
+      RevisionCount:              0,
+      UsingOnDiskFSForRepository: useOnDiskFS,
 		},
 		outputFolder:   strings.TrimRight(outputFolder, "/"),
 		repository:     nil,
@@ -89,19 +94,30 @@ func main() {
 	// --- Start updating the application configuration object ---
 
 	setupOutputFolder(outputFolder, &config)
-	setupArticleRoot(articleRoot, &config) // Doing this second since it's way more 'expensive'
 	setupDatabase(&config)
 
-	log.Println("Found", config.meta.ArticleCount, "articles and", config.meta.FolderCount, "folders")
+  // This is the most expensive step!
+	setupArticleRoot(articleRoot, &config)
+
+	log.Printf(
+		"Found %d articles and %d folders",
+		config.meta.ArticleCount,
+		config.meta.FolderCount,
+	)
 
 	// --- At this point, we have things to build/write ---
 
+	// Copy static assets. These are for the template itself and whatever one
+	// may find in the specified article root.
 	writeTemplateAssets(&config)
 	writeRepositoryAssets(&config)
 
-	// // Make a tree of entities: articles and folders
-	// entityTree := makeEntityTree(&config)
-	// config.entityTree = &entityTree
+	// Generate a tree of entities (articles and folders), the 404, and archive
+	// pages
+	write404(&config)
+	writeArchive(&config)
+	// writeEntityTree(&config)
+	writeRandom(&config)
 
 	// // Process all articles. TODO: Errors?
 	// writeEntities(&config)
@@ -111,38 +127,30 @@ func main() {
 	// writeIndex(&config)
 	// fmt.Println("... done")
 
-	// fmt.Print("Writing 404 page")
-	// write404(&config)
-	// fmt.Println("... done")
-
-	// fmt.Print("Writing archive page")
-	// writeArchive(&config)
-	// fmt.Println("... done")
-
-	// fmt.Print("Writing tree")
-	// writeTree(&config)
-	// fmt.Println("... done")
-
-	// fmt.Print("Writing random page")
-	// writeRandom(&config)
-	// fmt.Println("... done")
-
 	// fmt.Print("Writing /Home: ")
 	// writeHome(&config)
 	// fmt.Println("... done")
 
 	// Tock
 	end := time.Now()
-	generationTime := end.Sub(start)
-	config.meta.GenerationTime = generationTime
-	config.meta.GenerationTimeRounded = generationTime.Round(time.Second)
+	config.meta.GenerationTime = end.Sub(start)
+  config.meta.GenerationTimeRounded = getRoundedGenerationTime(config.meta.GenerationTime)
 
-	// Summary
-	log.Printf(
-		"Done! Finished processing %d articles, %d folders, and %d revisions in %s\n",
-		config.meta.ArticleCount,
-		config.meta.FolderCount,
-		config.meta.RevisionCount,
-		config.meta.GenerationTime,
-	)
+	// Done! Now for a summary
+	if config.meta.GenerateRevisions {
+		log.Printf(
+			"Done! Finished processing %d articles, %d folders, and %d revisions in %s",
+			config.meta.ArticleCount,
+			config.meta.FolderCount,
+			config.meta.RevisionCount,
+			config.meta.GenerationTimeRounded,
+		)
+	} else {
+		log.Printf(
+			"Done! Finished processing %d articles, %d folders in %s",
+			config.meta.ArticleCount,
+			config.meta.FolderCount,
+			config.meta.GenerationTimeRounded,
+		)
+	}
 }

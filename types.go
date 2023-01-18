@@ -28,6 +28,12 @@ type Children struct {
 	Folders  []HierarchicalEntity `json:"folders"`
 }
 
+type ArticleHistory struct {
+  created   time.Time
+  modified  time.Time
+  revisions []Revision
+}
+
 type Article struct {
 	Created   time.Time            `json:"created"`
 	Hierarchy []HierarchicalEntity `json:"hierarchy"`
@@ -87,14 +93,16 @@ type Meta struct {
 }
 
 type BockConfig struct {
-	articleRoot        string
-	entityTree         *[]Entity
-	listOfArticlePaths *[]Entity
-	listOfFolderPaths  *[]string
-	database           *sql.DB
-	meta               Meta
-	outputFolder       string
-	repository         *git.Repository
-	started            time.Time
-	workTreeStatus     *git.Status
+  articleRoot        string
+  database           *sql.DB
+  entityTree         *[]Entity
+  listOfArticlePaths *[]string
+  listOfArticles     *[]Article
+  listOfFolderPaths  *[]string
+  listOfFolders      *[]Folder
+  meta               Meta
+  outputFolder       string
+  repository         *git.Repository
+  started            time.Time
+  workTreeStatus     *git.Status
 }

@@ -18,15 +18,15 @@ func writeFile(name string, contents []byte) {
 	dirName := path.Dir(name)
 
 	if m_err := os.MkdirAll(dirName, os.ModePerm); m_err != nil {
-		fmt.Println("ERROR: Could not make folder", dirName, ":", m_err)
-		fmt.Println("Halting.")
+		log.Println("ERROR: Could not make folder", dirName, ":", m_err)
+		log.Println("Halting.")
 
 		os.Exit(EXIT_GENERAL_IO_ERROR)
 	}
 
 	if f_err := os.WriteFile(name, contents, os.ModePerm); f_err != nil {
-		fmt.Println("ERROR: Could not make file", name, ":", f_err)
-		fmt.Println("Halting.")
+		log.Println("ERROR: Could not make file", name, ":", f_err)
+		log.Println("Halting.")
 
 		os.Exit(EXIT_GENERAL_IO_ERROR)
 	}
@@ -82,11 +82,17 @@ func writeRepositoryAssets(config *BockConfig) {
 }
 
 func writeIndex(config *BockConfig) {
-	writeFile(config.outputFolder+"/index.html", []byte(renderIndex(config)))
+  html := renderIndex(config)
+	writeFile(config.outputFolder+"/index.html", []byte(html))
 }
 
 func write404(config *BockConfig) {
-	writeFile(config.outputFolder+"/404.html", []byte(renderNotFound(config)))
+	log.Println("Writing 404 page...")
+
+  html := renderNotFound(config)
+  writeFile(config.outputFolder+"/404.html", []byte(html))
+
+  log.Println("Finished writing 404 page")
 }
 
 func writeRevision(article Article, revision Revision, config *BockConfig) {
@@ -160,7 +166,7 @@ func writeArticle(
 			title,
 			uri,
 		); s_err != nil {
-			fmt.Println("ERROR: Could not update database with '"+relativePath+"': ", s_err)
+			log.Println("ERROR: Could not update database with '"+relativePath+"': ", s_err)
 			os.Exit(EXIT_DATABASE_ERROR)
 		}
 	}
@@ -208,7 +214,7 @@ func writeHome(config *BockConfig) {
 	_, h_err := os.Stat(homePath)
 
 	if h_err != nil {
-		fmt.Println("Could not find Home.md... making one.")
+		log.Println("Could not find Home.md... making one.")
 		writeFile(config.articleRoot+"/Home.md", []byte("(You need to make a `Home.md` here!)\n"))
 	}
 
@@ -218,8 +224,12 @@ func writeHome(config *BockConfig) {
 }
 
 func writeArchive(config *BockConfig) {
+  log.Println("Writing archive page...")
+
 	html := renderArchive(config)
 	writeFile(config.outputFolder+"/archive/index.html", []byte(html))
+
+  log.Println("Finished writing archive page")
 }
 
 func writeFolder(absolutePath string, config *BockConfig) {
@@ -333,17 +343,17 @@ func writeEntities(config *BockConfig) {
 	// coroutines as articles and gets really slow on machines with low memory.
 	entityWaitGroup := new(sync.WaitGroup)
 
-	fmt.Println("Will write", config.meta.ArticleCount, "articles")
-	for _, e := range *config.listOfArticlePaths {
-		entityWaitGroup.Add(1)
+	log.Println("Will write", config.meta.ArticleCount, "articles")
+	// for _, e := range *config.listOfArticlePaths {
+	// 	entityWaitGroup.Add(1)
 
-		go func(e Entity, stmt *sql.Stmt, config *BockConfig) {
-			defer entityWaitGroup.Done()
-			writeArticle(e.path, config, e, stmt)
-		}(e, stmt, config)
-	}
+	// 	go func(e Entity, stmt *sql.Stmt, config *BockConfig) {
+	// 		defer entityWaitGroup.Done()
+	// 		writeArticle(e.path, config, e, stmt)
+	// 	}(e, stmt, config)
+	// }
 
-	fmt.Println("Will write", config.meta.FolderCount, "folders")
+	log.Println("Will write", config.meta.FolderCount, "folders")
 	for _, e := range *config.listOfFolderPaths {
 		entityWaitGroup.Add(1)
 
@@ -356,16 +366,29 @@ func writeEntities(config *BockConfig) {
 	entityWaitGroup.Wait()
 
 	fmt.Printf("\033[2K\r")
-	fmt.Println("Finished writing all entities")
+	log.Println("Finished writing all entities")
 	tx.Commit()
 }
 
-func writeTree(config *BockConfig) {
-	s, _ := jsonMarshal(config.entityTree)
-	writeFile(config.outputFolder+"/tree.json", s)
-}
+// func writeEntityTree(config *BockConfig) {
+// 	entityTree := makeEntityTree(config)
+// 	config.entityTree = &entityTree
+
+// 	s, err := jsonMarshal(config.entityTree)
+
+// 	if err != nil {
+// 		log.Println("Could not write entity tree :/")
+// 		os.Exit(EXIT_COULD_NOT_WRITE_ENTITY_TREE)
+// 	}
+
+// 	writeFile(config.outputFolder+"/tree.json", s)
+// }
 
 func writeRandom(config *BockConfig) {
+  log.Println("Writing random page generator...")
+
 	html := renderRandom(config)
 	writeFile(config.outputFolder+"/random/index.html", []byte(html))
+
+  log.Println("Finished writing random page generator")
 }

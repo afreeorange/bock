@@ -56,19 +56,32 @@ func setupRepository(config *BockConfig) {
 // the application configuration with them. If there are no valid articles
 // to render, it quits.
 func setupArticleRoot(articleRoot string, config *BockConfig) {
+  // Did they specify an article root?
 	if articleRoot == "" {
 		log.Println("You must give me an article root.")
 		os.Exit(EXIT_NO_ARTICLE_ROOT)
 	}
 
+  // If so, does it exist?
 	if _, err := os.Stat(articleRoot); os.IsNotExist(err) {
 		log.Println("That article root is not a folder or does not exist.")
 		os.Exit(EXIT_BAD_ARTICLE_ROOT)
 	}
 
+  // Run some repository checks on the specified article root and update the
+  // application configuration object
 	setupRepository(config)
-	listOfArticlePaths, listOfFolderPaths, _ := makeListOfEntities(config)
 
+  // Just generate lists of things first
+	listOfArticlePaths, listOfFolderPaths, err := makeListsOfEntities(config)
+  if err != nil {
+    log.Println("Could not generate list of entities. Quitting.")
+    os.Exit(EXIT_COULD_NOT_GENERATE_LIST_OF_ENTITIES)
+  }
+
+  // Now the 'heavy' step of getting article data
+
+  // Some final updates to the application configuration object
 	config.articleRoot = articleRoot
 	config.listOfArticlePaths = &listOfArticlePaths
 	config.listOfFolderPaths = &listOfFolderPaths
