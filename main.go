@@ -14,6 +14,7 @@ import (
 	"github.com/shirou/gopsutil/v3/mem"
 )
 
+// TODO: Can this be embedded?
 func init() {
 	fmt.Println("     __               __       ")
 	fmt.Println("    / /_  ____  _____/ /__     ")
@@ -96,23 +97,11 @@ func main() {
 	// --- At this point, we have things to build/write ---
 
 	writeTemplateAssets(&config)
+	writeRepositoryAssets(&config)
 
 	// // Make a tree of entities: articles and folders
 	// entityTree := makeEntityTree(&config)
 	// config.entityTree = &entityTree
-
-	// // Copy static assets over
-	// fmt.Print("Creating template assets")
-	// copyTemplateAssets(&config)
-	// fmt.Println("... done")
-
-	// fmt.Print("Copying assets")
-	// copyError := copyAssets(&config)
-	// if copyError != nil {
-	// 	fmt.Println("; could not find '__assets' in repository. Ignoring.")
-	// } else {
-	// 	fmt.Println("... done")
-	// }
 
 	// // Process all articles. TODO: Errors?
 	// writeEntities(&config)
@@ -156,5 +145,4 @@ func main() {
 		config.meta.RevisionCount,
 		config.meta.GenerationTime,
 	)
-
 }

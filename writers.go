@@ -66,13 +66,19 @@ func writeTemplateAssets(config *BockConfig) {
 	log.Println("Finished copying template assets")
 }
 
-func copyAssets(config *BockConfig) error {
+func writeRepositoryAssets(config *BockConfig) {
+	log.Println("Copying assets in article root...")
+
 	err := cp.Copy(
 		config.articleRoot+"/__assets",
 		config.outputFolder+"/assets",
 	)
 
-	return err
+	if err != nil {
+		log.Println("Could not find __assets in article root. Ignoring.")
+	}
+
+	log.Println("Finished copying assets in article root")
 }
 
 func writeIndex(config *BockConfig) {
