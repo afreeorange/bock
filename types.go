@@ -41,7 +41,7 @@ type Article struct {
 	Untracked bool                 `json:"untracked"`
 	URI       string               `json:"uri"`
 
-	// You do NOT want to make this public!
+	// This is the *absolute* path! You do NOT want to make this public!
 	path string
 }
 
@@ -57,7 +57,6 @@ type Folder struct {
 type Entity struct {
 	Children     *[]Entity `json:"children"`
 	IsFolder     bool      `json:"isFolder"`
-	Modified     time.Time `json:"modified"`
 	Name         string    `json:"name"`
 	RelativePath string    `json:"relativePath"`
 	SizeInBytes  int64     `json:"sizeInBytes"`
@@ -69,30 +68,33 @@ type Entity struct {
 }
 
 type Meta struct {
-	Architecture          string        `json:"architecture"`
-	ArticleCount          int           `json:"articleCount"`
-	BuildDate             time.Time     `json:"buildTime"`
-	CPUCount              int           `json:"cpuCount"`
-	FolderCount           int           `json:"folderCount"`
-	GenerateJSON          bool          `json:"generateJSON"`
-	GenerateRaw           bool          `json:"generateRaw"`
-	GenerateRevisions     bool          `json:"generateRevisions"`
-	GenerationTime        time.Duration `json:"generationTime"`
-	GenerationTimeRounded time.Duration `json:"generationTimeRounded"`
-	MemoryInGB            int           `json:"memoryInGB"`
-	Platform              string        `json:"platform"`
-	RevisionCount         int           `json:"revisionCount"`
+	Architecture               string        `json:"architecture"`
+	ArticleCount               int           `json:"articleCount"`
+	BuildDate                  time.Time     `json:"buildTime"`
+	CPUCount                   int           `json:"cpuCount"`
+	FolderCount                int           `json:"folderCount"`
+	GenerateDatabase           bool          `json:"generateDatabase"`
+	GenerateJSON               bool          `json:"generateJSON"`
+	GenerateRaw                bool          `json:"generateRaw"`
+	GenerateRevisions          bool          `json:"generateRevisions"`
+	GenerationTime             time.Duration `json:"generationTime"`
+	GenerationTimeRounded      time.Duration `json:"generationTimeRounded"`
+	IsRepository               bool          `json:"isRepository"`
+	MemoryInGB                 int           `json:"memoryInGB"`
+	Platform                   string        `json:"platform"`
+	RevisionCount              int           `json:"revisionCount"`
+	UsingOnDiskFSForRepository bool          `json:"usingOnDiskFSForRepository"`
 }
 
 type BockConfig struct {
-	articleRoot    string
-	entityTree     *[]Entity
-	listOfArticles *[]Entity
-	listOfFolders  *[]string
-	database       *sql.DB
-	meta           Meta
-	outputFolder   string
-	repository     *git.Repository
-	started        time.Time
-	workTreeStatus *git.Status
+	articleRoot        string
+	entityTree         *[]Entity
+	listOfArticlePaths *[]Entity
+	listOfFolderPaths  *[]string
+	database           *sql.DB
+	meta               Meta
+	outputFolder       string
+	repository         *git.Repository
+	started            time.Time
+	workTreeStatus     *git.Status
 }

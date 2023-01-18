@@ -37,7 +37,7 @@ func renderNotFound(config *BockConfig) string {
 
 func renderRandom(config *BockConfig) string {
 	html, _ := t_random.Execute(pongo2.Context{
-		"list":    config.listOfArticles,
+		"list":    config.listOfArticlePaths,
 		"type":    "random",
 		"version": VERSION,
 	})

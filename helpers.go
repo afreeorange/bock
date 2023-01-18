@@ -152,7 +152,6 @@ func getEntityInfo(config *BockConfig, info fs.FileInfo, path string) *Entity {
 	entity := Entity{
 		Children:     &[]Entity{},
 		IsFolder:     info.IsDir(),
-		Modified:     info.ModTime(),
 		Name:         info.Name(),
 		path:         path,
 		RelativePath: makeRelativePath(path, config.articleRoot),
@@ -184,7 +183,6 @@ func makeEntityTree(config *BockConfig) []Entity {
 	tree = append(tree, Entity{
 		Children:     &[]Entity{},
 		IsFolder:     true,
-		Modified:     time.Now(),
 		Name:         "ROOT",
 		RelativePath: ".",
 		SizeInBytes:  0,
@@ -195,7 +193,7 @@ func makeEntityTree(config *BockConfig) []Entity {
 
 	// These loops took me an embarrassingly LONG while to write :/
 
-	for _, article := range *config.listOfArticles {
+	for _, article := range *config.listOfArticlePaths {
 		pathFragments := strings.Split(article.RelativePath, "/")
 
 		// Use this to build the URI. Reset with each iteration.
@@ -223,7 +221,6 @@ func makeEntityTree(config *BockConfig) []Entity {
 					*subEntity.Children = append(*subEntity.Children, Entity{
 						Children:     &[]Entity{},
 						IsFolder:     true,
-						Modified:     time.Now(),
 						Name:         fragment,
 						RelativePath: strings.TrimPrefix(uri, "/"),
 						SizeInBytes:  0,
@@ -282,9 +279,15 @@ func hasDotEntities(relativePath string) bool {
 	return false
 }
 
+// makeListOfEntities returns relative paths to the list of all valid articles
+// folders found in the supplied absolute or relative article path. A 'valid'
+// article is something that ends in '.md', is not a dotfile, and does not
+// match any of the excluded paths specified in constants.go. Folders are
+// derived from valid article paths: any folder that contains an *invalid*
+// article path will not be in the returned list.
 func makeListOfEntities(config *BockConfig) (
-	listOfArticles []Entity,
-	listOfFolders []string,
+	listOfArticlePaths []Entity,
+	listOfFolderPaths []string,
 	err error,
 ) {
 	walkFunction := func(entityPath string, entityInfo os.FileInfo, walkErr error) error {
@@ -296,8 +299,8 @@ func makeListOfEntities(config *BockConfig) (
 			filepath.Ext(entityPath) == ".md")
 
 		if isValidArticle {
-			listOfArticles = append(
-				listOfArticles,
+			listOfArticlePaths = append(
+				listOfArticlePaths,
 				*getEntityInfo(config, entityInfo, entityPath),
 			)
 
@@ -325,13 +328,14 @@ func makeListOfEntities(config *BockConfig) (
 			*/
 			folderSplits := strings.Split(makeRelativePath(folderPath, config.articleRoot), "/")
 			p := ""
+
 			if len(folderSplits) > 1 {
 				for _, s := range folderSplits {
 					p += "/" + s
-					listOfFolders = append(listOfFolders, config.articleRoot+p)
+					listOfFolderPaths = append(listOfFolderPaths, config.articleRoot+p)
 				}
 			} else {
-				listOfFolders = append(listOfFolders, folderPath)
+				listOfFolderPaths = append(listOfFolderPaths, folderPath)
 			}
 		}
 
@@ -341,7 +345,7 @@ func makeListOfEntities(config *BockConfig) (
 	// It strikes me that error-handling in Go is a bit strange... looks like
 	// things can just fall through.
 	err = filepath.Walk(config.articleRoot, walkFunction)
-	listOfFolders = uniqueStringsInList(listOfFolders)
+	listOfFolderPaths = uniqueStringsInList(listOfFolderPaths)
 
-	return listOfArticles, listOfFolders, err
+	return listOfArticlePaths, listOfFolderPaths, err
 }

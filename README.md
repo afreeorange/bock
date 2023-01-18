@@ -66,6 +66,10 @@ A giant work in progress but works pretty well for me so far. Uses a baby implem
 
 ## Upcoming Features
 
+- [ ] Recently added articles
+- [ ] Recently updated articles
+- [ ] Articles that have not been checked in! "Warning you have x untracked articles...."
+- [ ] Revision Search in DB
 - [ ] Categories/Tags
 - [ ] Frontmatter support
 - [ ] Live-watcher of articles

@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -10,6 +11,7 @@ const setupStatement string = `
 CREATE TABLE IF NOT EXISTS articles (
   id              TEXT NOT NULL UNIQUE,
   content         TEXT,
+  created         TEXT NOT NULL,
   modified        TEXT NOT NULL,
   title           TEXT NOT NULL,
   uri             TEXT NOT NULL
@@ -18,6 +20,7 @@ CREATE TABLE IF NOT EXISTS articles (
 CREATE VIRTUAL TABLE articles_fts USING fts5(
   id,
   content,
+  created,
   modified,
   title,
   uri,
@@ -29,6 +32,7 @@ CREATE TRIGGER fts_update AFTER INSERT ON articles
     INSERT INTO articles_fts (
       id,
       content,
+      created,
       modified,
       title,
       uri
@@ -36,6 +40,7 @@ CREATE TRIGGER fts_update AFTER INSERT ON articles
     VALUES (
       new.id,
       new.content,
+      new.created,
       new.modified,
       new.title,
       new.uri
@@ -47,14 +52,14 @@ END;
 func makeDatabase(config *BockConfig) *sql.DB {
 	dbPath := config.outputFolder + "/" + DATABASE_NAME
 
-	fmt.Println("Creating database", dbPath)
+	log.Println("Creating database", dbPath)
 
 	// Recreate the database from scratch. TODO: Do this intelligently.
 	os.Remove(dbPath)
 
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
-		fmt.Println("ERROR: Could not open", dbPath, ":", err)
+		log.Println("ERROR: Could not open", dbPath, ":", err)
 		os.Exit(EXIT_DATABASE_ERROR)
 	}
 

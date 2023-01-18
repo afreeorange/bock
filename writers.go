@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -31,10 +32,13 @@ func writeFile(name string, contents []byte) {
 	}
 }
 
-func copyTemplateAssets(config *BockConfig) {
+func writeTemplateAssets(config *BockConfig) {
+	log.Println("Copying template assets...")
+
 	// Copy all the css, js, etc
 	for _, a := range [3]string{"css", "img", "js"} {
 		d, err := templatesContent.ReadDir("template/" + a)
+
 		if err != nil {
 			fmt.Print("Could not read " + a + "...skipping")
 			break
@@ -51,12 +55,15 @@ func copyTemplateAssets(config *BockConfig) {
 	// Then copy anything at the root level of the template folder except the
 	// actual template HTML files!
 	d, _ := templatesContent.ReadDir("template")
+
 	for _, de := range d {
 		if filepath.Ext(de.Name()) != ".njk" {
 			f, _ := templatesContent.ReadFile("template/" + de.Name())
 			os.WriteFile(config.outputFolder+"/"+de.Name(), f, os.ModePerm)
 		}
 	}
+
+	log.Println("Finished copying template assets")
 }
 
 func copyAssets(config *BockConfig) error {
@@ -142,7 +149,8 @@ func writeArticle(
 		if _, s_err := stmt.Exec(
 			makeID(articlePath),
 			string(contents),
-			entity.Modified.UTC(),
+			article.Created.UTC(),
+			article.Modified.UTC(),
 			title,
 			uri,
 		); s_err != nil {
@@ -305,11 +313,12 @@ func writeEntities(config *BockConfig) {
     INSERT INTO articles (
       id,
       content,
+      created,
       modified,
       title,
       uri
     )
-    VALUES (?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?)
   `)
 
 	defer stmt.Close()
@@ -319,7 +328,7 @@ func writeEntities(config *BockConfig) {
 	entityWaitGroup := new(sync.WaitGroup)
 
 	fmt.Println("Will write", config.meta.ArticleCount, "articles")
-	for _, e := range *config.listOfArticles {
+	for _, e := range *config.listOfArticlePaths {
 		entityWaitGroup.Add(1)
 
 		go func(e Entity, stmt *sql.Stmt, config *BockConfig) {
@@ -329,7 +338,7 @@ func writeEntities(config *BockConfig) {
 	}
 
 	fmt.Println("Will write", config.meta.FolderCount, "folders")
-	for _, e := range *config.listOfFolders {
+	for _, e := range *config.listOfFolderPaths {
 		entityWaitGroup.Add(1)
 
 		go func(e string, stmt *sql.Stmt, config *BockConfig) {
