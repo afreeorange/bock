@@ -29,47 +29,45 @@ type Children struct {
 }
 
 type ArticleHistory struct {
-  created   time.Time
-  modified  time.Time
-  revisions []Revision
+	created   time.Time
+	modified  time.Time
+	revisions []Revision
 }
 
 type Article struct {
-	Created   time.Time            `json:"created"`
+	Id    string `json:"id"`
+	Title string `json:"title"`
+	URI   string `json:"uri"`
+
 	Hierarchy []HierarchicalEntity `json:"hierarchy"`
-	Html      string               `json:"html"`
-	ID        string               `json:"id"`
-	Modified  time.Time            `json:"modified"`
-	Revisions []Revision           `json:"revisions"`
-	Size      int64                `json:"sizeInBytes"`
-	Source    string               `json:"source"`
-	Title     string               `json:"title"`
-	Untracked bool                 `json:"untracked"`
-	URI       string               `json:"uri"`
+
+	Size     int64     `json:"sizeInBytes"`
+	Created  time.Time `json:"created"`
+	Modified time.Time `json:"modified"`
+
+	Html   string `json:"html"`
+	Source string `json:"source"`
+
+	Untracked bool       `json:"untracked"`
+	Unsaved   bool       `json:"unsaved"`
+	Revisions []Revision `json:"revisions"`
 
 	// This is the *absolute* path! You do NOT want to make this public!
 	path string
 }
 
 type Folder struct {
-	Children  Children             `json:"children"`
+	Id    string `json:"id"`
+	Title string `json:"title"`
+	URI   string `json:"uri"`
+
 	Hierarchy []HierarchicalEntity `json:"hierarchy"`
-	ID        string               `json:"id"`
-	README    string               `json:"readme"`
-	Title     string               `json:"title"`
-	URI       string               `json:"uri"`
-}
 
-type Entity struct {
-	Children     *[]Entity `json:"children"`
-	IsFolder     bool      `json:"isFolder"`
-	Name         string    `json:"name"`
-	RelativePath string    `json:"relativePath"`
-	SizeInBytes  int64     `json:"sizeInBytes"`
-	Title        string    `json:"title"`
-	URI          string    `json:"uri"`
+	README string `json:"readme"`
 
-	// You do NOT want to make this public!
+	Children Children `json:"children"`
+
+	// This is the *absolute* path! You do NOT want to make this public!
 	path string
 }
 
@@ -93,16 +91,31 @@ type Meta struct {
 }
 
 type BockConfig struct {
-  articleRoot        string
-  database           *sql.DB
-  entityTree         *[]Entity
-  listOfArticlePaths *[]string
-  listOfArticles     *[]Article
-  listOfFolderPaths  *[]string
-  listOfFolders      *[]Folder
-  meta               Meta
-  outputFolder       string
-  repository         *git.Repository
-  started            time.Time
-  workTreeStatus     *git.Status
+	articleRoot        string
+	database           *sql.DB
+	tree               *[]Folder // Since we always have a `ROOT` folder
+	listOfArticlePaths *[]string
+	listOfArticles     *[]Article
+	listOfFolderPaths  *[]string
+	listOfFolders      *[]Folder
+	meta               Meta
+	outputFolder       string
+	repository         *git.Repository
+	started            time.Time
+	workTreeStatus     *git.Status
+}
+
+// --- Remove this ---
+
+type Entity struct {
+	Children     *[]Entity `json:"children"`
+	IsFolder     bool      `json:"isFolder"`
+	Name         string    `json:"name"`
+	RelativePath string    `json:"relativePath"`
+	SizeInBytes  int64     `json:"sizeInBytes"`
+	Title        string    `json:"title"`
+	URI          string    `json:"uri"`
+
+	// You do NOT want to make this public!
+	path string
 }

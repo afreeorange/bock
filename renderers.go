@@ -60,7 +60,7 @@ func renderArticle(
 		"created":     article.Created,
 		"hierarchy":   article.Hierarchy,
 		"html":        conversionBuffer.String(),
-		"id":          article.ID,
+		"id":          article.Id,
 		"modified":    article.Modified,
 		"revisions":   article.Revisions,
 		"sizeInBytes": article.Size,
@@ -112,7 +112,7 @@ func renderFolder(folder Folder) string {
 func renderArchive(config *BockConfig) string {
 	html, _ := t_archive.Execute(pongo2.Context{
 		"title": "Archive",
-		"tree":  config.entityTree,
+		"tree":  config.tree,
 		"uri":   "/archive",
 
 		"meta":    config.meta,

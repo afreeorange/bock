@@ -62,28 +62,28 @@ func main() {
 	config := BockConfig{
 		articleRoot:        strings.TrimRight(articleRoot, "/"),
 		database:           nil,
-		entityTree:         nil,
+		tree:               nil,
 		listOfArticlePaths: nil,
 		listOfArticles:     nil,
 		listOfFolderPaths:  nil,
 		listOfFolders:      nil,
 		meta: Meta{
-      Architecture:               runtime.GOARCH,
-      ArticleCount:               0,
-      BuildDate:                  time.Now().UTC(),
-      CPUCount:                   runtime.NumCPU(),
-      FolderCount:                0,
-      GenerateDatabase:           generateDatabase,
-      GenerateJSON:               generateJSON,
-      GenerateRaw:                generateRaw,
-      GenerateRevisions:          generateRevisions,
-      GenerationTime:             0,
-      GenerationTimeRounded:      0,
-      IsRepository:               false,
-      MemoryInGB:                 int(v.Total / (1024 * 1024 * 1024)),
-      Platform:                   runtime.GOOS,
-      RevisionCount:              0,
-      UsingOnDiskFSForRepository: useOnDiskFS,
+			Architecture:               runtime.GOARCH,
+			ArticleCount:               0,
+			BuildDate:                  time.Now().UTC(),
+			CPUCount:                   runtime.NumCPU(),
+			FolderCount:                0,
+			GenerateDatabase:           generateDatabase,
+			GenerateJSON:               generateJSON,
+			GenerateRaw:                generateRaw,
+			GenerateRevisions:          generateRevisions,
+			GenerationTime:             0,
+			GenerationTimeRounded:      0,
+			IsRepository:               false,
+			MemoryInGB:                 int(v.Total / (1024 * 1024 * 1024)),
+			Platform:                   runtime.GOOS,
+			RevisionCount:              0,
+			UsingOnDiskFSForRepository: useOnDiskFS,
 		},
 		outputFolder:   strings.TrimRight(outputFolder, "/"),
 		repository:     nil,
@@ -95,15 +95,7 @@ func main() {
 
 	setupOutputFolder(outputFolder, &config)
 	setupDatabase(&config)
-
-  // This is the most expensive step!
-	setupArticleRoot(articleRoot, &config)
-
-	log.Printf(
-		"Found %d articles and %d folders",
-		config.meta.ArticleCount,
-		config.meta.FolderCount,
-	)
+	setupArticleRoot(articleRoot, &config) // This is the most expensive step!
 
 	// --- At this point, we have things to build/write ---
 
@@ -116,9 +108,9 @@ func main() {
 	// pages
 	write404(&config)
 	writeArchive(&config)
-	// writeEntityTree(&config)
 	writeRandom(&config)
 
+	makeTreeOfEntities(&config)
 	// // Process all articles. TODO: Errors?
 	// writeEntities(&config)
 
@@ -134,7 +126,7 @@ func main() {
 	// Tock
 	end := time.Now()
 	config.meta.GenerationTime = end.Sub(start)
-  config.meta.GenerationTimeRounded = getRoundedGenerationTime(config.meta.GenerationTime)
+	config.meta.GenerationTimeRounded = roundDuration(config.meta.GenerationTime)
 
 	// Done! Now for a summary
 	if config.meta.GenerateRevisions {

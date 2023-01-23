@@ -7,7 +7,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
 	"sync"
 
 	// TODO: Implement this yourself
@@ -82,17 +81,17 @@ func writeRepositoryAssets(config *BockConfig) {
 }
 
 func writeIndex(config *BockConfig) {
-  html := renderIndex(config)
+	html := renderIndex(config)
 	writeFile(config.outputFolder+"/index.html", []byte(html))
 }
 
 func write404(config *BockConfig) {
 	log.Println("Writing 404 page...")
 
-  html := renderNotFound(config)
-  writeFile(config.outputFolder+"/404.html", []byte(html))
+	html := renderNotFound(config)
+	writeFile(config.outputFolder+"/404.html", []byte(html))
 
-  log.Println("Finished writing 404 page")
+	log.Println("Finished writing 404 page")
 }
 
 func writeRevision(article Article, revision Revision, config *BockConfig) {
@@ -145,7 +144,7 @@ func writeArticle(
 		Modified:  history.created,
 		Hierarchy: makeHierarchy(articlePath, config.articleRoot),
 		Html:      "",
-		ID:        makeID(articlePath),
+		Id:        makeId(articlePath),
 		path:      articlePath,
 		Revisions: history.revisions,
 		Size:      entity.SizeInBytes,
@@ -159,7 +158,7 @@ func writeArticle(
 	// TODO: Find a way to search through revisions as well <3
 	if stmt != nil {
 		if _, s_err := stmt.Exec(
-			makeID(articlePath),
+			makeId(articlePath),
 			string(contents),
 			article.Created.UTC(),
 			article.Modified.UTC(),
@@ -224,104 +223,104 @@ func writeHome(config *BockConfig) {
 }
 
 func writeArchive(config *BockConfig) {
-  log.Println("Writing archive page...")
+	log.Println("Writing archive page...")
 
 	html := renderArchive(config)
 	writeFile(config.outputFolder+"/archive/index.html", []byte(html))
 
-  log.Println("Finished writing archive page")
+	log.Println("Finished writing archive page")
 }
 
-func writeFolder(absolutePath string, config *BockConfig) {
-	relativePath := makeRelativePath(absolutePath, config.articleRoot)
-	pathFragments := strings.Split(relativePath, "/")
+// func writeFolder(absolutePath string, config *BockConfig) {
+// 	relativePath := makeRelativePath(absolutePath, config.articleRoot)
+// 	pathFragments := strings.Split(relativePath, "/")
 
-	folder := (*config.entityTree)[0]
-	var folderIndex int
-	var folderName string
-	var folders []HierarchicalEntity
-	var articles []HierarchicalEntity
+// 	folder := (*config.tree)[0]
+// 	var folderIndex int
+// 	var folderName string
+// 	var folders []HierarchicalEntity
+// 	var articles []HierarchicalEntity
 
-	// Iterate through the list and get the children of the folder
-	for _, fragment := range pathFragments {
-		folderIndex = findChildWithName(folder.Children, fragment)
+// 	// Iterate through the list and get the children of the folder
+// 	for _, fragment := range pathFragments {
+// 		folderIndex = findChildWithName(folder.Children, fragment)
 
-		// Else, this is the ROOT folder
-		if folderIndex != -1 {
-			folder = (*folder.Children)[folderIndex]
-		}
+// 		// Else, this is the ROOT folder
+// 		if folderIndex != -1 {
+// 			folder = (&folder.Children)[folderIndex]
+// 		}
 
-		folderName = fragment
-	}
+// 		folderName = fragment
+// 	}
 
-	if folderName == "" {
-		folderName = "Root"
-	}
+// 	if folderName == "" {
+// 		folderName = "Root"
+// 	}
 
-	// Make the folder's children
-	for _, f := range *folder.Children {
-		if f.IsFolder {
-			folders = append(folders, HierarchicalEntity{
-				Name: removeExtensionFrom(f.Name),
-				Type: "folder",
-				URI: makeURI(
-					absolutePath, config.articleRoot) + "/" + makeURI(f.Name,
-					config.articleRoot,
-				),
-			})
-		} else {
-			articles = append(articles, HierarchicalEntity{
-				Name: removeExtensionFrom(f.Name),
-				Type: "article",
-				URI: makeURI(
-					absolutePath, config.articleRoot) + "/" + makeURI(f.Name,
-					config.articleRoot,
-				),
-			})
-		}
-	}
+// 	// Make the folder's children
+// 	for _, f := range *folder.Children {
+// 		if f.IsFolder {
+// 			folders = append(folders, HierarchicalEntity{
+// 				Name: removeExtensionFrom(f.Name),
+// 				Type: "folder",
+// 				URI: makeURI(
+// 					absolutePath, config.articleRoot) + "/" + makeURI(f.Name,
+// 					config.articleRoot,
+// 				),
+// 			})
+// 		} else {
+// 			articles = append(articles, HierarchicalEntity{
+// 				Name: removeExtensionFrom(f.Name),
+// 				Type: "article",
+// 				URI: makeURI(
+// 					absolutePath, config.articleRoot) + "/" + makeURI(f.Name,
+// 					config.articleRoot,
+// 				),
+// 			})
+// 		}
+// 	}
 
-	// Check if the folder has a readme
-	README := ""
-	if r, err := os.ReadFile(absolutePath + "/README.md"); err == nil {
-		README = string(r)
-	}
+// 	// Check if the folder has a readme
+// 	README := ""
+// 	if r, err := os.ReadFile(absolutePath + "/README.md"); err == nil {
+// 		README = string(r)
+// 	}
 
-	// Make the folder struct and render it.
-	html := renderFolder(
-		Folder{
-			ID:    makeID(absolutePath),
-			URI:   makeURI(absolutePath, config.articleRoot),
-			Title: folderName,
-			Children: Children{
-				Articles: articles,
-				Folders:  folders,
-			},
-			Hierarchy: makeHierarchy(absolutePath, config.articleRoot),
-			README:    README,
-		})
+// 	// Make the folder struct and render it.
+// 	html := renderFolder(
+// 		Folder{
+// 			Id:    makeId(absolutePath),
+// 			URI:   makeURI(absolutePath, config.articleRoot),
+// 			Title: folderName,
+// 			Children: Children{
+// 				Articles: articles,
+// 				Folders:  folders,
+// 			},
+// 			Hierarchy: makeHierarchy(absolutePath, config.articleRoot),
+// 			README:    README,
+// 		})
 
-	// Small little local helper to keep things short
-	_writeFolder := func(isRoot bool) {
-		prefix := config.outputFolder + makeURI(absolutePath, config.articleRoot)
-		if isRoot {
-			prefix += "/ROOT"
-		}
+// 	// Small little local helper to keep things short
+// 	_writeFolder := func(isRoot bool) {
+// 		prefix := config.outputFolder + makeURI(absolutePath, config.articleRoot)
+// 		if isRoot {
+// 			prefix += "/ROOT"
+// 		}
 
-		writeFile(prefix+"/index.html", []byte(html))
+// 		writeFile(prefix+"/index.html", []byte(html))
 
-		if config.meta.GenerateJSON {
-			jsonData, _ := jsonMarshal(folder)
-			writeFile(prefix+"/index.json", jsonData)
-		}
-	}
+// 		if config.meta.GenerateJSON {
+// 			jsonData, _ := jsonMarshal(folder)
+// 			writeFile(prefix+"/index.json", jsonData)
+// 		}
+// 	}
 
-	if absolutePath == config.articleRoot {
-		_writeFolder(true)
-	} else {
-		_writeFolder(false)
-	}
-}
+// 	if absolutePath == config.articleRoot {
+// 		_writeFolder(true)
+// 	} else {
+// 		_writeFolder(false)
+// 	}
+// }
 
 func writeEntities(config *BockConfig) {
 	tx, _ := config.database.Begin()
@@ -354,14 +353,14 @@ func writeEntities(config *BockConfig) {
 	// }
 
 	log.Println("Will write", config.meta.FolderCount, "folders")
-	for _, e := range *config.listOfFolderPaths {
-		entityWaitGroup.Add(1)
+	// for _, e := range *config.listOfFolderPaths {
+	// 	entityWaitGroup.Add(1)
 
-		go func(e string, stmt *sql.Stmt, config *BockConfig) {
-			defer entityWaitGroup.Done()
-			writeFolder(e, config)
-		}(e, stmt, config)
-	}
+	// 	go func(e string, stmt *sql.Stmt, config *BockConfig) {
+	// 		defer entityWaitGroup.Done()
+	// 		writeFolder(e, config)
+	// 	}(e, stmt, config)
+	// }
 
 	entityWaitGroup.Wait()
 
@@ -385,10 +384,10 @@ func writeEntities(config *BockConfig) {
 // }
 
 func writeRandom(config *BockConfig) {
-  log.Println("Writing random page generator...")
+	log.Println("Writing random page generator...")
 
 	html := renderRandom(config)
 	writeFile(config.outputFolder+"/random/index.html", []byte(html))
 
-  log.Println("Finished writing random page generator")
+	log.Println("Finished writing random page generator")
 }
