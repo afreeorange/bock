@@ -101,52 +101,74 @@ func makeTreeOfEntities(config *BockConfig) []Folder {
 
 	// These loops took me an embarrassingly LONG while to write :/
 
-	for _, articlePath := range *config.listOfArticlePaths {
-		pathFragments := strings.Split(articlePath, "/")
+	for _, ap := range *config.listOfArticlePaths {
+		// First, remove the article root and get relative paths. Then split
+		// into fragments.
+		pathFragments := strings.Split(makeRelativePath(ap, config.articleRoot), "/")
+		fmt.Println(">>>", pathFragments)
 
-		// Use this to build the URI. Reset with each iteration.
-		uri := ""
+		// // Now loop over each fragment
+		// for _, fragment := range pathFragments {
+
+		// 	subFolder := tree[0]
+
+		// 	// Simple: we have a root-level article. Append it!
+		// 	if strings.HasSuffix(fragment, ".md") {
+		// 		subFolder.Children.Articles = append(subFolder.Children.Articles, Article{
+		// 			path:  ap,
+		// 			Id:    "Foo",
+		// 			Title: fragment,
+		// 			URI:   "Lol",
+		// 			Size:  0,
+		// 			// Created: ,
+		// 			Hierarchy: []HierarchicalEntity{},
+		// 		})
+		// 	}
+		// }
+
+		// // Use this to build the URI. Reset with each iteration.
+		// uri := ""
 
 		// Start at the root entity for each iteration
-		subEntity := tree[0]
+		// subEntity := tree[0]
 
-		fmt.Println(">>>", subEntity)
+		// for _, fragment := range pathFragments {
+		// 	fmt.Println("", fragment)
 
-		for index, fragment := range pathFragments {
-			fmt.Println("LOP", index, fragment)
-			// maybeChildIndex := findChildWithName(subEntity.Children, fragment)
-			uri = uri + "/" + fragment
+		// maybeChildIndex := findChildWithName(subEntity.Children, fragment)
+		// uri = uri + "/" + fragment
+		// fmt.Println(">>>", fragment, uri)
 
-			// // This path fragment does not exist in the current entity. We need
-			// // to create something. It could be an article or a folder.
-			// //
-			// if maybeChildIndex == -1 {
-			// 	if index+1 == len(pathFragments) {
-			// 		// This is the last element of the path fragments: We have an
-			// 		// article. Just append its metadata.
-			// 		//
-			// 		*subEntity.Children = append(*subEntity.Children, article)
-			// 	} else {
-			// 		// We need to create a new folder here.
-			// 		//
-			// 		*subEntity.Children = append(*subEntity.Children, Entity{
-			// 			Children:     &[]Entity{},
-			// 			IsFolder:     true,
-			// 			Name:         fragment,
-			// 			RelativePath: strings.TrimPrefix(uri, "/"),
-			// 			SizeInBytes:  0,
-			// 			Title:        fragment,
-			// 			URI:          makeURI(uri, config.articleRoot),
-			// 			path:         article.path,
-			// 		})
-			// 	}
-			// }
+		// // This path fragment does not exist in the current entity. We need
+		// // to create something. It could be an article or a folder.
+		// //
+		// if maybeChildIndex == -1 {
+		// 	if index+1 == len(pathFragments) {
+		// 		// This is the last element of the path fragments: We have an
+		// 		// article. Just append its metadata.
+		// 		//
+		// 		*subEntity.Children = append(*subEntity.Children, article)
+		// 	} else {
+		// 		// We need to create a new folder here.
+		// 		//
+		// 		*subEntity.Children = append(*subEntity.Children, Entity{
+		// 			Children:     &[]Entity{},
+		// 			IsFolder:     true,
+		// 			Name:         fragment,
+		// 			RelativePath: strings.TrimPrefix(uri, "/"),
+		// 			SizeInBytes:  0,
+		// 			Title:        fragment,
+		// 			URI:          makeURI(uri, config.articleRoot),
+		// 			path:         article.path,
+		// 		})
+		// 	}
+		// }
 
-			// // Now recompute the index and update the sub entity we're dealing with.
-			// // It's some child of the entity we started with!
-			// childIndex := findChildWithName(subEntity.Children, fragment)
-			// subEntity = (*subEntity.Children)[childIndex]
-		}
+		// // Now recompute the index and update the sub entity we're dealing with.
+		// // It's some child of the entity we started with!
+		// childIndex := findChildWithName(subEntity.Children, fragment)
+		// subEntity = (*subEntity.Children)[childIndex]
+		// }
 	}
 
 	return tree

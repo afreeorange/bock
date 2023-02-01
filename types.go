@@ -24,8 +24,8 @@ type HierarchicalEntity struct {
 }
 
 type Children struct {
-	Articles []HierarchicalEntity `json:"articles"`
-	Folders  []HierarchicalEntity `json:"folders"`
+	Articles []Article `json:"articles"`
+	Folders  []Folder  `json:"folders"`
 }
 
 type ArticleHistory struct {
@@ -35,10 +35,9 @@ type ArticleHistory struct {
 }
 
 type Article struct {
-	Id    string `json:"id"`
-	Title string `json:"title"`
-	URI   string `json:"uri"`
-
+	Id        string               `json:"id"`
+	Title     string               `json:"title"`
+	URI       string               `json:"uri"`
 	Hierarchy []HierarchicalEntity `json:"hierarchy"`
 
 	Size     int64     `json:"sizeInBytes"`
@@ -56,16 +55,21 @@ type Article struct {
 	path string
 }
 
-type Folder struct {
-	Id    string `json:"id"`
-	Title string `json:"title"`
-	URI   string `json:"uri"`
+type Farticle struct {
+	Article
+	Fas   string
+	booba time.Duration
+}
 
+type Folder struct {
+	Id        string               `json:"id"`
+	Title     string               `json:"title"`
+	URI       string               `json:"uri"`
 	Hierarchy []HierarchicalEntity `json:"hierarchy"`
 
-	README string `json:"readme"`
-
 	Children Children `json:"children"`
+
+	README string `json:"readme"`
 
 	// This is the *absolute* path! You do NOT want to make this public!
 	path string
@@ -90,6 +94,7 @@ type Meta struct {
 	UsingOnDiskFSForRepository bool          `json:"usingOnDiskFSForRepository"`
 }
 
+// NOTE: Paths will **not** have trailing slashes!
 type BockConfig struct {
 	articleRoot        string
 	database           *sql.DB

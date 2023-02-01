@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
 
 	"github.com/go-git/go-billy/v5/memfs"
 	"github.com/go-git/go-git/v5"
@@ -79,15 +80,14 @@ func setupArticleRoot(articleRoot string, config *BockConfig) {
 		os.Exit(EXIT_COULD_NOT_GENERATE_LIST_OF_ENTITIES)
 	}
 
-	// Now the 'heavy' step of getting article data
-
-	// Some final updates to the application configuration object
+	// Some updates to the application configuration object
 	config.articleRoot = articleRoot
 	config.listOfArticlePaths = &listOfArticlePaths
 	config.listOfFolderPaths = &listOfFolderPaths
 	config.meta.ArticleCount = len(listOfArticlePaths)
 	config.meta.FolderCount = len(listOfFolderPaths)
 
+	// Check if we have any work to do lol
 	if config.meta.ArticleCount == 0 {
 		log.Println("I could not find any articles to render :/")
 		log.Println("Quitting.")
@@ -100,6 +100,14 @@ func setupArticleRoot(articleRoot string, config *BockConfig) {
 		config.meta.ArticleCount,
 		config.meta.FolderCount,
 	)
+
+	// And now we finally build the entity tree. NOTE: You cannot do this
+	// beforehand since the function depends on the list of application paths
+	// being computed and attached to the application configuration object (i.e.
+	// `config.listOfArticlePaths` must exist before call this function!)
+	log.Println("Building entity tree...")
+	tree := makeTreeOfEntities(config)
+	config.tree = &tree
 }
 
 func setupOutputFolder(outputFolder string, config *BockConfig) {
@@ -113,7 +121,7 @@ func setupOutputFolder(outputFolder string, config *BockConfig) {
 		os.MkdirAll(outputFolder, os.ModePerm)
 	}
 
-	config.outputFolder = outputFolder
+	config.outputFolder = strings.TrimSuffix(outputFolder, "/")
 }
 
 func setupDatabase(config *BockConfig) {

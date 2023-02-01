@@ -93,7 +93,7 @@ func main() {
 
 	// --- Start updating the application configuration object ---
 
-	setupOutputFolder(outputFolder, &config)
+	setupOutputFolder(outputFolder, &config) // Order matters here
 	setupDatabase(&config)
 	setupArticleRoot(articleRoot, &config) // This is the most expensive step!
 
@@ -104,20 +104,16 @@ func main() {
 	writeTemplateAssets(&config)
 	writeRepositoryAssets(&config)
 
-	// Generate a tree of entities (articles and folders), the 404, and archive
-	// pages
+	// Generate a tree of entities (articles and folders), the 404, the archive
+	// page, and so on
+	writeTreeOfEntities(&config)
 	write404(&config)
 	writeArchive(&config)
 	writeRandom(&config)
+	writeIndex(&config)
 
-	makeTreeOfEntities(&config)
 	// // Process all articles. TODO: Errors?
 	// writeEntities(&config)
-
-	// // Write the index page and other pages
-	// fmt.Print("Writing index page")
-	// writeIndex(&config)
-	// fmt.Println("... done")
 
 	// fmt.Print("Writing /Home: ")
 	// writeHome(&config)

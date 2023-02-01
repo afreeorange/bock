@@ -81,8 +81,12 @@ func writeRepositoryAssets(config *BockConfig) {
 }
 
 func writeIndex(config *BockConfig) {
+	log.Println("Writing Index page...")
+
 	html := renderIndex(config)
 	writeFile(config.outputFolder+"/index.html", []byte(html))
+
+	log.Println("Finished writing Index page")
 }
 
 func write404(config *BockConfig) {
@@ -369,19 +373,19 @@ func writeEntities(config *BockConfig) {
 	tx.Commit()
 }
 
-// func writeEntityTree(config *BockConfig) {
-// 	entityTree := makeEntityTree(config)
-// 	config.entityTree = &entityTree
+func writeTreeOfEntities(config *BockConfig) {
+	log.Println("Writing entity tree...")
 
-// 	s, err := jsonMarshal(config.entityTree)
+	s, err := jsonMarshal(config.tree)
+	if err != nil {
+		log.Println("Could not marshal entity tree :(")
+		os.Exit(EXIT_COULD_NOT_GENERATE_LIST_OF_ENTITIES)
+	}
 
-// 	if err != nil {
-// 		log.Println("Could not write entity tree :/")
-// 		os.Exit(EXIT_COULD_NOT_WRITE_ENTITY_TREE)
-// 	}
+	writeFile(config.outputFolder+"/tree.json", s)
 
-// 	writeFile(config.outputFolder+"/tree.json", s)
-// }
+	log.Println("Finished writing entity tree")
+}
 
 func writeRandom(config *BockConfig) {
 	log.Println("Writing random page generator...")
