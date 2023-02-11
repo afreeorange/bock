@@ -7,6 +7,7 @@ require (
 	github.com/flosch/pongo2/v5 v5.0.0
 	github.com/go-git/go-billy/v5 v5.3.1
 	github.com/go-git/go-git/v5 v5.4.2
+	github.com/litao91/goldmark-mathjax v0.0.0-20210217064022-a43cf739a50f
 	github.com/mattn/go-sqlite3 v1.14.13
 	github.com/otiai10/copy v1.7.0
 	github.com/satori/go.uuid v1.2.0

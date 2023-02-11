@@ -8,7 +8,7 @@
     (() => {
       const list = [{%- for entity in list -%}
           {
-            uri: "{{ entity.URI }}",
+            uri: "{{ entity.URI | safe }}",
             isFolder:{% if entity.IsFolder %}
               true
             {% else %}

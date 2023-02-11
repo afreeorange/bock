@@ -7,6 +7,7 @@ import (
 
 	chroma "github.com/alecthomas/chroma/formatters/html"
 	"github.com/flosch/pongo2/v5"
+	mathjax "github.com/litao91/goldmark-mathjax"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting"
 	"github.com/yuin/goldmark/extension"
@@ -62,6 +63,7 @@ var markdown = goldmark.New(
 				chroma.WithClasses(true),
 			),
 		),
+		mathjax.MathJax,
 	),
 )
 
