@@ -31,9 +31,9 @@ jobs:
             - "/go/pkg/mod"
 
 workflows:
-  build-and-deploy:
+  build-and-publish:
     jobs:
-      - build
+      - build:   
           filters:
             branches:
               only: master
