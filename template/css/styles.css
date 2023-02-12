@@ -79,8 +79,9 @@ body {
 
 a {
   color: var(--color-foreground);
-  text-underline-offset: 2px;
   text-decoration-color: var(--color-highlight);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
 }
 
 a:hover {
