@@ -190,7 +190,7 @@ main nav {
 }
 main nav a {
   color: var(--color-light);
-  text-decoration-color: var(--color-light);
+  text-decoration: none;
 }
 main nav ul {
   padding: 0;
