@@ -64,6 +64,15 @@ The first command in the "Usage" section will generate the following (using [thi
 
 A giant work in progress but works pretty well for me so far. Uses a baby implementation of Go's [WaitGroups](https://gobyexample.com/waitgroups) so will be slow on older machines or those with less memory.
 
+## Building and Releasing
+
+This is manual and done from my Mac laptop.
+
+```bash
+.scripts/build.sh
+.scripts/build-linux.sh
+```
+
 ## Upcoming Features
 
 - [ ] Categories/Tags
