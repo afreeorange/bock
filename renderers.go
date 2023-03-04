@@ -2,9 +2,48 @@ package main
 
 import (
 	"bytes"
+	"embed"
 
+	chroma "github.com/alecthomas/chroma/formatters/html"
 	"github.com/flosch/pongo2/v5"
+	mathjax "github.com/litao91/goldmark-mathjax"
+	"github.com/yuin/goldmark"
+	highlighting "github.com/yuin/goldmark-highlighting"
+	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/renderer/html"
 )
+
+// ---------- Configure Renderers ----------
+
+// We use Goldmark as the Markdown converter. Configure it here.
+var markdown = goldmark.New(
+	goldmark.WithRendererOptions(
+		html.WithXHTML(),
+		html.WithUnsafe(),
+	),
+	goldmark.WithExtensions(
+		extension.Footnote,
+		extension.Linkify,
+		extension.Strikethrough,
+		extension.Table,
+		extension.Typographer,
+		extension.GFM,
+		highlighting.NewHighlighting(
+			highlighting.WithFormatOptions(
+				chroma.WithClasses(true),
+			),
+		),
+		mathjax.MathJax,
+	),
+)
+
+// Now configure Pongo2. We create a new 'set' of templates from the ones we
+// embed. This took me forever to figure out...
+
+//go:embed template
+var templatesContent embed.FS
+var pongoLoader = pongo2.NewFSLoader(templatesContent)
+var templateSet = pongo2.NewSet("template", pongoLoader)
 
 var t_archive, _ = templateSet.FromCache("template/archive.njk")
 var t_article_raw, _ = templateSet.FromCache("template/article-raw.njk")
@@ -16,6 +55,8 @@ var t_random, _ = templateSet.FromCache("template/random.njk")
 var t_revision_raw, _ = templateSet.FromCache("template/revision-raw.njk")
 var t_revision, _ = templateSet.FromCache("template/revision.njk")
 var t_revisionList, _ = templateSet.FromCache("template/revision-list.njk")
+
+// ---------- End Configuring Renderers ----------
 
 func renderIndex(config *BockConfig) string {
 	html, _ := t_index.Execute(pongo2.Context{
@@ -37,7 +78,7 @@ func renderNotFound(config *BockConfig) string {
 
 func renderRandom(config *BockConfig) string {
 	html, _ := t_random.Execute(pongo2.Context{
-		"list":    config.listOfArticlePaths,
+		"list":    config.listOfArticles,
 		"type":    "random",
 		"version": VERSION,
 	})

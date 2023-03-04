@@ -65,7 +65,7 @@ func writeTemplateAssets(config *BockConfig) {
 	log.Println("Finished copying template assets")
 }
 
-func writeRepositoryAssets(config *BockConfig) {
+func writeArticleRepositoryAssets(config *BockConfig) {
 	log.Println("Copying assets in article root...")
 
 	err := cp.Copy(

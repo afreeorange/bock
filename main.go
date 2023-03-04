@@ -19,7 +19,7 @@ func init() {
 	fmt.Println("    / /_  ____  _____/ /__     ")
 	fmt.Println("   / __ \\/ __ \\/ ___/ //_/   ")
 	fmt.Println("  / /_/ / /_/ / /__/ ,<        ")
-	fmt.Println("  /_.___/\\____/\\___/_/|_|    ")
+	fmt.Println(" /_.___/\\____/\\___/_/|_|     ")
 	fmt.Println("  v" + VERSION)
 	fmt.Println("                               ")
 }
@@ -93,7 +93,8 @@ func main() {
 
 	// --- Start updating the application configuration object ---
 
-	setupOutputFolder(outputFolder, &config) // Order matters here
+	// Order matters here!
+	setupOutputFolder(outputFolder, &config)
 	setupDatabase(&config)
 	setupArticleRoot(articleRoot, &config) // This is the most expensive step!
 
@@ -102,7 +103,7 @@ func main() {
 	// Copy static assets. These are for the template itself and whatever one
 	// may find in the specified article root.
 	writeTemplateAssets(&config)
-	writeRepositoryAssets(&config)
+	writeArticleRepositoryAssets(&config)
 
 	// Generate a tree of entities (articles and folders), the 404, the archive
 	// page, and so on

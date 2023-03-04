@@ -1,25 +1,23 @@
 package main
 
 import (
-	"embed"
+	_ "embed"
 	"regexp"
 	"strings"
-
-	chroma "github.com/alecthomas/chroma/formatters/html"
-	"github.com/flosch/pongo2/v5"
-	mathjax "github.com/litao91/goldmark-mathjax"
-	"github.com/yuin/goldmark"
-	highlighting "github.com/yuin/goldmark-highlighting"
-	"github.com/yuin/goldmark/extension"
-	"github.com/yuin/goldmark/renderer/html"
 )
 
 //go:embed VERSION
 var v []byte
 var VERSION string = strings.Trim(string(v), "\n")
 
+// One of the strangest things I learned about Golang!
 const DATE_LAYOUT string = "2006-01-02 15:04:05 -0700"
+
+// The name of the SQLite database we will generate from the article repository
 const DATABASE_NAME string = "articles.db"
+
+// Where static assets (like images) are placed in the article repository
+const ARTICLE_REPOSITORY_ASSETS_FOLDER = "__assets"
 
 // Exit codes
 const (
@@ -30,8 +28,9 @@ const (
 	EXIT_NO_OUTPUT_FOLDER
 	EXIT_NOT_A_GIT_REPO
 	EXIT_NO_ARTICLES_TO_RENDER
-  EXIT_COULD_NOT_GENERATE_LIST_OF_ENTITIES
-  EXIT_COULD_NOT_WRITE_ENTITY_TREE
+	EXIT_COULD_NOT_GENERATE_LIST_OF_ENTITIES
+	EXIT_COULD_NOT_WRITE_ENTITY_TREE
+	EXIT_COULD_NOT_CREATE_OUTPUT_FOLDER
 )
 
 // Things to ignore when walking the article repository. NOTE: In Golang, only
@@ -39,37 +38,10 @@ const (
 // beginning with `.` are automatically excluded in the function that uses this
 // pattern.
 var IGNORED_ENTITIES_REGEX = regexp.MustCompile(strings.Join([]string{
-  "__assets",
-  "css",
-  "Home.md", // This is dealt with separately
-  "img",
-  "js",
-  "node_modules",
+	"__assets",
+	"css",
+	"Home.md", // This is dealt with separately
+	"img",
+	"js",
+	"node_modules",
 }, "|"))
-
-// We use Goldmark as the Markdown converter. Configure it here.
-var markdown = goldmark.New(
-	goldmark.WithRendererOptions(
-		html.WithXHTML(),
-		html.WithUnsafe(),
-	),
-	goldmark.WithExtensions(
-		extension.Footnote,
-		extension.Linkify,
-		extension.Strikethrough,
-		extension.Table,
-		extension.Typographer,
-		extension.GFM,
-		highlighting.NewHighlighting(
-			highlighting.WithFormatOptions(
-				chroma.WithClasses(true),
-			),
-		),
-		mathjax.MathJax,
-	),
-)
-
-//go:embed template
-var templatesContent embed.FS
-var pongoLoader = pongo2.NewFSLoader(templatesContent)
-var templateSet = pongo2.NewSet("template", pongoLoader)
