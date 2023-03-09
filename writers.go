@@ -126,8 +126,8 @@ func writeArticle(
 ) {
 	fileName := entity.Name
 	title := removeExtensionFrom(fileName)
-	uri := makeURI(articlePath, config.articleRoot)
-	relativePath := makeRelativePath(articlePath, config.articleRoot)
+  uri := makeURI(articlePath, config.articleRoot)
+  relativePath := makeRelativePath(articlePath, config.articleRoot)
 
 	contents, _ := os.ReadFile(articlePath)
 	untracked := true

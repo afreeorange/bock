@@ -40,6 +40,11 @@ type Article struct {
 	URI       string               `json:"uri"`
 	Hierarchy []HierarchicalEntity `json:"hierarchy"`
 
+	// This is the *absolute* path! You do NOT want to make this public!
+	path string
+
+	// ---------- Properties specific to Articles ----------
+
 	Size     int64     `json:"sizeInBytes"`
 	Created  time.Time `json:"created"`
 	Modified time.Time `json:"modified"`
@@ -50,15 +55,6 @@ type Article struct {
 	Untracked bool       `json:"untracked"`
 	Unsaved   bool       `json:"unsaved"`
 	Revisions []Revision `json:"revisions"`
-
-	// This is the *absolute* path! You do NOT want to make this public!
-	path string
-}
-
-type Farticle struct {
-	Article
-	Fas   string
-	booba time.Duration
 }
 
 type Folder struct {
@@ -67,12 +63,13 @@ type Folder struct {
 	URI       string               `json:"uri"`
 	Hierarchy []HierarchicalEntity `json:"hierarchy"`
 
-	Children Children `json:"children"`
-
-	README string `json:"readme"`
-
 	// This is the *absolute* path! You do NOT want to make this public!
 	path string
+
+	// ---------- Properties specific to Folders ----------
+
+	Children Children `json:"children"`
+	README   string   `json:"readme"`
 }
 
 type Meta struct {

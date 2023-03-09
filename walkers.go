@@ -65,6 +65,8 @@ func makeListsOfEntities(config *BockConfig) (
 			*/
 			folderPath := path.Dir(entityPath)
 			folderSplits := strings.Split(makeRelativePath(folderPath, config.articleRoot), "/")
+
+			// Because this walk function is applied to each path found, this gets reset!
 			p := ""
 
 			if len(folderSplits) > 1 {
@@ -80,8 +82,6 @@ func makeListsOfEntities(config *BockConfig) (
 		return nil
 	}
 
-	// It strikes me that error-handling in Go is a bit strange... looks like
-	// things can just fall through.
 	err = filepath.Walk(config.articleRoot, walkFunction)
 	listOfFolderPaths = uniqueStringsInList(listOfFolderPaths)
 
