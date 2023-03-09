@@ -502,6 +502,7 @@ footer {
 footer a {
   color: var(--color-light);
   text-decoration-color: var(--color-light);
+  text-decoration-thickness: 1px;
 }
 footer a:hover {
   color: var(--color-highlight);
@@ -514,7 +515,7 @@ footer ul {
   list-style-type: none;
   padding: 0;
 }
-footer ul li a::before {
+footer ul li:last-of-type a::before {
   width: var(--root-spacing);
   height: var(--root-spacing);
   content: "";

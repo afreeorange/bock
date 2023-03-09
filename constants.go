@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	chroma "github.com/alecthomas/chroma/formatters/html"
+	"github.com/dustin/go-humanize"
 	"github.com/flosch/pongo2/v5"
 	mathjax "github.com/litao91/goldmark-mathjax"
 	"github.com/yuin/goldmark"
@@ -71,3 +72,11 @@ var markdown = goldmark.New(
 var templatesContent embed.FS
 var pongoLoader = pongo2.NewFSLoader(templatesContent)
 var templateSet = pongo2.NewSet("template", pongoLoader)
+
+// Register some Pongo filters
+// TODO: How do I prevent this assignment?
+var _ = pongo2.RegisterFilter(
+	"humanizeNumber",
+	func(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
+		return pongo2.AsValue(humanize.Comma(int64(in.Integer()))), nil
+	})

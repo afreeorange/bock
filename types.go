@@ -29,17 +29,18 @@ type Children struct {
 }
 
 type Article struct {
-	Created   time.Time            `json:"created"`
-	Hierarchy []HierarchicalEntity `json:"hierarchy"`
-	Html      string               `json:"html"`
-	ID        string               `json:"id"`
-	Modified  time.Time            `json:"modified"`
-	Revisions []Revision           `json:"revisions"`
-	Size      int64                `json:"sizeInBytes"`
-	Source    string               `json:"source"`
-	Title     string               `json:"title"`
-	Untracked bool                 `json:"untracked"`
-	URI       string               `json:"uri"`
+	Created      time.Time            `json:"created"`
+	Hierarchy    []HierarchicalEntity `json:"hierarchy"`
+	Html         string               `json:"html"`
+	ID           string               `json:"id"`
+	Modified     time.Time            `json:"modified"`
+	Revisions    []Revision           `json:"revisions"`
+	Size         int64                `json:"sizeInBytes"`
+	Source       string               `json:"source"`
+	Title        string               `json:"title"`
+	Untracked    bool                 `json:"untracked"`
+	URI          string               `json:"uri"`
+	RelativePath string               `json:"relativePath"`
 
 	// You do NOT want to make this public!
 	path string

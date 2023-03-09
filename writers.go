@@ -122,18 +122,19 @@ func writeArticle(
 	}
 
 	article := Article{
-		Created:   history.modified,
-		Modified:  history.created,
-		Hierarchy: makeHierarchy(articlePath, config.articleRoot),
-		Html:      "",
-		ID:        makeID(articlePath),
-		path:      articlePath,
-		Revisions: history.revisions,
-		Size:      entity.SizeInBytes,
-		Source:    string(contents),
-		Title:     title,
-		Untracked: untracked,
-		URI:       uri,
+		Created:      history.modified,
+		Modified:     history.created,
+		Hierarchy:    makeHierarchy(articlePath, config.articleRoot),
+		Html:         "",
+		ID:           makeID(articlePath),
+		path:         articlePath,
+		Revisions:    history.revisions,
+		Size:         entity.SizeInBytes,
+		Source:       string(contents),
+		Title:        title,
+		Untracked:    untracked,
+		URI:          uri,
+		RelativePath: makeRelativePath(articlePath, config.articleRoot),
 	}
 
 	// Insert just the article into Database

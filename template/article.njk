@@ -9,14 +9,21 @@
   {{ html | safe }}
 {% endblock main %}
 {% block footerElements %}
-  <li>{{ sizeInBytes }} bytes</li>
+  <li>{{ sizeInBytes | humanizeNumber }} bytes</li>
   {% if not untracked %}
     <li>Created on {{ created | date:"Monday, 2 January 2006 at 15:04 MST" }}</li>
     <li>Modified on {{ modified | date:"Monday, 2 January 2006 at 15:04 MST" }}</li>
+    <br/>
+    <li>
+      <a
+        href="https://github.com/afreeorange/wiki.nikhil.io.articles/edit/master/{{ relativePath }}"
+        title="Edit this article">Edit this article</a>
+    </li>
   {% endif %}
 {% endblock footerElements %}
 {% block statistics %}
-  There are {{ meta.ArticleCount }} articles{% if meta.GenerateRevisions %} and {{ meta.RevisionCount }} revisions{% endif %} in this wiki. It took
-  {{ meta.GenerationTimeRounded }} to generate it on a {{ meta.CPUCount }}-core
+  There are {{ meta.ArticleCount | humanizeNumber }} articles{% if meta.GenerateRevisions %}
+    and {{ meta.RevisionCount | humanizeNumber }} revisions{% endif %}
+  in this wiki. It took {{ meta.GenerationTimeRounded }} to generate it on a {{ meta.CPUCount }}-core
   {{ meta.Platform }}/{{ meta.Architecture }} system with {{ meta.MemoryInGB }}GiB RAM on {{ meta.BuildDate | date:"Monday, 2 January 2006 at 15:04 MST" }}
 {% endblock statistics %}
