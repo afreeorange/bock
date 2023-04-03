@@ -78,5 +78,7 @@ A giant work in progress but works pretty well for me so far. Uses a baby implem
 - [ ] Better/finer concurrency control
 - [ ] [Table of Contents](https://github.com/abhinav/goldmark-toc)
 - [ ] [Treeviews in CSS](https://iamkate.com/code/tree-views/)
-- [x] MathJAX Support
+- [ ] MathJAX Support
   - [ ] Self-hosted MathJAX
+- [ ] [Password-protected articles](https://github.com/robinmoisson/staticrypt)?
+
