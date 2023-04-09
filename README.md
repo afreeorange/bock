@@ -82,3 +82,4 @@ A giant work in progress but works pretty well for me so far. Uses a baby implem
 - [x] MathJAX Support
   - [ ] Self-hosted MathJAX
 - [ ] [Password-protected articles](https://github.com/robinmoisson/staticrypt)?
+- [ ] [SQLite Driver without CGO](https://gitlab.com/cznic/sqlite)? Appears to be slower but I don't care.
