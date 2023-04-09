@@ -22,16 +22,15 @@ const REMOTE_DATABASE = "/articles.db";
   );
 
   const template = `
-   {% for row in rows %}
-   <li>
-     <a href="{{ row.uri }}" title="{{ row.title }}">{{ row.highlightedTitle | arrowPath | markMatch | safe }}</a>
-     <br />
-     <small>
-       {{ row.content | markMatch | safe }}
-     </small>
-   </li>
-   {% endfor %}
-   `;
+  {% for row in rows %}
+  <li>
+    <a href="{{ row.uri }}" title="{{ row.title }}">{{ row.highlightedTitle | arrowPath | markMatch | safe }}</a>
+    <span>
+    {{ row.content | markMatch | safe }}
+    </span>
+  </li>
+  {% endfor %}
+  `;
 
   const resultsSection = document.querySelector(`[data-content="results"]`);
   const treeSection = document.querySelector(`[data-content="tree"]`);

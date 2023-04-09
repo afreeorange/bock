@@ -361,10 +361,12 @@ ul[data-content="results"] li a {
 ul[data-content="results"] li:last-child {
   border: 0;
 }
-ul[data-content="results"] li small {
+ul[data-content="results"] li span {
+  display: block;
   color: var(--color-light);
+  margin-top: calc(var(--root-spacing) / 2);
 }
-ul[data-content="results"] li small mark {
+ul[data-content="results"] li span mark {
   background: var(--color-background-dark);
 }
 ul[data-content="results"] li:not(:last-child) {
