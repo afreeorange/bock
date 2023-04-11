@@ -320,7 +320,9 @@ main table tbody tr:not(:last-child) td {
 }
 main hr {
   border: 0;
-  border-top: 1px dotted var(--color-light);
+  height: 0.25em;
+  background-image: linear-gradient(135deg, var(--color-background) 25%, var(--color-light) 25%, var(--color-light) 50%, var(--color-background) 50%, var(--color-background) 75%, var(--color-light) 75%, #3D6F8E 100%);
+  background-size: 0.5em 0.5em;
 }
 main em {
   font-family: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman,
