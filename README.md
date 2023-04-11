@@ -10,6 +10,8 @@ I have old [Node](https://github.com/afreeorange/bock/tree/node) and [Python](ht
 
 See [the releases page](https://github.com/afreeorange/bock/releases) for a few pre-built binaries.
 
+Here's how you can run from source:
+
 ```bash
 # Clone repo
 git clone https://github.com/afreeorange/bock.git
@@ -30,8 +32,7 @@ An **Entity** is either
 
 - An **Article**, a Markdown file ending in `.md` somewhere in your article repository, or
 - A **Folder**, which is exactly what you think it is. You can organize your articles into folders at any depth.
-
-A **Revision** is a `git` commit that modifies an Article.
+- A **Revision** is a `git` commit that modifies an Article.
 
 Other stuff:
 
@@ -64,24 +65,21 @@ The first command in the "Usage" section will generate the following (using [thi
 
 A giant work in progress but works pretty well for me so far. Uses a baby implementation of Go's [WaitGroups](https://gobyexample.com/waitgroups) so will be slow on older machines or those with less memory.
 
-## Building and Releasing
-
-This is manual and done from my Mac laptop.
-
-```bash
-.scripts/build.sh
-.scripts/build-linux.sh
-```
-
 ## Upcoming Features
 
+- [ ] Recently added articles
+- [ ] Recently updated articles
+- [ ] Articles that have not been checked in! "Warning you have x untracked articles...."
+- [ ] Revision Search in DB
 - [ ] Categories/Tags
 - [ ] Frontmatter support
-- [ ] Live-watcher of articles
-- [ ] Customizable Templates
+- [ ] Local development server with live-reloading
+- [ ] Customizable Templates with config JSON/YAML
 - [x] Option to disable revision histories
 - [ ] Better/finer concurrency control
 - [ ] [Table of Contents](https://github.com/abhinav/goldmark-toc)
 - [ ] [Treeviews in CSS](https://iamkate.com/code/tree-views/)
 - [x] MathJAX Support
   - [ ] Self-hosted MathJAX
+- [ ] [Password-protected articles](https://github.com/robinmoisson/staticrypt)?
+- [ ] [SQLite Driver without CGO](https://gitlab.com/cznic/sqlite)? Appears to be slower but I don't care.
