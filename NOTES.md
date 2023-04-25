@@ -14,6 +14,19 @@ go get package@none
 CGO_ENABLED=1 go build --tags "fts5" -o "dist/bock-$(uname)-$(uname -m)" .
 ```
 
+### `git` commands
+
+```bash
+# Get the commits. Note that a single commit can change many articles!
+# This is something you need to try to avoid.
+git log /path/to/article.md
+
+# Now get the *contents* of a commit by reading the blob.
+git show 27e239b8f52ceb29a14a5d4fdf8d957ce4f022f4:/path/to/article.md
+```
+
+`git cat-file -p <something>` is a "swiss army knife" of sorts that lets you examine all manner of things. The `-p` flag tells `git` to figure out what the `<something>` is.
+
 ### TODO
 
 * [x] FIX THE NAVIGATION FFS
