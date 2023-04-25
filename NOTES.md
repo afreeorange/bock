@@ -16,6 +16,8 @@ CGO_ENABLED=1 go build --tags "fts5" -o "dist/bock-$(uname)-$(uname -m)" .
 
 ### `git` commands
 
+This the rough outline of how you'd get the revision history of a file. `git cat-file -p <something>` is a "swiss army knife" of sorts that lets you examine all manner of things. The `-p` flag tells `git` to figure out what the `<something>` is.
+
 ```bash
 # Get the commits. Note that a single commit can change many articles!
 # This is something you need to try to avoid.
@@ -25,33 +27,47 @@ git log /path/to/article.md
 git show 27e239b8f52ceb29a14a5d4fdf8d957ce4f022f4:/path/to/article.md
 ```
 
-`git cat-file -p <something>` is a "swiss army knife" of sorts that lets you examine all manner of things. The `-p` flag tells `git` to figure out what the `<something>` is.
+And here's how you [find deleted files](https://waylonwalker.com/git-find-deleted-files/):
+
+```bash
+# On the branch you're on
+git log --diff-filter D --pretty="format:" --name-only | sed '/^$/d'
+
+# Across all branches
+git reflog --diff-filter D --pretty="format:" --name-only | sed '/^$/d'
+```
+
+### `git log` slowness with `go-git`
+
+This is [a known issue](https://github.com/go-git/go-git/issues/137). I thought I could just use the `git` command and don't appear to be [the only one who's had this thought](https://github.com/redhat-cop/agnosticv/commit/bc71f0add636b197fb0dc332bd8723cdc8365881). Note that with the few articles I have in my wiki (~250) generating JSON, HTML, the SQLite Database, etc takes ~200ms (on an M1 Max with 24GB memory). With revisions this goes up to 6s :/
+
+Here's [another comment](https://github.com/go-git/go-git/issues/67#issuecomment-653819889) that compares go-git with git2go (libgit2 wrapper) and just the git command.
 
 ### TODO
 
+- [ ] Fix issue with apostrophes 🤦‍♀️
+* [ ] Compare Page
+* [ ] Gist of recursive tree generation!
+* [ ] Recent Changes (Global)
+* [ ] Revisions argument
+* [ ] STATS : Average number of revisions
+* [ ] STATS : Average words per article (length)
+* [ ] STATS : Oldest and newest article
+* [ ] STATS : Recent articles
+* [ ] STATS : Total words
+* [ ] Syntax Highlighting
+* [ ] Table of Contents
+* [ ] Template argument
+* [ ] Use `context` in lieu of `config` struct? What are the dis/advantages?
+* [x] 404 Page
+* [x] Better, less buggy tree
+* [x] Breadcrumbs > Revision
+* [x] Fix builds on cimg/go:1.18
+* [x] FIX FOLDER generation
 * [x] FIX THE NAVIGATION FFS
 * [x] FIX THE PATH GENERATION PROBLEM FFS
-* [x] FIX FOLDER generation
-* [x] Breadcrumbs > Revision
-* [ ] Table of Contents
-* [ ] Recent Changes (Global)
-* [ ] Syntax Highlighting
-* [x] JSON for Revision
-* [ ] STATS : Oldest and newest article
-* [ ] STATS : Average number of revisions
-* [ ] STATS : Total words
-* [ ] STATS : Average words per article (length)
-* [ ] STATS : Recent articles
-* [ ] Compare Page
 * [x] Fix timestamps; make them consistent
-* [x] Fix builds on cimg/go:1.18
-* [x] 404 Page
-* [ ] Template argument
-* [ ] Revisions argument
-* [x] Better, less buggy tree
-* [ ] Gist of recursive tree generation!
-- [ ] Fix issue with apostrophes 🤦‍♀️
-* [ ] Use `context` in lieu of `config` struct? What are the dis/advantages?
+* [x] JSON for Revision
 * [ ] [Markdown highlight in Raw view](https://www.zupzup.org/go-markdown-syntax-highlight-chroma/)
 * [ ] [Filtering logs with filename is very slow in `go-git`](https://github.com/go-git/go-git/issues/137)```
 
