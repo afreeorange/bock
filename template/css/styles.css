@@ -81,7 +81,7 @@ a {
   color: var(--color-foreground);
   text-decoration-color: var(--color-highlight);
   text-decoration-thickness: 2px;
-  text-underline-offset: 5px;
+  text-underline-offset: 2px;
 }
 
 a:hover {

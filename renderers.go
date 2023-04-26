@@ -2,9 +2,53 @@ package main
 
 import (
 	"bytes"
+	"embed"
 
 	"github.com/flosch/pongo2/v5"
+
+	chroma "github.com/alecthomas/chroma/formatters/html"
+	"github.com/dustin/go-humanize"
+	mathjax "github.com/litao91/goldmark-mathjax"
+	"github.com/yuin/goldmark"
+	highlighting "github.com/yuin/goldmark-highlighting"
+	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/renderer/html"
 )
+
+// We use Goldmark as the Markdown converter. Configure it here.
+var markdown = goldmark.New(
+	goldmark.WithRendererOptions(
+		html.WithXHTML(),
+		html.WithUnsafe(),
+	),
+	goldmark.WithExtensions(
+		extension.Footnote,
+		extension.Linkify,
+		extension.Strikethrough,
+		extension.Table,
+		extension.Typographer,
+		extension.GFM,
+		highlighting.NewHighlighting(
+			highlighting.WithFormatOptions(
+				chroma.WithClasses(true),
+			),
+		),
+		mathjax.MathJax,
+	),
+)
+
+//go:embed template
+var templatesContent embed.FS
+var pongoLoader = pongo2.NewFSLoader(templatesContent)
+var templateSet = pongo2.NewSet("template", pongoLoader)
+
+// Register some Pongo filters
+// TODO: How do I prevent this assignment?
+var _ = pongo2.RegisterFilter(
+	"humanizeNumber",
+	func(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
+		return pongo2.AsValue(humanize.Comma(int64(in.Integer()))), nil
+	})
 
 var t_archive, _ = templateSet.FromCache("template/archive.njk")
 var t_article_raw, _ = templateSet.FromCache("template/article-raw.njk")
