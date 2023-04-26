@@ -17,14 +17,16 @@ Here's how you can run from source:
 git clone https://github.com/afreeorange/bock.git
 
 # Now point it at a git repository full of Markdown files
-# and tell it where to generate the output
-go run --tags "fts5" . -a /path/to/repo -o /path/to/output -r -j
+# and tell it where to generate the output. You need to use
+# absolute paths for now.
+go run --tags "fts5" . --in=/path/to/repo --out=/path/to/output --without-revisions
 
-# You can just point it at a folder full of Markdown files (not a git repo)
-# and it will generate stuff. Note that `-R` refers to article revisions and
-# only applies if we're dealing with git repositories
-go run --tags "fts5" . -a /path/to/repo -o /path/to/output -r -j -R=false
+# If your article repository is managed by git, you can omit
+# that last flag to generate ✨article revisions✨
+go run --tags "fts5" . --in=/path/to/repo --out=/path/to/output
 ```
+
+Add a `--help` flag to see some more options.
 
 ## Terminology and Setup
 
