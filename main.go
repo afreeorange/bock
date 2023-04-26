@@ -101,6 +101,10 @@ func main() {
 			fmt.Println(help)
 			os.Exit(0)
 
+		default:
+			fmt.Println("I don't know what this means:", arg)
+			fmt.Println("Use --help to see usage.")
+			os.Exit(EXIT_INVALID_FLAG_SUPPLIED)
 		}
 	}
 

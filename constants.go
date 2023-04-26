@@ -31,6 +31,7 @@ const (
 	EXIT_COULD_NOT_GENERATE_LIST_OF_ENTITIES
 	EXIT_COULD_NOT_WRITE_ENTITY_TREE
 	EXIT_COULD_NOT_CREATE_OUTPUT_FOLDER
+	EXIT_INVALID_FLAG_SUPPLIED
 )
 
 // Things to ignore when walking the article repository. NOTE: In Golang, only
