@@ -20,6 +20,7 @@ var markdown = goldmark.New(
 	goldmark.WithRendererOptions(
 		html.WithXHTML(),
 		html.WithUnsafe(),
+		html.WithHardWraps(),
 	),
 	goldmark.WithExtensions(
 		extension.Footnote,
