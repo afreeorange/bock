@@ -1,5 +1,3 @@
-[![CircleCI](https://circleci.com/gh/afreeorange/bockgo/tree/master.svg?style=svg)](https://circleci.com/gh/afreeorange/bockgo/tree/master)
-
 # bock 🍺
 
 A small personal Markdown and `git`-powered wiki I wrote to teach myself Go. [You can see it in action here](https://wiki.nikhil.io/).
@@ -34,7 +32,7 @@ An **Entity** is either
 
 - An **Article**, a Markdown file ending in `.md` somewhere in your article repository, or
 - A **Folder**, which is exactly what you think it is. You can organize your articles into folders at any depth.
-- A **Revision** is a `git` commit that modifies an Article.
+- A **Revision**, which is a `git` commit that modifies an Article.
 
 Other stuff:
 
