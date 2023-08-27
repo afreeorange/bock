@@ -85,3 +85,23 @@ A giant work in progress but works pretty well for me so far. Uses a baby implem
   - [ ] Self-hosted MathJAX
 - [ ] [Password-protected articles](https://github.com/robinmoisson/staticrypt)?
 - [ ] [SQLite Driver without CGO](https://gitlab.com/cznic/sqlite)? Appears to be slower but I don't care.
+
+---
+
+## Other Notes
+
+```golang
+	go func() {
+		for {
+			log.Printf("Number of goroutines: %d", runtime.NumGoroutine())
+			time.Sleep(1 * time.Second)
+		}
+	}()
+```
+
+- [GoReleaser](https://goreleaser.com/quick-start/) and [Image](https://circleci.com/developer/orbs/orb/hubci/goreleaser) for CircleCI
+- [Stricter formatting](https://github.com/mvdan/gofumpt)
+- [Lovely stuff for CLIs](https://charm.sh/)
+- [You Don't Need a Library for File Walking in Go](https://engineering.kablamo.com.au/posts/2021/quick-comparison-between-go-file-walk-implementations/)
+- [gojekyll](https://github.com/osteele/gojekyll)
+- [gostatic](https://github.com/piranha/gostatic)
