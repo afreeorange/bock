@@ -103,3 +103,4 @@ A giant work in progress but works pretty well for me so far. Uses a baby implem
 - [You Don't Need a Library for File Walking in Go](https://engineering.kablamo.com.au/posts/2021/quick-comparison-between-go-file-walk-implementations/)
 - [gojekyll](https://github.com/osteele/gojekyll)
 - [gostatic](https://github.com/piranha/gostatic)
+- [A Guide to Build awesome CLIs](https://clig.dev/)
