@@ -9,7 +9,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: cimg/go:1.18
+      - image: cimg/go:1.22
     steps:
       - checkout
       - restore_cache:
@@ -35,7 +35,7 @@ jobs:
 workflows:
   build-and-publish:
     jobs:
-      - build:   
+      - build:
           filters:
             branches:
               only: master
