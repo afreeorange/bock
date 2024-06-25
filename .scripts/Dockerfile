@@ -1,4 +1,4 @@
-FROM cimg/go:1.18
+FROM cimg/go:1.22
 
 # TODO: Can you just fetch/cache `go get .` so that dependencies not re-fetched
 # at each build? You cannot `RUN pushd /project && go get . && popd` for
