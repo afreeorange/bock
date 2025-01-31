@@ -104,3 +104,4 @@ A giant work in progress but works pretty well for me so far. Uses a baby implem
 - [gojekyll](https://github.com/osteele/gojekyll)
 - [gostatic](https://github.com/piranha/gostatic)
 - [A Guide to Build awesome CLIs](https://clig.dev/)
+- [Script](https://github.com/bitfield/script), a lovely little script-y library for Golang!
