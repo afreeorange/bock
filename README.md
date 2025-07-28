@@ -1,4 +1,6 @@
-# bock 🍺
+<img src="https://public.nikhil.io/bock-logo.png" style="width: 14em;" align="right" />
+
+# bock
 
 A small personal Markdown and `git`-powered wiki I wrote to teach myself Go. [You can see it in action here](https://wiki.nikhil.io/).
 
