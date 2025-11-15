@@ -105,3 +105,4 @@ A giant work in progress but works pretty well for me so far. Uses a baby implem
 - [gostatic](https://github.com/piranha/gostatic)
 - [A Guide to Build awesome CLIs](https://clig.dev/)
 - [Script](https://github.com/bitfield/script), a lovely little script-y library for Golang!
+- [fuhgit](https://github.com/runxiyu/furgit) - Faster git client - Most people appear to go to the shell for `git` stuff given the speed of `go-git`
