@@ -52,7 +52,6 @@ var _ = pongo2.RegisterFilter(
 	})
 
 var t_archive, _ = templateSet.FromCache("template/archive.njk")
-var t_article_raw, _ = templateSet.FromCache("template/article-raw.njk")
 var t_article, _ = templateSet.FromCache("template/article.njk")
 var t_folder, _ = templateSet.FromCache("template/folder.njk")
 var t_index, _ = templateSet.FromCache("template/index.njk")
@@ -126,7 +125,7 @@ func renderArticle(
 		"type": "raw",
 	})
 
-	raw, _ := t_article_raw.Execute(baseContext)
+	raw := article.Source
 
 	conversionBuffer.Reset()
 

@@ -42,14 +42,14 @@
             {% if meta.GenerateRaw %}
               {% if type == "article" %}
                 <li>
-                  <a href="{{ uri }}/raw" {% if type == "raw" or type == "revision-raw" %} class="active" {% endif %} title="View Source">
+                  <a href="{{ uri }}/raw.txt" {% if type == "raw" or type == "revision-raw" %} class="active" {% endif %} title="View Source">
                     <span>Raw</span>
                   </a>
                 </li>
               {% endif %}
               {% if type == "revision" %}
                 <li>
-                  <a href="{{ uri }}/revisions/{{ revision.ShortId }}/raw" {% if type == "raw" or type == "revision-raw" %} class="active" {% endif %} title="View Source">
+                  <a href="{{ uri }}/revisions/{{ revision.ShortId }}/raw.txt" {% if type == "raw" or type == "revision-raw" %} class="active" {% endif %} title="View Source">
                     <span>Raw</span>
                   </a>
                 </li>

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Just a general build command for macOS and Linux
+# Just a general build command for macOS and Linux.
+# Note that `build-linux.sh` invokes this script.
 
 set -euo pipefail
 

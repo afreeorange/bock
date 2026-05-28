@@ -85,7 +85,7 @@ func writeRevision(article Article, revision Revision, config *BockConfig) {
 	writeFile(outputPath+"/index.html", []byte(html))
 
 	if config.meta.GenerateRaw {
-		writeFile(outputPath+"/raw/index.html", []byte(raw))
+		writeFile(outputPath+"/raw.txt", []byte(raw))
 	}
 
 	if config.meta.GenerateJSON {
@@ -160,7 +160,7 @@ func writeArticle(
 	writeFile(config.outputFolder+uri+"/index.html", []byte(html))
 
 	if config.meta.GenerateRaw {
-		writeFile(config.outputFolder+uri+"/raw/index.html", []byte(raw))
+		writeFile(config.outputFolder+uri+"/raw.txt", []byte(raw))
 	}
 
 	if config.meta.GenerateJSON {
