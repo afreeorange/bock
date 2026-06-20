@@ -45,7 +45,7 @@ Other stuff:
   - You'll be warned if you don't have one.
   - It will be generated if you don't have one.
 - The paths `raw`, `revisions`, `random`, and `archive` are reserved. So, for example, don't create a `raw.md` anywhere. It will be overwritten.
-- You can place static assets in `__assets` in your article repository. You can reference all assets in there in your Markdown files prefixed with `/assets` (e.g. `__assets/some-file.jpg` &rarr; `/assets/some-file.jpg`). [Here's an example](https://wiki.nikhil.io/Types_of_Documentation/raw/).
+- You can place static assets in `__assets` in your article repository. You can reference all assets in there in your Markdown files prefixed with `/assets` (e.g. `__assets/some-file.jpg` &rarr; `/assets/some-file.jpg`). [Here's an example](https://wiki.nikhil.io/Types_of_Documentation/raw.txt).
 - Any dotfiles or dotfolders are ignored when generating the entity-tree.
   - This includes `node_modules`. See [this file](https://github.com/afreeorange/bock/blob/master/constants.go) for other things. It's a small list.
 
