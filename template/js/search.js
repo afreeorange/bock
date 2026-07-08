@@ -46,7 +46,7 @@ const REMOTE_DATABASE = "/articles.db";
       SELECT
         uri,
         title,
-        highlight(articles_fts, 3, '>>>', '<<<') as highlightedTitle,
+        highlight(articles_fts, 0, '>>>', '<<<') as highlightedTitle,
         snippet(articles_fts, 1, '>>>', '<<<', '...', 50) as content
       FROM articles_fts
       WHERE articles_fts MATCH 'title:${term}* OR content:${term}*'

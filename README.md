@@ -39,7 +39,7 @@ An **Entity** is either
 Other stuff:
 
 - The name of the Markdown file is the _title_ of the article and will be served at a simplified URI with underscores. For example,
-  - `/Notes on Deleuze.md` will be served at `/Notes_on_Deleuze`
+  - `/Notes on Photography.md` will be served at `/Notes_on_Photography`
   - `/Tech Stuff/OpenBSD/pf Notes.md` will be served at `/Tech_Stuff/OpenBSD/pf_Notes`
 - The root of the generated wiki will always redirect to `/Home` (for now) so you will need a `Home.md`.
   - You'll be warned if you don't have one.
@@ -55,15 +55,15 @@ That's really about it.
 
 The first command in the "Usage" section will generate the following (using [this article](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time) as an example):
 
-* Every Markdown article in your repository rendered as [HTML](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/), [Raw Markdown](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/raw/), and [JSON](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/index.json)
-* A [listing of all revisions](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/revisions) for each article, if applicable. Some articles can be untracked and they will be annotated as such.
-* Each article's revision rendered as [HTML](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/revisions/04c7d651/) and [Raw Markdown](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/revisions/04c7d651/raw) (Unless you set `-R=false`. Things will go _much_ faster too!)
-* Each folder's structure in [HTML](https://wiki.nikhil.io/Food/) and [JSON](https://wiki.nikhil.io/Food/index.json)
-* [An archive page](https://wiki.nikhil.io/archive/) that lets you search your articles thanks to SQLite and [SQL.js](https://github.com/sql-js/sql.js/)
-* A Homepage (if it doesn't exist as `Home.md`) at [`/Home`](https://wiki.nikhil.io/Home/)
-* A page that redirects to some random article at [`/random`](https://wiki.nikhil.io/random/)
-* An index page that redirects to `/Home`
-* A 404 Page at [`/404.html`](https://wiki.nikhil.io/404.html)
+- Every Markdown article in your repository rendered as [HTML](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/), [Raw Markdown](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/raw/), and [JSON](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/index.json)
+- A [listing of all revisions](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/revisions) for each article, if applicable. Some articles can be untracked and they will be annotated as such.
+- Each article's revision rendered as [HTML](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/revisions/04c7d651/) and [Raw Markdown](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/revisions/04c7d651/raw) (Unless you set `-R=false`. Things will go _much_ faster too!)
+- Each folder's structure in [HTML](https://wiki.nikhil.io/Food/) and [JSON](https://wiki.nikhil.io/Food/index.json)
+- [An archive page](https://wiki.nikhil.io/archive/) that lets you search your articles thanks to SQLite and [SQL.js](https://github.com/sql-js/sql.js/)
+- A Homepage (if it doesn't exist as `Home.md`) at [`/Home`](https://wiki.nikhil.io/Home/)
+- A page that redirects to some random article at [`/random`](https://wiki.nikhil.io/random/)
+- An index page that redirects to `/Home`
+- A 404 Page at [`/404.html`](https://wiki.nikhil.io/404.html)
 
 A giant work in progress but works pretty well for me so far. Uses a baby implementation of Go's [WaitGroups](https://gobyexample.com/waitgroups) so will be slow on older machines or those with less memory.
 

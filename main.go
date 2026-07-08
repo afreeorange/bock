@@ -242,6 +242,7 @@ func main() {
 
 	// Process all articles. TODO: Errors?
 	writeEntities(&config)
+	finalizeDatabase(db)
 
 	// Write the index page and other pages
 	fmt.Print("Writing index page")

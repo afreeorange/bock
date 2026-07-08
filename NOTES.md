@@ -1,8 +1,12 @@
 ## Development Notes
 
+
 ```bash
 # Initialize this project
 go mod init afreeorange/bock
+
+# Run after initializing
+go run --tags "fts5" . --in=/Users/nikhil/Programming/wiki.nikhil.io.articles --out=/Users/nikhil/Desktop/wiki
 
 # Remove unused mods
 go mod tidy
