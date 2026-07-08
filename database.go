@@ -9,7 +9,12 @@ import (
 // Only index what's searchable; uri is stored unindexed for retrieval.
 // content="articles" lets highlight() and snippet() read original text.
 // porter+unicode61 gives stemming and diacritic-insensitive matching.
+// prefix='2 3 4' pre-builds prefix indexes so term* queries are O(1).
+// No trigger: articles_fts is populated via 'rebuild' after all inserts,
+// which is far faster than N individual trigger-driven inserts.
 const setupStatement string = `
+PRAGMA page_size = 8192;
+
 CREATE TABLE IF NOT EXISTS articles (
   id       TEXT NOT NULL UNIQUE,
   content  TEXT,
@@ -23,14 +28,9 @@ CREATE VIRTUAL TABLE articles_fts USING fts5(
   content,
   uri UNINDEXED,
   content="articles",
-  tokenize='porter unicode61 remove_diacritics 2'
+  tokenize='porter unicode61 remove_diacritics 2',
+  prefix='2 3 4'
 );
-
-CREATE TRIGGER fts_update AFTER INSERT ON articles
-  BEGIN
-    INSERT INTO articles_fts (rowid, title, content, uri)
-    VALUES (new.rowid, new.title, new.content, new.uri);
-  END;
 `
 
 // Set up the database and schema. Assumed that the output folder exists.
@@ -71,8 +71,9 @@ func makeDatabase(config *BockConfig) *sql.DB {
 	return db
 }
 
-// Merge FTS shadow tables and compact the file. Call after all inserts.
+// Populate FTS from content table, merge shadow tables, compact. Call after all inserts.
 func finalizeDatabase(db *sql.DB) {
+	db.Exec("INSERT INTO articles_fts(articles_fts) VALUES('rebuild')")
 	db.Exec("INSERT INTO articles_fts(articles_fts) VALUES('optimize')")
 	db.Exec("VACUUM")
 }
