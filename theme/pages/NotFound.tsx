@@ -1,0 +1,13 @@
+import { Base } from "../components/Base";
+
+export default function NotFound(props: any) {
+  return (
+    <Base {...props}>
+      <h1>I'm sorry I could not find that :/</h1>
+      <p>
+        You can <a href="/Home" title="Go to the home page">go home</a> or{" "}
+        <a href="/archive" title="Search the Archive">search the archive</a>.
+      </p>
+    </Base>
+  );
+}

@@ -71,7 +71,8 @@ p {
 /* --- Start Wiki Styling --- */
 
 body {
-  background-color: var(--color-background);
+  /* background-color: var(--color-background); */
+  background: red;
   color: var(--color-foreground);
   font-family: var(--font-family-body);
   font-size: var(--font-size-base);

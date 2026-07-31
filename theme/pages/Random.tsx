@@ -1,0 +1,24 @@
+import { Base } from "../components/Base";
+
+export default function Random(props: any) {
+  const listJSON = (props.list || [])
+    .map((entity: any) => {
+      return '{ uri: "' + entity.URI + '", isFolder: ' + (entity.IsFolder ? "true" : "false") + " }";
+    })
+    .join(",");
+
+  const scripts = raw(`<script type="text/javascript">
+    (() => {
+      const list = [${listJSON}].filter(_ => !_.isFolder).map(_ => _.uri);
+      const randomIndex = Math.floor(Math.random() * list.length);
+      setTimeout(() => window.location.assign(list[randomIndex]), 3000);
+    })();
+  </script>`);
+
+  return (
+    <Base {...props} scripts={scripts}>
+      <h1>Random article!</h1>
+      <div></div>
+    </Base>
+  );
+}

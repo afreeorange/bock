@@ -1,4 +1,5 @@
-<html>
+export default function Index(props: any) {
+  return raw(`<html>
   <head>
     <meta http-equiv="refresh" content="0; url=/Home"/>
     <title>Redirect</title>
@@ -26,4 +27,5 @@
       <a href="/Home" title="Go to the homepage">Click if you are not redirected</a>
     </p>
   </body>
-</html>
+</html>`);
+}

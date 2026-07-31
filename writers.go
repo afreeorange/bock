@@ -32,28 +32,57 @@ func writeFile(name string, contents []byte) {
 }
 
 func copyTemplateAssets(config *BockConfig) {
-	// Copy all the css, js, etc
-	for _, a := range [3]string{"css", "img", "js"} {
-		d, err := templatesContent.ReadDir("template/" + a)
+	// Copy all static assets from theme/static/
+	staticDirs := []string{"css", "img", "js"}
+	for _, a := range staticDirs {
+		d, err := themeContent.ReadDir("theme/static/" + a)
 		if err != nil {
 			fmt.Print("Could not read " + a + "...skipping")
-			break
+			continue
 		}
 
 		os.MkdirAll(config.outputFolder+"/"+a, os.ModePerm)
 
 		for _, de := range d {
-			f, _ := templatesContent.ReadFile("template/" + a + "/" + de.Name())
+			f, _ := themeContent.ReadFile("theme/static/" + a + "/" + de.Name())
 			writeFile(config.outputFolder+"/"+a+"/"+de.Name(), f)
 		}
 	}
 
-	// Then copy anything at the root level of the template folder except the
-	// actual template HTML files!
-	d, _ := templatesContent.ReadDir("template")
+	// Copy root-level static files (robots.txt, etc.)
+	d, _ := themeContent.ReadDir("theme/static")
 	for _, de := range d {
-		if filepath.Ext(de.Name()) != ".njk" {
-			f, _ := templatesContent.ReadFile("template/" + de.Name())
+		if !de.IsDir() {
+			f, _ := themeContent.ReadFile("theme/static/" + de.Name())
+			os.WriteFile(config.outputFolder+"/"+de.Name(), f, os.ModePerm)
+		}
+	}
+}
+
+// copyTemplateAssetsFromDisk copies static assets from an on-disk theme path.
+// Used by the dev server when theme files change.
+func copyTemplateAssetsFromDisk(config *BockConfig, themePath string) {
+	staticRoot := filepath.Join(themePath, "static")
+	for _, a := range []string{"css", "img", "js"} {
+		srcDir := filepath.Join(staticRoot, a)
+		entries, err := os.ReadDir(srcDir)
+		if err != nil {
+			continue
+		}
+		os.MkdirAll(config.outputFolder+"/"+a, os.ModePerm)
+		for _, de := range entries {
+			if de.IsDir() {
+				continue
+			}
+			f, _ := os.ReadFile(filepath.Join(srcDir, de.Name()))
+			writeFile(config.outputFolder+"/"+a+"/"+de.Name(), f)
+		}
+	}
+	// Root-level static files
+	entries, _ := os.ReadDir(staticRoot)
+	for _, de := range entries {
+		if !de.IsDir() {
+			f, _ := os.ReadFile(filepath.Join(staticRoot, de.Name()))
 			os.WriteFile(config.outputFolder+"/"+de.Name(), f, os.ModePerm)
 		}
 	}
@@ -354,4 +383,70 @@ func writeTree(config *BockConfig) {
 func writeRandom(config *BockConfig) {
 	html := renderRandom(config)
 	writeFile(config.outputFolder+"/random/index.html", []byte(html))
+}
+
+// rebuildArticle re-renders a single article and updates the database.
+// Used by the dev server for incremental rebuilds.
+func rebuildArticle(config *BockConfig, articlePath string) {
+	info, err := os.Stat(articlePath)
+	if err != nil {
+		fmt.Println("WARN: could not stat", articlePath, ":", err)
+		return
+	}
+
+	entity := Entity{
+		Name:        info.Name(),
+		SizeInBytes: info.Size(),
+		Modified:    info.ModTime(),
+		path:        articlePath,
+	}
+
+	title := removeExtensionFrom(entity.Name)
+	uri := makeURI(articlePath, config.articleRoot)
+	relativePath := makeRelativePath(articlePath, config.articleRoot)
+
+	contents, err := os.ReadFile(articlePath)
+	if err != nil {
+		fmt.Println("WARN: could not read", articlePath, ":", err)
+		return
+	}
+
+	article := Article{
+		Hierarchy:    makeHierarchy(articlePath, config.articleRoot),
+		Html:         "",
+		ID:           makeID(articlePath),
+		path:         articlePath,
+		Size:         entity.SizeInBytes,
+		Source:       string(contents),
+		Title:        title,
+		Untracked:    true,
+		URI:          uri,
+		RelativePath: relativePath,
+	}
+
+	// Update the database row
+	if config.database != nil {
+		config.database.Exec(
+			"INSERT OR REPLACE INTO articles (id, content, modified, title, uri) VALUES (?, ?, ?, ?, ?)",
+			article.ID, string(contents), entity.Modified.UTC(), title, uri,
+		)
+		// Rebuild the FTS index
+		config.database.Exec("INSERT INTO articles_fts(articles_fts) VALUES('rebuild')")
+	}
+
+	html, raw := renderArticle(contents, article, "article", config)
+	article.Html = html
+
+	writeFile(config.outputFolder+uri+"/index.html", []byte(html))
+
+	if config.meta.GenerateRaw {
+		writeFile(config.outputFolder+uri+"/raw.txt", []byte(raw))
+	}
+
+	if config.meta.GenerateJSON {
+		jsonData, _ := jsonMarshal(article)
+		writeFile(config.outputFolder+uri+"/index.json", jsonData)
+	}
+
+	fmt.Printf("  %s\n", relativePath)
 }
