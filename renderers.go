@@ -3,11 +3,13 @@ package main
 import (
 	"bytes"
 	"embed"
+	"io/fs"
+	"os"
+	"time"
 
-	"github.com/flosch/pongo2/v5"
+	"afreeorange/bock/tsx"
 
 	chroma "github.com/alecthomas/chroma/formatters/html"
-	"github.com/dustin/go-humanize"
 	mathjax "github.com/litao91/goldmark-mathjax"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting"
@@ -15,7 +17,6 @@ import (
 	"github.com/yuin/goldmark/renderer/html"
 )
 
-// We use Goldmark as the Markdown converter. Configure it here.
 var markdown = goldmark.New(
 	goldmark.WithRendererOptions(
 		html.WithXHTML(),
@@ -38,54 +39,48 @@ var markdown = goldmark.New(
 	),
 )
 
-//go:embed template
-var templatesContent embed.FS
-var pongoLoader = pongo2.NewFSLoader(templatesContent)
-var templateSet = pongo2.NewSet("template", pongoLoader)
+//go:embed theme
+var themeContent embed.FS
 
-// Register some Pongo filters
-// TODO: How do I prevent this assignment?
-var _ = pongo2.RegisterFilter(
-	"humanizeNumber",
-	func(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
-		return pongo2.AsValue(humanize.Comma(int64(in.Integer()))), nil
-	})
+var engine *tsx.Engine
 
-var t_archive, _ = templateSet.FromCache("template/archive.njk")
-var t_article, _ = templateSet.FromCache("template/article.njk")
-var t_folder, _ = templateSet.FromCache("template/folder.njk")
-var t_index, _ = templateSet.FromCache("template/index.njk")
-var t_not_found, _ = templateSet.FromCache("template/not-found.njk")
-var t_random, _ = templateSet.FromCache("template/random.njk")
-var t_revision_raw, _ = templateSet.FromCache("template/revision-raw.njk")
-var t_revision, _ = templateSet.FromCache("template/revision.njk")
-var t_revisionList, _ = templateSet.FromCache("template/revision-list.njk")
+func initEngine() error {
+	themeFS, err := fs.Sub(themeContent, "theme")
+	if err != nil {
+		return err
+	}
+	engine, err = tsx.NewFromFS(themeFS)
+	return err
+}
+
+func initEngineFromDisk(themePath string) error {
+	var err error
+	engine, err = tsx.NewFromFS(os.DirFS(themePath))
+	return err
+}
 
 func renderIndex(config *BockConfig) string {
-	html, _ := t_index.Execute(pongo2.Context{
+	html, _ := engine.Render("Index", map[string]any{
 		"type":    "index",
 		"version": VERSION,
 	})
-
 	return html
 }
 
 func renderNotFound(config *BockConfig) string {
-	html, _ := t_not_found.Execute(pongo2.Context{
+	html, _ := engine.Render("NotFound", map[string]any{
 		"type":    "not-found",
 		"version": VERSION,
 	})
-
 	return html
 }
 
 func renderRandom(config *BockConfig) string {
-	html, _ := t_random.Execute(pongo2.Context{
+	html, _ := engine.Render("Random", map[string]any{
 		"list":    config.listOfArticles,
 		"type":    "random",
 		"version": VERSION,
 	})
-
 	return html
 }
 
@@ -100,12 +95,12 @@ func renderArticle(
 		panic(err)
 	}
 
-	baseContext := pongo2.Context{
-		"created":      article.Created,
+	html, _ := engine.Render("Article", map[string]any{
+		"created":      article.Created.Format(time.RFC3339),
 		"hierarchy":    article.Hierarchy,
 		"html":         conversionBuffer.String(),
 		"id":           article.ID,
-		"modified":     article.Modified,
+		"modified":     article.Modified.Format(time.RFC3339),
 		"revisions":    article.Revisions,
 		"sizeInBytes":  article.Size,
 		"source":       article.Source,
@@ -117,16 +112,9 @@ func renderArticle(
 		"meta":    config.meta,
 		"type":    entityType,
 		"version": VERSION,
-	}
-
-	html, _ := t_article.Execute(baseContext)
-
-	baseContext.Update(pongo2.Context{
-		"type": "raw",
 	})
 
 	raw := article.Source
-
 	conversionBuffer.Reset()
 
 	return html, raw
@@ -138,7 +126,7 @@ func renderFolder(folder Folder) string {
 		panic(err)
 	}
 
-	html, _ := t_folder.Execute(pongo2.Context{
+	html, _ := engine.Render("Folder", map[string]any{
 		"children":  folder.Children,
 		"hierarchy": folder.Hierarchy,
 		"readme":    conversionBuffer.String(),
@@ -155,7 +143,7 @@ func renderFolder(folder Folder) string {
 }
 
 func renderArchive(config *BockConfig) string {
-	html, _ := t_archive.Execute(pongo2.Context{
+	html, _ := engine.Render("Archive", map[string]any{
 		"title": "Archive",
 		"tree":  config.entityTree,
 		"uri":   "/archive",
@@ -169,7 +157,7 @@ func renderArchive(config *BockConfig) string {
 }
 
 func renderRevisionList(article Article, revisions []Revision) string {
-	html, _ := t_revisionList.Execute(pongo2.Context{
+	html, _ := engine.Render("RevisionList", map[string]any{
 		"revisions": revisions,
 		"hierarchy": article.Hierarchy,
 		"title":     article.Title,
@@ -188,25 +176,40 @@ func renderRevision(article Article, revision Revision) (string, string) {
 		panic(err)
 	}
 
-	baseContext := pongo2.Context{
+	revisionMap := map[string]any{
+		"AuthorEmail": revision.AuthorEmail,
+		"AuthorName":  revision.AuthorName,
+		"Date":        revision.Date.Format(time.RFC3339),
+		"Id":          revision.Id,
+		"ShortId":     revision.ShortId,
+		"Subject":     revision.Subject,
+		"Content":     revision.Content,
+	}
+
+	html, _ := engine.Render("Revision", map[string]any{
 		"html":      conversionBuffer.String(),
 		"hierarchy": article.Hierarchy,
-		"revision":  revision,
+		"revision":  revisionMap,
 		"source":    revision.Content,
 		"title":     article.Title,
 		"uri":       article.URI,
 
 		"type":    "revision",
 		"version": VERSION,
-	}
-	html, _ := t_revision.Execute(baseContext)
-
-	baseContext.Update(pongo2.Context{
-		"type": "revision-raw",
 	})
-	raw, _ := t_revision_raw.Execute(baseContext)
+
+	rawHTML, _ := engine.Render("RevisionRaw", map[string]any{
+		"hierarchy": article.Hierarchy,
+		"revision":  revisionMap,
+		"source":    revision.Content,
+		"title":     article.Title,
+		"uri":       article.URI,
+
+		"type":    "revision-raw",
+		"version": VERSION,
+	})
 
 	conversionBuffer.Reset()
 
-	return html, raw
+	return html, rawHTML
 }

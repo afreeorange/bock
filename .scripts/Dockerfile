@@ -1,10 +1,10 @@
-FROM cimg/go:1.22
+FROM golang:1.25-alpine
 
-# TODO: Can you just fetch/cache `go get .` so that dependencies not re-fetched
-# at each build? You cannot `RUN pushd /project && go get . && popd` for
-# obvious reasons...
+RUN apk add --no-cache gcc musl-dev bash nodejs npm
 
-CMD \
-  pushd /project \
-  && /project/.scripts/build.sh \
-  && popd
+WORKDIR /project
+
+ENV CGO_ENABLED=1
+ENV CGO_LDFLAGS="-static"
+
+CMD ["/project/.scripts/build.sh"]

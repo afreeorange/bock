@@ -97,3 +97,19 @@ type BockConfig struct {
 	started        time.Time
 	workTreeStatus *git.Status
 }
+
+type ArticleHistory struct {
+	created   time.Time
+	modified  time.Time
+	revisions []Revision
+}
+
+type BuildOptions struct {
+	ArticleRoot       string
+	OutputFolder      string
+	GenerateJSON      bool
+	GenerateRaw       bool
+	GenerateRevisions bool
+	UseOnDiskFS       bool
+	ThemePath         string
+}

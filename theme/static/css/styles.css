@@ -9,10 +9,11 @@
   --font-size-base: 16px;
   --font-size-small: calc(var(--font-size-base) / 1.25);
   --font-size-large: calc(var(--font-size-base) * 1.25);
-  --font-family-body: -apple-system, BlinkMacSystemFont, avenir next, avenir,
-    segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
-  --font-family-monospace: Menlo, Consolas, Monaco, Liberation Mono,
-    Lucida Console, monospace;
+  --font-family-body:
+    -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
+    helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+  --font-family-monospace:
+    Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
   --line-height: 1.5;
 
   /* Colors */
@@ -321,13 +322,31 @@ main table tbody tr:not(:last-child) td {
 main hr {
   border: 0;
   height: 0.25em;
-  background-image: linear-gradient(135deg, var(--color-background) 25%, var(--color-light) 25%, var(--color-light) 50%, var(--color-background) 50%, var(--color-background) 75%, var(--color-light) 75%, #3D6F8E 100%);
+  background-image: linear-gradient(
+    135deg,
+    var(--color-background) 25%,
+    var(--color-light) 25%,
+    var(--color-light) 50%,
+    var(--color-background) 50%,
+    var(--color-background) 75%,
+    var(--color-light) 75%,
+    #3d6f8e 100%
+  );
   background-size: 0.5em 0.5em;
 }
 main em {
-  font-family: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman,
-    Droid Serif, Times, Source Serif Pro, serif, Apple Color Emoji,
-    Segoe UI Emoji, Segoe UI Symbol;
+  font-family:
+    Iowan Old Style,
+    Apple Garamond,
+    Baskerville,
+    Times New Roman,
+    Droid Serif,
+    Times,
+    Source Serif Pro,
+    serif,
+    Apple Color Emoji,
+    Segoe UI Emoji,
+    Segoe UI Symbol;
   font-size: 110%;
 }
 main kbd {
