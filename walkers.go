@@ -52,12 +52,6 @@ func makeHierarchy(path string, articleRoot string) []HierarchicalEntity {
 	return c
 }
 
-type ArticleHistory struct {
-	created   time.Time
-	modified  time.Time
-	revisions []Revision
-}
-
 func getArticleHistory(articlePath string, config *BockConfig) (ArticleHistory, error) {
 	relativePath := makeRelativePath(articlePath, config.articleRoot)
 	revisions := []Revision{}

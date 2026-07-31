@@ -6,7 +6,7 @@ export function Hierarchy(props: any) {
   return (
     <nav>
       <ul>
-        {nodes.map((node: any) => (
+        {nodes.map((node: HierarchicalEntity) => (
           <li>
             <a
               data-entity-type={node.Type}

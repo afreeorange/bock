@@ -17,16 +17,6 @@ import (
 	"github.com/shirou/gopsutil/v3/mem"
 )
 
-type BuildOptions struct {
-	ArticleRoot       string
-	OutputFolder      string
-	GenerateJSON      bool
-	GenerateRaw       bool
-	GenerateRevisions bool
-	UseOnDiskFS       bool
-	ThemePath         string
-}
-
 // doBuild runs a full one-shot build. DB is closed when it returns.
 func doBuild(opts BuildOptions) {
 	config := doInitialBuild(opts)

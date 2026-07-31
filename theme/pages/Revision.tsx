@@ -1,7 +1,7 @@
 import { Base } from "../components/Base";
 import { Hierarchy } from "../components/Hierarchy";
 
-export default function Revision(props: any) {
+export default function RevisionPage(props: RevisionProps) {
   return (
     <Base {...props}>
       <Hierarchy nodes={props.hierarchy} type={props.type} uri={props.uri} revision={props.revision} />

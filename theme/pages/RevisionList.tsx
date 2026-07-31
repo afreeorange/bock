@@ -1,7 +1,7 @@
 import { Base } from "../components/Base";
 import { Hierarchy } from "../components/Hierarchy";
 
-export default function RevisionList(props: any) {
+export default function RevisionList(props: RevisionListProps) {
   const revisions = props.revisions || [];
   const count = revisions.length;
   const label = count === 1 ? "Revision" : "Revisions";
@@ -14,13 +14,18 @@ export default function RevisionList(props: any) {
         <span>{count + " " + label}</span>
       </h1>
       <ul>
-        {revisions.map((revision: any) => (
+        {revisions.map((revision: Revision) => (
           <li>
-            <a href={revision.ShortId} title={"View revision " + revision.ShortId}>
+            <a
+              href={revision.ShortId}
+              title={"View revision " + revision.ShortId}
+            >
               {revision.ShortId}
             </a>
             <br />
-            <small>{formatDate(revision.Date, "Monday, 2 January 2006 at 15:04 MST")}</small>
+            <small>
+              {formatDate(revision.Date, "Monday, 2 January 2006 at 15:04 MST")}
+            </small>
             {revision.Subject && (
               <>
                 <br />
@@ -29,7 +34,8 @@ export default function RevisionList(props: any) {
             )}
             <br />
             <small>
-              {revision.AuthorName} <code>{"<" + revision.AuthorEmail + ">"}</code>
+              {revision.AuthorName}{" "}
+              <code>{"<" + revision.AuthorEmail + ">"}</code>
             </small>
           </li>
         ))}

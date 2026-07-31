@@ -2,7 +2,7 @@ import { Nav } from "./Nav";
 import { Footer } from "./Footer";
 
 export function Base(props: any) {
-  const { title, type, version } = props;
+  const { title, type } = props;
 
   return (
     <html lang="en">

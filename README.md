@@ -13,20 +13,84 @@ See [the releases page](https://github.com/afreeorange/bock/releases) for a few 
 Here's how you can run from source:
 
 ```bash
-# Clone repo
 git clone https://github.com/afreeorange/bock.git
+cd bock && npm install
 
-# Now point it at a git repository full of Markdown files
-# and tell it where to generate the output. You need to use
-# absolute paths for now.
-go run --tags "fts5" . --in=/path/to/repo --out=/path/to/output --without-revisions
+# Build mode: generate a static wiki
+go run --tags "fts5" . build --in=/path/to/repo --out=/path/to/output
 
-# If your article repository is managed by git, you can omit
-# that last flag to generate ✨article revisions✨
-go run --tags "fts5" . --in=/path/to/repo --out=/path/to/output
+# Serve mode: build + live-reload dev server
+go run --tags "fts5" . serve --in=/path/to/repo --out=/path/to/output
 ```
 
-Add a `--help` flag to see some more options.
+Add `--help` to see all options.
+
+## Commands
+
+### `build`
+
+One-shot static site generation. Reads a git repository of Markdown files, renders everything to HTML, and exits.
+
+```
+bock build --in=<path> --out=<path> [options]
+```
+
+Options:
+
+- `--in=<path>` &mdash; Path to article repository (required)
+- `--out=<path>` &mdash; Output directory (required)
+- `--with-json-files` &mdash; Generate JSON alongside HTML
+- `--with-raw-markdown-files` &mdash; Generate raw markdown source files
+- `--without-revisions` &mdash; Skip git history (much faster)
+- `--using-disk-fs` &mdash; Use on-disk git instead of in-memory clone
+
+### `serve`
+
+Builds the wiki and starts a dev server with WebSocket-based live reload. Revisions are always skipped in serve mode for speed.
+
+```
+bock serve --in=<path> --out=<path> [options]
+```
+
+Additional options:
+
+- `--port=<number>` &mdash; Port to serve on (default 8080)
+- `--theme=<path>` &mdash; Theme directory on disk (defaults to `./theme/` if present)
+
+The server watches both the article repository and the theme directory. When files change:
+
+- **Article changes** (.md files) &mdash; incrementally rebuild that article only
+- **Theme template changes** (.tsx) &mdash; re-compile the engine and re-render all pages concurrently
+- **Static asset changes** (css/js/img) &mdash; copy to output without re-rendering
+
+After any change, the server broadcasts a `reload` message over the WebSocket and the browser refreshes automatically.
+
+## TSX Templating
+
+All page templates and components live in `theme/` as TSX files:
+
+```
+theme/
+  pages/         # Page templates (one per route type)
+  components/    # Shared components (Base, Nav, Footer, etc.)
+  static/        # CSS, JS, images served as-is
+  tsconfig.json  # IDE type checking via Preact
+  globals.d.ts   # Types for formatDate, humanizeNumber
+```
+
+Templates are pure function components &mdash; no hooks, no state, no lifecycle methods. They are compiled at startup by esbuild (via Go's esbuild API) and rendered server-side in [goja](https://github.com/dop251/goja) (a Go JS runtime) using [Preact](https://preactjs.com/) + [preact-render-to-string](https://github.com/preactjs/preact-render-to-string).
+
+Two helper functions are injected as globals:
+
+- `formatDate(isoString, goLayout)` &mdash; formats an ISO date using Go's time layout syntax
+- `humanizeNumber(n)` &mdash; formats a number with commas (e.g. `1,234,567`)
+
+To rebuild the Preact runtime bundle after upgrading the npm dependency:
+
+```bash
+npm install
+make bundle
+```
 
 ## Terminology and Setup
 
@@ -49,62 +113,34 @@ Other stuff:
 - Any dotfiles or dotfolders are ignored when generating the entity-tree.
   - This includes `node_modules`. See [this file](https://github.com/afreeorange/bock/blob/master/constants.go) for other things. It's a small list.
 
-That's really about it.
-
 ## What It Does
 
-The first command in the "Usage" section will generate the following (using [this article](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time) as an example):
+The build command generates the following (using [this article](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time) as an example):
 
 - Every Markdown article in your repository rendered as [HTML](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/), [Raw Markdown](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/raw/), and [JSON](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/index.json)
 - A [listing of all revisions](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/revisions) for each article, if applicable. Some articles can be untracked and they will be annotated as such.
-- Each article's revision rendered as [HTML](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/revisions/04c7d651/) and [Raw Markdown](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/revisions/04c7d651/raw) (Unless you set `-R=false`. Things will go _much_ faster too!)
+- Each article's revision rendered as [HTML](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/revisions/04c7d651/) and [Raw Markdown](https://wiki.nikhil.io/CNN-IBNs_List_of_the_100_Greatest_Indian_Films_of_All_Time/revisions/04c7d651/raw)
 - Each folder's structure in [HTML](https://wiki.nikhil.io/Food/) and [JSON](https://wiki.nikhil.io/Food/index.json)
-- [An archive page](https://wiki.nikhil.io/archive/) that lets you search your articles thanks to SQLite and [SQL.js](https://github.com/sql-js/sql.js/)
-- A Homepage (if it doesn't exist as `Home.md`) at [`/Home`](https://wiki.nikhil.io/Home/)
-- A page that redirects to some random article at [`/random`](https://wiki.nikhil.io/random/)
-- An index page that redirects to `/Home`
+- [An archive page](https://wiki.nikhil.io/archive/) with full-text search via SQLite and [SQL.js](https://github.com/sql-js/sql.js/)
+- A Homepage at [`/Home`](https://wiki.nikhil.io/Home/)
+- A page that redirects to a random article at [`/random`](https://wiki.nikhil.io/random/)
 - A 404 Page at [`/404.html`](https://wiki.nikhil.io/404.html)
 
-A giant work in progress but works pretty well for me so far. Uses a baby implementation of Go's [WaitGroups](https://gobyexample.com/waitgroups) so will be slow on older machines or those with less memory.
+## Architecture
 
-## Upcoming Features
-
-- [ ] Recently added articles
-- [ ] Recently updated articles
-- [ ] Articles that have not been checked in! "Warning you have x untracked articles...."
-- [ ] Revision Search in DB
-- [ ] Categories/Tags
-- [ ] Frontmatter support
-- [ ] Local development server with live-reloading
-- [ ] Customizable Templates with config JSON/YAML
-- [x] Option to disable revision histories
-- [ ] Better/finer concurrency control
-- [ ] [Table of Contents](https://github.com/abhinav/goldmark-toc)
-- [ ] [Treeviews in CSS](https://iamkate.com/code/tree-views/)
-- [x] MathJAX Support
-  - [ ] Self-hosted MathJAX
-- [ ] [Password-protected articles](https://github.com/robinmoisson/staticrypt)?
-- [ ] [SQLite Driver without CGO](https://gitlab.com/cznic/sqlite)? Appears to be slower but I don't care.
-
----
-
-## Other Notes
-
-```golang
-	go func() {
-		for {
-			log.Printf("Number of goroutines: %d", runtime.NumGoroutine())
-			time.Sleep(1 * time.Second)
-		}
-	}()
 ```
+main.go           CLI: parse flags, dispatch to build/serve
+build.go          Build orchestration, serve mode, re-render logic
+renderers.go      Markdown (goldmark) + TSX (Preact/goja) rendering
+writers.go        File and database output
 
-- [GoReleaser](https://goreleaser.com/quick-start/) and [Image](https://circleci.com/developer/orbs/orb/hubci/goreleaser) for CircleCI
-- [Stricter formatting](https://github.com/mvdan/gofumpt)
-- [Lovely stuff for CLIs](https://charm.sh/)
-- [You Don't Need a Library for File Walking in Go](https://engineering.kablamo.com.au/posts/2021/quick-comparison-between-go-file-walk-implementations/)
-- [gojekyll](https://github.com/osteele/gojekyll)
-- [gostatic](https://github.com/piranha/gostatic)
-- [A Guide to Build awesome CLIs](https://clig.dev/)
-- [Script](https://github.com/bitfield/script), a lovely little script-y library for Golang!
-- [fuhgit](https://github.com/runxiyu/furgit) - Faster git client - Most people appear to go to the shell for `git` stuff given the speed of `go-git`
+tsx/
+  engine.go       Compiles TSX via esbuild, renders via goja
+  engine_test.go  Unit tests for the rendering engine
+  preact.js       Bundled Preact runtime (go:embed-ed into binary)
+  preact-entry.js Entry file for rebuilding preact.js
+
+server/
+  server.go       HTTP server, WebSocket hub, fsnotify file watcher
+  reload.js       Client-side script: reconnects + reloads on message
+```

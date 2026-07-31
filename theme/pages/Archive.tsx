@@ -1,6 +1,6 @@
 import { Base } from "../components/Base";
 
-function EntityNode(props: any) {
+function EntityNode(props: { entity: Entity }) {
   const { entity } = props;
   const type = entity.IsFolder ? "folder" : "article";
 
@@ -11,7 +11,7 @@ function EntityNode(props: any) {
       </a>
       {entity.Children && entity.Children.length > 0 && (
         <ul>
-          {entity.Children.map((child: any) => (
+          {entity.Children.map((child: Entity) => (
             <EntityNode entity={child} />
           ))}
         </ul>
@@ -20,7 +20,7 @@ function EntityNode(props: any) {
   );
 }
 
-export default function Archive(props: any) {
+export default function Archive(props: ArchiveProps) {
   const scripts = (
     <>
       <script src="/js/sql-wasm.js"></script>
@@ -39,7 +39,7 @@ export default function Archive(props: any) {
       <ul data-content="results"></ul>
       <ul data-content="tree">
         {props.tree &&
-          props.tree.map((entity: any) => <EntityNode entity={entity} />)}
+          props.tree.map((entity: Entity) => <EntityNode entity={entity} />)}
       </ul>
     </Base>
   );

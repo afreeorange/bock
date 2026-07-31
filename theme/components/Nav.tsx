@@ -27,11 +27,7 @@ export function Nav(props: any) {
 
           {meta && meta.GenerateRaw && type === "article" && (
             <li>
-              <a
-                href={uri + "/raw.txt"}
-                className={type === "raw" || type === "revision-raw" ? "active" : ""}
-                title="View Source"
-              >
+              <a href={uri + "/raw.txt"} title="View Source">
                 <span>Raw</span>
               </a>
             </li>
@@ -41,7 +37,6 @@ export function Nav(props: any) {
             <li>
               <a
                 href={uri + "/revisions/" + (revision && revision.ShortId) + "/raw.txt"}
-                className={type === "raw" || type === "revision-raw" ? "active" : ""}
                 title="View Source"
               >
                 <span>Raw</span>
