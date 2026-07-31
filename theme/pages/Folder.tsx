@@ -6,7 +6,7 @@ export default function Folder(props: any) {
     <Base {...props}>
       <Hierarchy nodes={props.hierarchy} type={props.type} uri={props.uri} />
       <h1>{props.title}</h1>
-      {props.readme && raw(props.readme)}
+      {props.readme && <div dangerouslySetInnerHTML={{__html: props.readme}} />}
       <ul data-content="tree">
         {props.children &&
           props.children.Folders &&

@@ -1,7 +1,7 @@
 export function Hierarchy(props: any) {
   const { nodes, type, uri, revision } = props;
 
-  if (!nodes || nodes.length === 0) return raw("");
+  if (!nodes || nodes.length === 0) return null;
 
   return (
     <nav>
@@ -32,7 +32,7 @@ export function Hierarchy(props: any) {
               </a>
             </li>
             <li>
-              <span>{raw("Revision " + (revision && revision.ShortId))}</span>
+              <span>{"Revision " + (revision && revision.ShortId)}</span>
             </li>
           </>
         )}
@@ -50,7 +50,7 @@ export function Hierarchy(props: any) {
                 href={uri + "/revisions/" + (revision && revision.ShortId)}
                 title={"View revision " + (revision && revision.ShortId)}
               >
-                {raw("Revision " + (revision && revision.ShortId))}
+                {"Revision " + (revision && revision.ShortId)}
               </a>
             </li>
             <li>

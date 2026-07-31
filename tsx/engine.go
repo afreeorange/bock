@@ -13,33 +13,22 @@ import (
 	"github.com/evanw/esbuild/pkg/api"
 )
 
-//go:embed dom.js
-var domPolyfill string
+//go:embed preact.js
+var jsxRuntime string
 
-// Engine compiles and caches TSX templates, renders them via goja + NanoJSX.
+// Engine compiles and caches TSX templates, renders them via goja.
 type Engine struct {
-	compiled    map[string]string // page name → compiled JS
-	domProgram  *goja.Program     // pre-compiled DOM polyfill
-	nanoProgram *goja.Program     // pre-compiled NanoJSX
+	compiled   map[string]string // page name → compiled JS
+	jsxProgram *goja.Program     // pre-compiled JSX runtime
 }
 
 // NewFromFS compiles all .tsx under components/ and pages/ from the given FS.
-// Reads NanoJSX from static/js/nano.full.min.js in the same FS.
 func NewFromFS(themeFS fs.FS) (*Engine, error) {
-	// Pre-compile DOM polyfill
-	domProg, err := goja.Compile("dom.js", domPolyfill, false)
+	// Pre-compile JSX runtime The first arg  is just a filename label for error
+	// messages/stack traces — it's stale from the old name. Let me fix that.
+	jsxProg, err := goja.Compile("preact.js", jsxRuntime, false)
 	if err != nil {
-		return nil, fmt.Errorf("compiling DOM polyfill: %w", err)
-	}
-
-	// Read and pre-compile NanoJSX from theme static assets
-	nanoSource, err := fs.ReadFile(themeFS, "static/js/nano.full.min.js")
-	if err != nil {
-		return nil, fmt.Errorf("reading NanoJSX: %w", err)
-	}
-	nanoProg, err := goja.Compile("nano.js", string(nanoSource), false)
-	if err != nil {
-		return nil, fmt.Errorf("compiling NanoJSX: %w", err)
+		return nil, fmt.Errorf("compiling JSX runtime: %w", err)
 	}
 
 	// Read all tsx source files into memory for the esbuild resolver
@@ -77,7 +66,7 @@ func NewFromFS(themeFS fs.FS) (*Engine, error) {
 		compiled[name] = js
 	}
 
-	return &Engine{compiled: compiled, domProgram: domProg, nanoProgram: nanoProg}, nil
+	return &Engine{compiled: compiled, jsxProgram: jsxProg}, nil
 }
 
 // compile bundles a single page TSX file, resolving imports from sources.
@@ -128,8 +117,8 @@ func compile(entrySource string, entryPath string, sources map[string]string) (s
 		Bundle:      true,
 		Write:       false,
 		JSX:         api.JSXTransform,
-		JSXFactory:  "nanoJSX.h",
-		JSXFragment: "nanoJSX.Fragment",
+		JSXFactory:  "h",
+		JSXFragment: "Fragment",
 		Target:      api.ES2015,
 		Format:      api.FormatIIFE,
 		GlobalName:  "__module",
@@ -149,9 +138,9 @@ func compile(entrySource string, entryPath string, sources map[string]string) (s
 	}
 
 	// The compiled JS defines __module with a "default" export.
-	// Render via NanoJSX into a root element and extract innerHTML.
+	// Render the page component to an HTML string via Preact.
 	js := string(result.OutputFiles[0].Contents)
-	wrapped := js + "\nvar __root = document.createElement(\"div\");\nnanoJSX.render(__module.default(__props), __root);\nvar __html = __root.innerHTML;\n"
+	wrapped := js + "\nvar __html = renderToString(h(__module.default, __props));\n"
 
 	return wrapped, nil
 }
@@ -169,14 +158,9 @@ func (e *Engine) Render(pageName string, props map[string]any) (string, error) {
 
 	vm := goja.New()
 
-	// Inject DOM polyfill (must come before NanoJSX)
-	if _, err := vm.RunProgram(e.domProgram); err != nil {
-		return "", fmt.Errorf("injecting DOM polyfill: %w", err)
-	}
-
-	// Inject NanoJSX
-	if _, err := vm.RunProgram(e.nanoProgram); err != nil {
-		return "", fmt.Errorf("injecting NanoJSX: %w", err)
+	// Inject JSX runtime
+	if _, err := vm.RunProgram(e.jsxProgram); err != nil {
+		return "", fmt.Errorf("injecting JSX runtime: %w", err)
 	}
 
 	// Inject helper functions
@@ -214,7 +198,11 @@ func (e *Engine) Render(pageName string, props map[string]any) (string, error) {
 		return "", fmt.Errorf("template %s produced no output", pageName)
 	}
 
-	return result.String(), nil
+	html := result.String()
+	if strings.HasPrefix(html, "<html") {
+		html = "<!DOCTYPE html>" + html
+	}
+	return html, nil
 }
 
 // Pages returns the list of compiled page names.

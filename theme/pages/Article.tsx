@@ -4,12 +4,12 @@ import { Hierarchy } from "../components/Hierarchy";
 export default function Article(props: any) {
   const footerElements = (
     <>
-      <li>{raw(humanizeNumber(props.sizeInBytes) + " bytes")}</li>
+      <li>{humanizeNumber(props.sizeInBytes) + " bytes"}</li>
       {!props.untracked && (
         <>
-          <li>{raw("Created on " + formatDate(props.created, "Monday, 2 January 2006 at 15:04 MST"))}</li>
-          <li>{raw("Modified on " + formatDate(props.modified, "Monday, 2 January 2006 at 15:04 MST"))}</li>
-          {raw("<br/>")}
+          <li>{"Created on " + formatDate(props.created, "Monday, 2 January 2006 at 15:04 MST")}</li>
+          <li>{"Modified on " + formatDate(props.modified, "Monday, 2 January 2006 at 15:04 MST")}</li>
+          <br />
           <li>
             <a
               href={"https://github.com/afreeorange/wiki.nikhil.io.articles/edit/master/" + props.relativePath}
@@ -30,7 +30,7 @@ export default function Article(props: any) {
         {props.title}
         {props.meta && props.meta.GenerateRevisions && props.untracked && <span>Untracked</span>}
       </h1>
-      {raw(props.html)}
+      <div dangerouslySetInnerHTML={{__html: props.html}} />
     </Base>
   );
 }

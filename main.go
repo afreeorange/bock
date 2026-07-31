@@ -132,7 +132,6 @@ func main() {
 		doBuild(opts)
 	case "serve":
 		port := parsePort(flagArgs)
-		doBuild(opts)
 		doServe(opts, port)
 	}
 }

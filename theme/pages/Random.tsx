@@ -7,13 +7,15 @@ export default function Random(props: any) {
     })
     .join(",");
 
-  const scripts = raw(`<script type="text/javascript">
+  const scripts = (
+    <script type="text/javascript" dangerouslySetInnerHTML={{__html: `
     (() => {
       const list = [${listJSON}].filter(_ => !_.isFolder).map(_ => _.uri);
       const randomIndex = Math.floor(Math.random() * list.length);
       setTimeout(() => window.location.assign(list[randomIndex]), 3000);
     })();
-  </script>`);
+  `}} />
+  );
 
   return (
     <Base {...props} scripts={scripts}>

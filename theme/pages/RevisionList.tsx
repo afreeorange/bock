@@ -11,7 +11,7 @@ export default function RevisionList(props: any) {
       <Hierarchy nodes={props.hierarchy} type={props.type} uri={props.uri} />
       <h1>
         {props.title}
-        <span>{raw(count + " " + label)}</span>
+        <span>{count + " " + label}</span>
       </h1>
       <ul>
         {revisions.map((revision: any) => (
@@ -19,17 +19,17 @@ export default function RevisionList(props: any) {
             <a href={revision.ShortId} title={"View revision " + revision.ShortId}>
               {revision.ShortId}
             </a>
-            {raw("<br/>")}
-            <small>{raw(formatDate(revision.Date, "Monday, 2 January 2006 at 15:04 MST"))}</small>
+            <br />
+            <small>{formatDate(revision.Date, "Monday, 2 January 2006 at 15:04 MST")}</small>
             {revision.Subject && (
               <>
-                {raw("<br/>")}
+                <br />
                 <small>{revision.Subject}</small>
               </>
             )}
-            {raw("<br/>")}
+            <br />
             <small>
-              {revision.AuthorName} {raw("<code>&lt;" + revision.AuthorEmail + "&gt;</code>")}
+              {revision.AuthorName} <code>{"<" + revision.AuthorEmail + ">"}</code>
             </small>
           </li>
         ))}

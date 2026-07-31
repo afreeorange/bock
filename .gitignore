@@ -1,5 +1,6 @@
 dist/
 bock
+node_modules
 .claude
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,go

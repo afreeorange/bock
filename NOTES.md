@@ -1,6 +1,5 @@
 ## Development Notes
 
-
 ```bash
 # Initialize this project
 go mod init afreeorange/bock

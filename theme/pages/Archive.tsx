@@ -23,14 +23,16 @@ function EntityNode(props: any) {
 export default function Archive(props: any) {
   const scripts = (
     <>
-      {raw('<script src="/js/sql-wasm.js"></script>')}
-      {raw('<script src="/js/search.js"></script>')}
+      <script src="/js/sql-wasm.js"></script>
+      <script src="/js/search.js"></script>
     </>
   );
 
   return (
     <Base {...props} scripts={scripts}>
-      <h1>{raw("Search " + humanizeNumber(props.meta.ArticleCount) + " articles")}</h1>
+      <h1>
+        {"Search " + humanizeNumber(props.meta.ArticleCount) + " articles"}
+      </h1>
       <form role="search">
         <input placeholder="3 or more characters" autofocus />
       </form>

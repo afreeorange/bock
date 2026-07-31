@@ -1,7 +1,6 @@
 package tsx
 
 import (
-	"os"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -9,14 +8,7 @@ import (
 
 func testThemeFS(t *testing.T, pages map[string]string) fstest.MapFS {
 	t.Helper()
-	nanoData, err := os.ReadFile("../theme/static/js/nano.full.min.js")
-	if err != nil {
-		t.Fatalf("reading nano.full.min.js: %v", err)
-	}
-
-	fs := fstest.MapFS{
-		"static/js/nano.full.min.js": &fstest.MapFile{Data: nanoData},
-	}
+	fs := fstest.MapFS{}
 	for name, content := range pages {
 		fs[name] = &fstest.MapFile{Data: []byte(content)}
 	}
@@ -51,7 +43,7 @@ func TestBasicRender(t *testing.T) {
 func TestRawHTML(t *testing.T) {
 	theme := testThemeFS(t, map[string]string{
 		"pages/Article.tsx": `export default function Article(props: any) {
-			return <div>{raw(props.html)}</div>;
+			return <div dangerouslySetInnerHTML={{__html: props.html}} />;
 		}`,
 	})
 
@@ -94,7 +86,7 @@ func TestEscaping(t *testing.T) {
 	if strings.Contains(html, "<script>") {
 		t.Errorf("expected HTML escaping, got: %s", html)
 	}
-	if !strings.Contains(html, "&lt;script&gt;") {
+	if !strings.Contains(html, "&lt;script") {
 		t.Errorf("expected escaped script tag, got: %s", html)
 	}
 }

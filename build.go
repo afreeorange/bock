@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 
 	"afreeorange/bock/server"
@@ -214,6 +215,9 @@ func doServe(opts BuildOptions, port int) {
 		opts.ThemePath = themePath
 	}
 
+	// Skip revisions in serve mode — they are expensive
+	opts.GenerateRevisions = false
+
 	config := doInitialBuild(opts)
 	defer config.database.Close()
 
@@ -255,13 +259,15 @@ func doServe(opts BuildOptions, port int) {
 					copyTemplateAssetsFromDisk(config, themePath)
 				}
 
-				// Re-init engine for TSX/component changes
-				fmt.Println("Theme changed — re-rendering")
-				if err := initEngineFromDisk(themePath); err != nil {
-					fmt.Println("ERROR re-init engine:", err)
-					return
+				// Only re-compile and re-render if non-static files changed
+				if !staticChanged || len(changedPaths) > countStaticPaths(changedPaths, themePath) {
+					fmt.Println("Theme changed — re-rendering")
+					if err := initEngineFromDisk(themePath); err != nil {
+						fmt.Println("ERROR re-init engine:", err)
+						return
+					}
+					reRenderAll(config)
 				}
-				reRenderAll(config)
 				return
 			}
 
@@ -276,14 +282,36 @@ func doServe(opts BuildOptions, port int) {
 	}
 }
 
+func countStaticPaths(paths []string, themePath string) int {
+	staticPrefix := filepath.Join(themePath, "static")
+	n := 0
+	for _, p := range paths {
+		if strings.HasPrefix(p, staticPrefix) {
+			n++
+		}
+	}
+	return n
+}
+
 // reRenderAll re-renders every article and special page using the current engine.
-// Does NOT redo git/entity discovery — just re-applies templates.
+// Does NOT redo git/entity discovery or touch the DB — just re-applies templates.
 func reRenderAll(config *BockConfig) {
 	start := time.Now()
 
-	for _, e := range *config.listOfArticles {
-		rebuildArticle(config, e.path)
+	articles := *config.listOfArticles
+	sem := make(chan struct{}, runtime.NumCPU())
+	var wg sync.WaitGroup
+
+	for _, e := range articles {
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(articlePath string) {
+			defer wg.Done()
+			defer func() { <-sem }()
+			renderToDisk(config, articlePath)
+		}(e.path)
 	}
+	wg.Wait()
 
 	writeIndex(config)
 	write404(config)
@@ -292,8 +320,36 @@ func reRenderAll(config *BockConfig) {
 
 	homePath := config.articleRoot + "/Home.md"
 	if _, err := os.Stat(homePath); err == nil {
-		rebuildArticle(config, homePath)
+		renderToDisk(config, homePath)
 	}
 
-	fmt.Printf("Re-rendered all pages in %s\n", time.Since(start))
+	fmt.Printf("Re-rendered %d pages in %s\n", len(articles), time.Since(start))
+}
+
+// renderToDisk renders a single article to its output file without touching the DB.
+func renderToDisk(config *BockConfig, articlePath string) {
+	info, err := os.Stat(articlePath)
+	if err != nil {
+		return
+	}
+
+	contents, err := os.ReadFile(articlePath)
+	if err != nil {
+		return
+	}
+
+	article := Article{
+		Hierarchy:    makeHierarchy(articlePath, config.articleRoot),
+		ID:           makeID(articlePath),
+		path:         articlePath,
+		Size:         info.Size(),
+		Source:       string(contents),
+		Title:        removeExtensionFrom(info.Name()),
+		Untracked:    true,
+		URI:          makeURI(articlePath, config.articleRoot),
+		RelativePath: makeRelativePath(articlePath, config.articleRoot),
+	}
+
+	html, _ := renderArticle(contents, article, "article", config)
+	writeFile(config.outputFolder+article.URI+"/index.html", []byte(html))
 }
