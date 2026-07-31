@@ -1,4 +1,4 @@
-<img src="https://public.nikhil.io/bock-logo.png" style="width: 14em;" align="right" />
+<img src="https://public.nikhil.io/bock-logo-2.png" style="width: 14em;" align="right" />
 
 # bock
 
