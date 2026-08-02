@@ -790,6 +790,16 @@ mark {
         }
       }
     }
+    li {
+      ul {
+        margin-left: calc(var(--spacing) * 6);
+        li {
+          ul {
+            margin-left: calc(var(--spacing) * 6);
+          }
+        }
+      }
+    }
     li[data-entity-type="article"]::before {
       margin-right: calc(var(--spacing) * 2);
       display: inline-block;

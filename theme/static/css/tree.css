@@ -6,6 +6,18 @@
       @apply hover:text-red-600 hover:decoration-red-600 underline transition-all;
     }
 
+    li {
+      ul {
+        @apply ml-6;
+
+        li {
+          ul {
+            @apply ml-6;
+          }
+        }
+      }
+    }
+
     li[data-entity-type="article"]::before {
       @apply inline-block bg-black mr-2 size-4 mask-contain;
       content: "";
