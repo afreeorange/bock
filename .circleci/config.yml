@@ -43,6 +43,7 @@ jobs:
       - run:
           name: Install Go
           command: brew install go
+          no_output_timeout: 15m
       - restore_cache:
           keys:
             - go-mod-macos-v1-{{ checksum "go.sum" }}
