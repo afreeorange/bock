@@ -792,17 +792,20 @@ mark {
     }
     li {
       ul {
-        margin-left: calc(var(--spacing) * 6);
         li {
           ul {
-            margin-left: calc(var(--spacing) * 6);
+            margin-left: calc(var(--spacing) * 4);
           }
         }
       }
     }
+    li[data-entity-type="article"] {
+      display: flex;
+      grid-template-columns: repeat(10%, auto);
+    }
     li[data-entity-type="article"]::before {
-      margin-right: calc(var(--spacing) * 2);
-      display: inline-block;
+      margin-right: var(--spacing);
+      display: block;
       width: calc(var(--spacing) * 4);
       height: calc(var(--spacing) * 4);
       background-color: var(--color-black);

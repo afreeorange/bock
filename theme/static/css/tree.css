@@ -8,18 +8,21 @@
 
     li {
       ul {
-        @apply ml-6;
-
         li {
           ul {
-            @apply ml-6;
+            @apply ml-4;
           }
         }
       }
     }
 
+    li[data-entity-type="article"] {
+      @apply flex;
+      grid-template-columns: repeat(10%, auto);
+    }
+
     li[data-entity-type="article"]::before {
-      @apply inline-block bg-black mr-2 size-4 mask-contain;
+      @apply block bg-black mr-1 size-4 mask-contain;
       content: "";
       -webkit-mask-image: url(/img/angle.svg);
       mask-image: url(/img/angle.svg);
