@@ -40,7 +40,7 @@ export default function Article(props: ArticleProps) {
           <h1>
             {props.title}
             {props.meta && props.meta.GenerateRevisions && props.untracked && (
-              <span> Untracked</span>
+              <span>Untracked</span>
             )}
           </h1>
         </header>

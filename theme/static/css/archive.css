@@ -16,7 +16,7 @@
         @apply overflow-x-hidden;
 
         a {
-          @apply block mb-1 font-bold hover:text-red-600 underline;
+          @apply block mb-1 font-bold hover:text-red-600 text-xl underline;
         }
       }
 

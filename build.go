@@ -208,7 +208,15 @@ func doServe(opts BuildOptions, port int) {
 	// Skip revisions in serve mode — they are expensive
 	opts.GenerateRevisions = false
 
+	// Show all nav icons in serve mode
+	opts.GenerateRaw = true
+	opts.GenerateJSON = true
+
 	config := doInitialBuild(opts)
+
+	// Show revision icon even though we skipped git history
+	config.meta.GenerateRevisions = true
+	reRenderAll(config)
 	defer config.database.Close()
 
 	articleRoot := strings.TrimRight(opts.ArticleRoot, "/")

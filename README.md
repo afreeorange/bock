@@ -126,6 +126,8 @@ Two helper functions are injected as globals:
 - `formatDate(isoString, goLayout)` &mdash; formats an ISO date using Go's time layout syntax
 - `humanizeNumber(n)` &mdash; formats a number with commas (e.g. `1,234,567`)
 
+NOTE: Run the `build` first and then `serve` for complete theme development.
+
 ### Note on the Preact Runtime
 
 The Preact runtime is pre-bundled at `tsx/preact.js` and embedded into the binary via `go:embed`. To rebuild it (e.g. after upgrading Preact), install `preact` and `preact-render-to-string` via NPM, then bundle with esbuild:
@@ -174,5 +176,8 @@ server/
 ### Development with TailwindCSS
 
 ```bash
-npx @tailwindcss/cli -i ./theme/static/css/styles-dev.css -o ./theme/static/css/styles.css --watch
+npx @tailwindcss/cli \
+  -i ./theme/static/css/main.css \
+  -o ./theme/static/css/styles.css \
+  --watch
 ```

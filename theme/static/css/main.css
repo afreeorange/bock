@@ -1,3 +1,13 @@
+/**
+This is the main file to edit. Do not edit `styles.css` by hand! Start a
+live-reloading server with this:
+
+npx @tailwindcss/cli \
+  -i ./theme/static/css/main.css \
+  -o ./theme/static/css/styles.css \
+  --watch
+*/
+
 @import "tailwindcss";
 
 html,
@@ -7,21 +17,24 @@ body {
   @apply bg-amber-400;
 }
 
+h1 {
+  @apply font-bold text-3xl;
+
+  span:nth-of-type(1) {
+    @apply ml-1 px-1 border rounded-lg text-lg align-middle;
+  }
+
+  span:nth-of-type(2) {
+    @apply block text-xl;
+  }
+}
+
+mark {
+  @apply px-1 rounded-lg bg-amber-500/50;
+}
+
 .container {
   @apply mx-auto p-4 max-w-3xl;
-
-  /** Global Heading **/
-  h1 {
-    @apply font-bold text-3xl;
-
-    span {
-      @apply px-1 border rounded-lg  bg-amber-500/50 ml-1 text-lg align-middle;
-    }
-  }
-
-  mark {
-    @apply px-1  rounded-lg  bg-amber-500/50;
-  }
 
   > header {
     @apply opacity-30 hover:opacity-100 mt-2 mb-4 transition-all;
@@ -75,26 +88,12 @@ body {
   }
 }
 
-@import "./article.css";
 @import "./archive.css";
+@import "./article.css";
 @import "./breadcrumbs.css";
-@import "./random.css";
-@import "./tree.css";
 @import "./folder.css";
+@import "./footer.css";
 @import "./not-found.css";
-
-footer {
-  @apply opacity-30 hover:opacity-100 my-6 text-sm transition-all;
-
-  a {
-    @apply hover:text-red-600 underline;
-  }
-
-  ul li:last-of-type a::before {
-    @apply inline-block bg-black mr-1 md:-ml-6 size-5 align-middle;
-    content: "";
-
-    -webkit-mask-image: url(/img/bock.svg);
-    mask-image: url(/img/bock.svg);
-  }
-}
+@import "./random.css";
+@import "./revisions.css";
+@import "./tree.css";

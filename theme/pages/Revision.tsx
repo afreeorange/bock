@@ -10,7 +10,7 @@ export default function RevisionPage(props: RevisionProps) {
         <span>Revision</span>
         <span>{"as of " + formatDate(props.revision.Date, "Monday, 2 January 2006 at 15:04 MST")}</span>
       </h1>
-      <div dangerouslySetInnerHTML={{__html: props.html}} />
+      <article-content dangerouslySetInnerHTML={{__html: props.html}} />
     </Base>
   );
 }
