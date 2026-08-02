@@ -5,10 +5,12 @@ export default function Folder(props: FolderProps) {
   return (
     <Base {...props}>
       <Hierarchy nodes={props.hierarchy} type={props.type} uri={props.uri} />
-      <h1>{props.title}</h1>
-      {props.readme && (
-        <div dangerouslySetInnerHTML={{ __html: props.readme }} />
-      )}
+      <header>
+        <h1>{props.title}</h1>
+        {props.readme && (
+          <div dangerouslySetInnerHTML={{ __html: props.readme }} />
+        )}
+      </header>
       <ul data-content="tree">
         {props.children &&
           props.children.Folders &&

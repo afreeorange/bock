@@ -4,7 +4,7 @@ export function Hierarchy(props: any) {
   if (!nodes || nodes.length === 0) return null;
 
   return (
-    <nav>
+    <article-breadcrumbs>
       <ul>
         {nodes.map((node: HierarchicalEntity) => (
           <li>
@@ -27,7 +27,11 @@ export function Hierarchy(props: any) {
         {type === "revision" && (
           <>
             <li>
-              <a data-entity-type="revision-list" href={uri + "/revisions"} title="Article revisions">
+              <a
+                data-entity-type="revision-list"
+                href={uri + "/revisions"}
+                title="Article revisions"
+              >
                 Revisions
               </a>
             </li>
@@ -40,7 +44,11 @@ export function Hierarchy(props: any) {
         {type === "revision-raw" && (
           <>
             <li>
-              <a data-entity-type="revision-list" href={uri + "/revisions"} title="Article revisions">
+              <a
+                data-entity-type="revision-list"
+                href={uri + "/revisions"}
+                title="Article revisions"
+              >
                 Revisions
               </a>
             </li>
@@ -65,6 +73,6 @@ export function Hierarchy(props: any) {
           </li>
         )}
       </ul>
-    </nav>
+    </article-breadcrumbs>
   );
 }

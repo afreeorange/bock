@@ -208,7 +208,15 @@ func doServe(opts BuildOptions, port int) {
 	// Skip revisions in serve mode — they are expensive
 	opts.GenerateRevisions = false
 
+	// Show all nav icons in serve mode
+	opts.GenerateRaw = true
+	opts.GenerateJSON = true
+
 	config := doInitialBuild(opts)
+
+	// Show revision icon even though we skipped git history
+	config.meta.GenerateRevisions = true
+	reRenderAll(config)
 	defer config.database.Close()
 
 	articleRoot := strings.TrimRight(opts.ArticleRoot, "/")
@@ -283,8 +291,9 @@ func countStaticPaths(paths []string, themePath string) int {
 	return n
 }
 
-// reRenderAll re-renders every article and special page using the current engine.
-// Does NOT redo git/entity discovery or touch the DB — just re-applies templates.
+// reRenderAll re-renders every article and special page using the current
+// engine. Does NOT redo git/entity discovery or touch the DB — just re-applies
+// templates.
 func reRenderAll(config *BockConfig) {
 	start := time.Now()
 

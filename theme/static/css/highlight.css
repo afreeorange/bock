@@ -1,196 +1,277 @@
+/* Chroma syntax theme for a light amber background (Tailwind bg-amber-400 /
+   #fbbf24). Drop-in replacement: same selectors, same order as the Solarized
+   Dark version. Contrast ratios in comments are measured against #fbbf24. */
+
 .chroma {
-  color: #93a1a1;
-  background-color: #111;
+  color: #1c1917; /* base text — 10.5:1 */
 }
+
 .chroma .x {
-  color: #cb4b16;
+  color: #7c2d12; /* 5.6:1 */
 }
+
 .chroma .lntd {
   vertical-align: top;
   padding: 0;
   margin: 0;
   border: 0;
 }
+
 .chroma .lntable {
   border-spacing: 0;
   padding: 0;
   margin: 0;
   border: 0;
 }
+
 .chroma .hl {
-  background-color: #19404a;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.11
+  ); /* darkens the amber instead of tinting it */
 }
+
 .chroma .lnt {
   white-space: pre;
   user-select: none;
   margin-right: 0.4em;
   padding: 0 0.4em 0 0.4em;
-  color: #495050;
+  color: #6d6560; /* 3.6:1 — deliberately dim gutter */
 }
+
 .chroma .ln {
   white-space: pre;
   user-select: none;
   margin-right: 0.4em;
   padding: 0 0.4em 0 0.4em;
-  color: #495050;
+  color: #6d6560;
 }
+
 .chroma .line {
   display: flex;
 }
+
+/* Keywords — deep green, 5.5:1 */
 .chroma .k {
-  color: #719e07;
+  color: #14532d;
 }
+
 .chroma .kc {
-  color: #cb4b16;
+  color: #7c2d12; /* constants — burnt orange, 5.6:1 */
 }
+
 .chroma .kd {
-  color: #268bd2;
+  color: #1e3a8a; /* declarations — navy, 6.2:1 */
 }
+
 .chroma .kn {
-  color: #719e07;
+  color: #14532d;
 }
+
 .chroma .kp {
-  color: #719e07;
+  color: #14532d;
 }
+
 .chroma .kr {
-  color: #268bd2;
+  color: #1e3a8a;
 }
+
 .chroma .kt {
-  color: #dc322f;
+  color: #7f1d1d; /* types — oxblood, 6.0:1 */
 }
+
+/* Names */
 .chroma .nb {
-  color: #b58900;
+  color: #7c2d12; /* builtins — was yellow; yellow is unusable here */
 }
+
 .chroma .bp {
-  color: #268bd2;
+  color: #7c2d12;
 }
+
 .chroma .nc {
-  color: #268bd2;
+  color: #1e3a8a;
 }
+
 .chroma .no {
-  color: #cb4b16;
+  color: #7c2d12;
 }
+
 .chroma .nd {
-  color: #268bd2;
+  color: #1e3a8a;
 }
+
 .chroma .ni {
-  color: #cb4b16;
+  color: #7c2d12;
 }
+
 .chroma .ne {
-  color: #cb4b16;
+  color: #7c2d12;
 }
+
 .chroma .nf {
-  color: #268bd2;
+  color: #1e3a8a;
 }
+
 .chroma .nt {
-  color: #268bd2;
+  color: #1e3a8a;
 }
+
 .chroma .nv {
-  color: #268bd2;
+  color: #1e3a8a;
 }
+
+/* Strings — deep teal, 5.5:1 */
 .chroma .s {
-  color: #2aa198;
+  color: #164e63;
 }
+
 .chroma .sa {
-  color: #2aa198;
+  color: #164e63;
 }
+
 .chroma .sb {
-  color: #586e75;
+  color: #57534e;
 }
+
 .chroma .sc {
-  color: #2aa198;
+  color: #164e63;
 }
+
 .chroma .dl {
-  color: #2aa198;
+  color: #164e63;
 }
+
 .chroma .s2 {
-  color: #2aa198;
+  color: #164e63;
 }
+
 .chroma .se {
-  color: #cb4b16;
+  color: #7c2d12; /* escapes break out of the string color */
 }
+
 .chroma .si {
-  color: #2aa198;
+  color: #831843; /* interpolation — plum, 5.8:1 */
 }
+
 .chroma .sx {
-  color: #2aa198;
+  color: #164e63;
 }
+
 .chroma .sr {
-  color: #dc322f;
+  color: #7f1d1d; /* regex */
 }
+
 .chroma .s1 {
-  color: #2aa198;
+  color: #164e63;
 }
+
 .chroma .ss {
-  color: #2aa198;
+  color: #164e63;
 }
+
+/* Numbers — violet, 6.6:1 (distinct from strings at a glance) */
 .chroma .m {
-  color: #2aa198;
+  color: #4c1d95;
 }
+
 .chroma .mb {
-  color: #2aa198;
+  color: #4c1d95;
 }
+
 .chroma .mf {
-  color: #2aa198;
+  color: #4c1d95;
 }
+
 .chroma .mh {
-  color: #2aa198;
+  color: #4c1d95;
 }
+
 .chroma .mi {
-  color: #2aa198;
+  color: #4c1d95;
 }
+
 .chroma .il {
-  color: #2aa198;
+  color: #4c1d95;
 }
+
 .chroma .mo {
-  color: #2aa198;
+  color: #4c1d95;
 }
+
+/* Operators */
 .chroma .o {
-  color: #719e07;
+  color: #14532d;
 }
+
 .chroma .ow {
-  color: #719e07;
+  color: #14532d;
 }
+
+/* Comments — stone, 4.6:1: readable but recedes */
 .chroma .c {
-  color: #586e75;
+  color: #57534e;
+  font-style: italic;
 }
+
 .chroma .ch {
-  color: #586e75;
+  color: #57534e;
+  font-style: italic;
 }
+
 .chroma .cm {
-  color: #586e75;
+  color: #57534e;
+  font-style: italic;
 }
+
 .chroma .c1 {
-  color: #586e75;
+  color: #57534e;
+  font-style: italic;
 }
+
 .chroma .cs {
-  color: #719e07;
+  color: #14532d;
+  font-weight: bold;
 }
+
 .chroma .cp {
-  color: #719e07;
+  color: #14532d;
 }
+
 .chroma .cpf {
-  color: #719e07;
+  color: #14532d;
 }
+
+/* Generic (diffs, output) */
 .chroma .gd {
-  color: #dc322f;
+  color: #7f1d1d;
+  background-color: rgba(127, 29, 29, 0.12);
 }
+
 .chroma .ge {
   font-style: italic;
 }
+
 .chroma .gr {
-  color: #dc322f;
+  color: #7f1d1d;
   font-weight: bold;
 }
+
 .chroma .gh {
-  color: #cb4b16;
+  color: #7c2d12;
 }
+
 .chroma .gi {
-  color: #719e07;
+  color: #14532d;
+  background-color: rgba(20, 83, 45, 0.12);
 }
+
 .chroma .gs {
   font-weight: bold;
 }
+
 .chroma .gu {
-  color: #268bd2;
+  color: #1e3a8a;
 }

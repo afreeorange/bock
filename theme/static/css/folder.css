@@ -1,0 +1,7 @@
+@layer base {
+  .container.folder {
+    div {
+      @apply my-4;
+    }
+  }
+}

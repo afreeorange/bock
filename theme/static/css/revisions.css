@@ -1,0 +1,21 @@
+@layer components {
+  revision-list {
+    ul {
+      @apply space-y-4 my-4;
+      li {
+        a {
+          @apply font-bold hover:text-red-600 text-xl underline;
+        }
+
+        revision-author {
+          @apply mr-auto;
+        }
+
+        revision-author,
+        revision-date {
+          @apply inline-block text-sm;
+        }
+      }
+    }
+  }
+}

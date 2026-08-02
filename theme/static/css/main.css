@@ -1,0 +1,99 @@
+/**
+This is the main file to edit. Do not edit `styles.css` by hand! Start a
+live-reloading server with this:
+
+npx @tailwindcss/cli \
+  -i ./theme/static/css/main.css \
+  -o ./theme/static/css/styles.css \
+  --watch
+*/
+
+@import "tailwindcss";
+
+html,
+body {
+  height: 100%;
+  font-family: Circular;
+  @apply bg-amber-400;
+}
+
+h1 {
+  @apply font-bold text-3xl;
+
+  span:nth-of-type(1) {
+    @apply ml-1 px-1 border rounded-lg text-lg align-middle;
+  }
+
+  span:nth-of-type(2) {
+    @apply block text-xl;
+  }
+}
+
+mark {
+  @apply px-1 rounded-lg bg-amber-500/50;
+}
+
+.container {
+  @apply mx-auto p-4 max-w-3xl;
+
+  > header {
+    @apply opacity-30 hover:opacity-100 mt-2 mb-4 transition-all;
+
+    nav ul {
+      @apply flex gap-6;
+
+      li a {
+        @apply block bg-black hover:bg-red-600 size-8 transition-colors mask-no-repeat mask-center;
+
+        &[href="/archive"] {
+          -webkit-mask-image: url(/img/search.svg);
+          mask-image: url(/img/search.svg);
+        }
+
+        &[href="/Home"] {
+          -webkit-mask-image: url(/img/home.svg);
+          mask-image: url(/img/home.svg);
+        }
+        &[href="/random"] {
+          -webkit-mask-image: url(/img/random.svg);
+          mask-image: url(/img/random.svg);
+        }
+        &[href="/articles"] {
+          -webkit-mask-image: url(/img/articles.svg);
+          mask-image: url(/img/articles.svg);
+        }
+        &[href*="/raw"] {
+          -webkit-mask-image: url(/img/raw.svg);
+          mask-image: url(/img/raw.svg);
+        }
+        &[href$="/revisions"] {
+          -webkit-mask-image: url(/img/revisions.svg);
+          mask-image: url(/img/revisions.svg);
+        }
+        &[title="View Article"] {
+          /* TODO: This is kinda shitty */
+          -webkit-mask-image: url(/img/article.svg);
+          mask-image: url(/img/article.svg);
+        }
+        &[href*="/index.json"] {
+          -webkit-mask-image: url(/img/json.svg);
+          mask-image: url(/img/json.svg);
+        }
+
+        span {
+          @apply hidden;
+        }
+      }
+    }
+  }
+}
+
+@import "./archive.css";
+@import "./article.css";
+@import "./breadcrumbs.css";
+@import "./folder.css";
+@import "./footer.css";
+@import "./not-found.css";
+@import "./random.css";
+@import "./revisions.css";
+@import "./tree.css";

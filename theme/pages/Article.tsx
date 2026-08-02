@@ -34,14 +34,18 @@ export default function Article(props: ArticleProps) {
 
   return (
     <Base {...props} footerElements={footerElements}>
-      <Hierarchy nodes={props.hierarchy} type={props.type} uri={props.uri} />
-      <h1>
-        {props.title}
-        {props.meta && props.meta.GenerateRevisions && props.untracked && (
-          <span>Untracked</span>
-        )}
-      </h1>
-      <div dangerouslySetInnerHTML={{ __html: props.html }} />
+      <article>
+        <Hierarchy nodes={props.hierarchy} type={props.type} uri={props.uri} />
+        <header>
+          <h1>
+            {props.title}
+            {props.meta && props.meta.GenerateRevisions && props.untracked && (
+              <span>Untracked</span>
+            )}
+          </h1>
+        </header>
+        <article-content dangerouslySetInnerHTML={{ __html: props.html }} />
+      </article>
     </Base>
   );
 }

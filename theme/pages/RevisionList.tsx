@@ -10,36 +10,39 @@ export default function RevisionList(props: RevisionListProps) {
     <Base {...props}>
       <Hierarchy nodes={props.hierarchy} type={props.type} uri={props.uri} />
       <h1>
-        {props.title}
-        <span>{count + " " + label}</span>
+        {props.title} <span>{count + " " + label}</span>
       </h1>
-      <ul>
-        {revisions.map((revision: Revision) => (
-          <li>
-            <a
-              href={revision.ShortId}
-              title={"View revision " + revision.ShortId}
-            >
-              {revision.ShortId}
-            </a>
-            <br />
-            <small>
-              {formatDate(revision.Date, "Monday, 2 January 2006 at 15:04 MST")}
-            </small>
-            {revision.Subject && (
-              <>
-                <br />
-                <small>{revision.Subject}</small>
-              </>
-            )}
-            <br />
-            <small>
-              {revision.AuthorName}{" "}
-              <code>{"<" + revision.AuthorEmail + ">"}</code>
-            </small>
-          </li>
-        ))}
-      </ul>
+      <revision-list>
+        <ul>
+          {revisions.map((revision: Revision) => (
+            <li>
+              <a
+                href={revision.ShortId}
+                title={"View revision " + revision.ShortId}
+              >
+                {revision.ShortId}
+              </a>
+              {revision.Subject && (
+                <>
+                  <br />
+                  <revision-subject>{revision.Subject}</revision-subject>
+                </>
+              )}
+              <br />
+              <revision-author>
+                {revision.AuthorName}{" "}
+                <code>{"<" + revision.AuthorEmail + ">"}</code>
+              </revision-author>{" "}
+              <revision-date>
+                {formatDate(
+                  revision.Date,
+                  "Monday, 2 January 2006 at 15:04 MST",
+                )}
+              </revision-date>
+            </li>
+          ))}
+        </ul>
+      </revision-list>
     </Base>
   );
 }

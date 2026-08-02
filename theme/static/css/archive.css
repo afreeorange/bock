@@ -1,0 +1,46 @@
+@layer components {
+  .container.archive {
+    form[role="search"] input {
+      @apply my-4 p-2 border rounded-md w-full;
+    }
+
+    ul.results {
+      background: #000;
+    }
+
+    ul[data-content="results"] {
+      /* margin-top: var(--root-spacing); */
+      @apply space-y-4;
+
+      li {
+        @apply overflow-x-hidden;
+
+        a {
+          @apply block mb-1 font-bold hover:text-red-600 text-xl underline;
+        }
+      }
+
+      /* li {
+        margin: 0;
+        padding: 0.25em 0;
+      }
+      li a {
+        font-weight: bold;
+      }
+      li:last-child {
+        border: 0;
+      }
+      li span {
+        display: block;
+        color: var(--color-light);
+        margin-top: calc(var(--root-spacing) / 2);
+      }
+      li span mark {
+        background: var(--color-background-dark);
+      }
+      li:not(:last-child) {
+        margin-bottom: var(--root-spacing);
+      } */
+    }
+  }
+}
