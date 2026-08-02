@@ -10,7 +10,7 @@ export default function RevisionList(props: RevisionListProps) {
     <Base {...props}>
       <Hierarchy nodes={props.hierarchy} type={props.type} uri={props.uri} />
       <h1>
-        {props.title}
+        {props.title}{" "}
         <span>{count + " " + label}</span>
       </h1>
       <ul>

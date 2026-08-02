@@ -1,0 +1,59 @@
+@layer components {
+  article-breadcrumbs {
+    @apply block opacity-30 hover:opacity-100 mt-6 mb-4 text-sm transition-all;
+
+    ul {
+      @apply md:flex;
+
+      li a[data-entity-type] {
+        @apply hover:text-red-600 hover:decoration-red-600 transition-all;
+
+        &::before {
+          @apply inline-block bg-black mr-1 size-4 align-text-top mask-no-repeat mask-contain;
+          content: "";
+        }
+
+        &:hover::before {
+          @apply bg-red-600;
+        }
+      }
+
+      li a[data-entity-type="article"]::before {
+        -webkit-mask-image: url(/img/article-breadcrumb.svg);
+        mask-image: url(/img/article-breadcrumb.svg);
+      }
+      li a[data-entity-type="folder"]::before {
+        -webkit-mask-image: url(/img/folder.svg);
+        mask-image: url(/img/folder.svg);
+      }
+      li a[data-entity-type="revision-list"]::before {
+        -webkit-mask-image: url(/img/revisions.svg);
+        mask-image: url(/img/revisions.svg);
+      }
+      li a[data-entity-type="revision"]::before {
+        -webkit-mask-image: url(/img/revisions.svg);
+        mask-image: url(/img/revisions.svg);
+      }
+      li a[href="/ROOT"]::before {
+        -webkit-mask-image: url(/img/root.svg);
+        mask-image: url(/img/root.svg);
+      }
+
+      li:not(:last-child) a::after {
+        @apply inline-block bg-black mx-2 size-3 md:size-4 align-text-bottom mask-contain mask-no-repeat md:mask-[url(/img/arrow-right.svg)] mask-[url(/img/arrow-down-curve.svg)];
+        content: "";
+        /* -webkit-mask-image: url(/img/arrow-right.svg);
+        mask-image: url(/img/arrow-right.svg); */
+      }
+
+      li:last-of-type a[data-entity-type="folder"] {
+      }
+
+      li:last-of-type a[data-entity-type="article"] {
+      }
+
+      li:not(:last-of-type) a {
+      }
+    }
+  }
+}

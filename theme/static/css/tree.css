@@ -1,0 +1,33 @@
+@layer base {
+  ul[data-content="tree"] {
+    @apply my-4;
+
+    a {
+      @apply hover:text-red-600 hover:decoration-red-600 underline transition-all;
+    }
+
+    li[data-entity-type="article"]::before {
+      @apply inline-block bg-black mr-2 size-4 mask-contain;
+      content: "";
+      -webkit-mask-image: url(/img/angle.svg);
+      mask-image: url(/img/angle.svg);
+    }
+
+    li[data-entity-type="article"] {
+    }
+
+    li[data-entity-type="folder"] {
+    }
+
+    li[data-entity-type="folder"]::before {
+      @apply inline-block bg-black mr-2 size-4 mask-cover;
+      content: "";
+      -webkit-mask-image: url(/img/folder.svg);
+      mask-image: url(/img/folder.svg);
+    }
+  }
+  /* ul[data-content="tree"] li ul li ul {
+    border-left: 2px solid;
+    margin-left: 0.4em;
+  } */
+}

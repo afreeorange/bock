@@ -17,12 +17,29 @@ export function Base(props: any) {
         <link rel="apple-touch-icon" href="/img/logo192.png" />
         <link rel="stylesheet" href="/css/styles.css" />
         <link rel="stylesheet" href="/css/highlight.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&display=swap"
+          rel="stylesheet"
+        />
         <title>{title} – Nikhil's Personal Wiki</title>
-        <script type="text/javascript" id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-        <script defer data-domain="wiki.nikhil.io" src="https://plausible.io/js/plausible.js"></script>
+        <script
+          type="text/javascript"
+          id="MathJax-script"
+          defer
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+        ></script>
+        <script
+          defer
+          data-domain="wiki.nikhil.io"
+          src="https://plausible.io/js/plausible.js"
+        ></script>
       </head>
       <body>
-        <noscript>👉 A few things won't work if you have JavaScript disabled.</noscript>
+        <noscript>
+          👉 A few things won't work if you have JavaScript disabled.
+        </noscript>
         <div className={"container" + (type ? " " + type : "")}>
           <Nav {...props} />
           <main>{props.children}</main>
@@ -30,7 +47,10 @@ export function Base(props: any) {
         </div>
         {props.scripts}
         {type !== "archive" && (
-          <script type="text/javascript" dangerouslySetInnerHTML={{__html: `
+          <script
+            type="text/javascript"
+            dangerouslySetInnerHTML={{
+              __html: `
         document.body.addEventListener(
           "keypress", (e) => e.key === "f"
           ? window.location.assign("/archive")
@@ -46,7 +66,9 @@ export function Base(props: any) {
             fontCache: 'global'
           }
         };
-      `}} />
+      `,
+            }}
+          />
         )}
       </body>
     </html>

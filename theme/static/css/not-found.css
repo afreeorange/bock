@@ -1,0 +1,15 @@
+@layer components {
+  .container.not-found {
+    main {
+      @apply content-center h-48 text-xl;
+
+      p {
+        @apply mt-4;
+      }
+
+      a {
+        @apply hover:text-red-600 underline;
+      }
+    }
+  }
+}

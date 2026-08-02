@@ -283,8 +283,9 @@ func countStaticPaths(paths []string, themePath string) int {
 	return n
 }
 
-// reRenderAll re-renders every article and special page using the current engine.
-// Does NOT redo git/entity discovery or touch the DB — just re-applies templates.
+// reRenderAll re-renders every article and special page using the current
+// engine. Does NOT redo git/entity discovery or touch the DB — just re-applies
+// templates.
 func reRenderAll(config *BockConfig) {
 	start := time.Now()
 

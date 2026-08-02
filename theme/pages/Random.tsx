@@ -31,7 +31,7 @@ export default function Random(props: RandomProps) {
   return (
     <Base {...props} scripts={scripts}>
       <h1>Random article!</h1>
-      <div></div>
+      <random-spinner />
     </Base>
   );
 }

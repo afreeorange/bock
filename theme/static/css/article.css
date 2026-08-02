@@ -1,0 +1,59 @@
+@layer components {
+  article {
+    header {
+      h1 {
+      }
+    }
+
+    article-content {
+      h2 {
+        @apply my-6 font-bold text-2xl;
+
+        span {
+          @apply border;
+        }
+      }
+
+      h3 {
+        @apply my-6 font-bold text-xl;
+      }
+
+      h4 {
+        @apply my-6 font-bold;
+      }
+
+      a {
+        @apply hover:text-red-600 underline transition-all;
+      }
+
+      p {
+        @apply my-4;
+
+        code {
+          @apply bg-amber-500/30 px-0.5 rounded-sm;
+        }
+      }
+
+      hr {
+        @apply my-4 border-dotted;
+      }
+
+      code,
+      pre {
+        font-family: "CircularMono";
+      }
+
+      ul {
+        @apply my-4 ml-4 list-disc;
+      }
+
+      ol {
+        @apply my-4 ml-8 list-decimal;
+      }
+
+      > pre {
+        @apply bg-amber-500/30 my-2 p-2 rounded-lg overflow-x-auto scrollbar-thin scrollbar-thumb-amber-300 scrollbar-track-transparent;
+      }
+    }
+  }
+}

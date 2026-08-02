@@ -68,8 +68,8 @@ function renderResults(rows) {
           rows.length > 1
             ? rows.length.toString() + " results"
             : rows.length === 1
-            ? "One result"
-            : "No Results :/";
+              ? "One result"
+              : "No Results :/";
 
         countSection.innerHTML = term + " <span>" + summary + "</span>";
         treeSection.style.display = "none";
@@ -80,6 +80,6 @@ function renderResults(rows) {
         treeSection.style.display = "block";
         resultsSection.style.display = "none";
       }
-    }, 150)
+    }, 150),
   );
 })();

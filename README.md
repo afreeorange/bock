@@ -170,3 +170,9 @@ server/
   server.go       HTTP server, WebSocket hub, fsnotify file watcher
   reload.js       Client-side script: reconnects + reloads on message
 ```
+
+### Development with TailwindCSS
+
+```bash
+npx @tailwindcss/cli -i ./theme/static/css/styles-dev.css -o ./theme/static/css/styles.css --watch
+```
