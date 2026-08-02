@@ -11,7 +11,8 @@ jobs:
     docker:
       - image: cimg/go:1.22
     steps:
-      - checkout
+      - checkout:
+          method: full
       - restore_cache:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
