@@ -12,6 +12,12 @@ jobs:
     docker:
       - image: cimg/go:1.25
     steps:
+      - run:
+          name: Configure SSH keepalives
+          command: |
+            mkdir -p ~/.ssh
+            printf "Host *\n  ServerAliveInterval 30\n  ServerAliveCountMax 3\n" > ~/.ssh/config
+            chmod 600 ~/.ssh/config
       - checkout:
           method: full
       - restore_cache:
@@ -38,6 +44,12 @@ jobs:
       xcode: "16.2.0"
     resource_class: macos.m1.medium.gen1
     steps:
+      - run:
+          name: Configure SSH keepalives
+          command: |
+            mkdir -p ~/.ssh
+            printf "Host *\n  ServerAliveInterval 30\n  ServerAliveCountMax 3\n" > ~/.ssh/config
+            chmod 600 ~/.ssh/config
       - checkout:
           method: full
       - run:
@@ -67,6 +79,12 @@ jobs:
     docker:
       - image: cimg/go:1.25
     steps:
+      - run:
+          name: Configure SSH keepalives
+          command: |
+            mkdir -p ~/.ssh
+            printf "Host *\n  ServerAliveInterval 30\n  ServerAliveCountMax 3\n" > ~/.ssh/config
+            chmod 600 ~/.ssh/config
       - checkout:
           method: full
       - attach_workspace:
