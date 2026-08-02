@@ -35,15 +35,6 @@
       }
     }
 
-    hr {
-      @apply my-4 border-dotted;
-    }
-
-    code,
-    pre {
-      font-family: "CircularMono";
-    }
-
     ul {
       @apply my-4 ml-4 list-disc;
     }
@@ -54,6 +45,38 @@
 
     > pre {
       @apply bg-amber-500/30 my-2 p-2 rounded-lg overflow-x-auto scrollbar-thin scrollbar-thumb-amber-300 scrollbar-track-transparent;
+    }
+
+    hr {
+      @apply relative bg-transparent my-6 border-none h-4 text-center;
+
+      &::before {
+        @apply top-0 absolute left-1/2 -translate-x-1/2 text-2xl;
+        content: "***";
+        color: var(--color-highlight);
+        letter-spacing: 1rem;
+      }
+    }
+
+    kbd {
+      @apply px-1 border border-amber-600 rounded-md bg-amber-500/20 mx-1 shadow;
+      font-family: "D8C100D5-3273-4B63-8953-984B26A1C2AD", monospace;
+    }
+
+    table {
+      @apply w-full;
+
+      thead tr th {
+        @apply py-1 border-b-2 font-bold text-left align-top;
+      }
+
+      tbody tr td {
+        @apply py-1 align-top;
+      }
+
+      tbody tr:not(:last-child) td {
+        @apply border-b;
+      }
     }
   }
 }

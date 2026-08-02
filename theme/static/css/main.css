@@ -10,11 +10,22 @@ npx @tailwindcss/cli \
 
 @import "tailwindcss";
 
+@import "./fonts.css";
+
 html,
 body {
   height: 100%;
-  font-family: Circular;
+  font-family: "3079CB20-4E74-4746-A318-7B72A06CC701", sans-serif;
   @apply bg-amber-400;
+}
+
+code,
+pre {
+  font-family: "D8C100D5-3273-4B63-8953-984B26A1C2AD", monospace;
+}
+
+noscript {
+  @apply bg-amber-500 w-full;
 }
 
 h1 {

@@ -213,22 +213,22 @@
 /* Comments — stone, 4.6:1: readable but recedes */
 .chroma .c {
   color: #57534e;
-  font-style: italic;
+  /* font-style: italic; */
 }
 
 .chroma .ch {
   color: #57534e;
-  font-style: italic;
+  /* font-style: italic; */
 }
 
 .chroma .cm {
   color: #57534e;
-  font-style: italic;
+  /* font-style: italic; */
 }
 
 .chroma .c1 {
   color: #57534e;
-  font-style: italic;
+  /* font-style: italic; */
 }
 
 .chroma .cs {
@@ -251,7 +251,7 @@
 }
 
 .chroma .ge {
-  font-style: italic;
+  /* font-style: italic; */
 }
 
 .chroma .gr {
