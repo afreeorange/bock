@@ -51,7 +51,7 @@ mark {
     @apply opacity-30 hover:opacity-100 mt-2 mb-4 transition-all;
 
     nav ul {
-      @apply flex gap-6;
+      @apply flex justify-between md:justify-start gap-6;
 
       li a {
         @apply block bg-black hover:bg-red-600 size-8 transition-colors mask-no-repeat mask-center;

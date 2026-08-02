@@ -338,7 +338,11 @@ mark {
     }
     nav ul {
       display: flex;
+      justify-content: space-between;
       gap: calc(var(--spacing) * 6);
+      @media (width >= 48rem) {
+        justify-content: flex-start;
+      }
       li a {
         display: block;
         width: calc(var(--spacing) * 8);
