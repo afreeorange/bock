@@ -24,7 +24,7 @@
       }
 
       random-spinner {
-        @apply block bg-black mx-auto size-96 mask-no-repeat mask-center;
+        @apply block bg-black mx-auto size-80 mask-no-repeat mask-center;
         -webkit-mask-image: url(/img/twenty-die.svg);
         mask-image: url(/img/twenty-die.svg);
         animation: rotation 4s infinite cubic-bezier(1, 2.5, 0, 1.5);

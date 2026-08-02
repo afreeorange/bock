@@ -338,11 +338,8 @@ mark {
     }
     nav ul {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: calc(var(--spacing) * 6);
-      @media (width >= 48rem) {
-        justify-content: flex-start;
-      }
       li a {
         display: block;
         width: calc(var(--spacing) * 8);
@@ -731,8 +728,8 @@ mark {
     random-spinner {
       margin-inline: auto;
       display: block;
-      width: calc(var(--spacing) * 96);
-      height: calc(var(--spacing) * 96);
+      width: calc(var(--spacing) * 80);
+      height: calc(var(--spacing) * 80);
       background-color: var(--color-black);
       mask-position: center;
       mask-repeat: no-repeat;
