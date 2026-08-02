@@ -13,13 +13,11 @@ jobs:
       - image: cimg/go:1.25
     steps:
       - run:
-          name: Configure SSH keepalives
+          name: Checkout code
+          no_output_timeout: 5m
           command: |
-            mkdir -p ~/.ssh
-            printf "Host *\n  ServerAliveInterval 30\n  ServerAliveCountMax 3\n" > ~/.ssh/config
-            chmod 600 ~/.ssh/config
-      - checkout:
-          method: full
+            git clone "https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git" .
+            git checkout "$CIRCLE_SHA1"
       - restore_cache:
           keys:
             - go-mod-v5-{{ checksum "go.sum" }}
@@ -45,13 +43,11 @@ jobs:
     resource_class: macos.m1.medium.gen1
     steps:
       - run:
-          name: Configure SSH keepalives
+          name: Checkout code
+          no_output_timeout: 5m
           command: |
-            mkdir -p ~/.ssh
-            printf "Host *\n  ServerAliveInterval 30\n  ServerAliveCountMax 3\n" > ~/.ssh/config
-            chmod 600 ~/.ssh/config
-      - checkout:
-          method: full
+            git clone "https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git" .
+            git checkout "$CIRCLE_SHA1"
       - run:
           name: Install Go
           command: brew install go
@@ -80,13 +76,11 @@ jobs:
       - image: cimg/go:1.25
     steps:
       - run:
-          name: Configure SSH keepalives
+          name: Checkout code
+          no_output_timeout: 5m
           command: |
-            mkdir -p ~/.ssh
-            printf "Host *\n  ServerAliveInterval 30\n  ServerAliveCountMax 3\n" > ~/.ssh/config
-            chmod 600 ~/.ssh/config
-      - checkout:
-          method: full
+            git clone "https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git" .
+            git checkout "$CIRCLE_SHA1"
       - attach_workspace:
           at: dist
       - aws-s3/sync:
