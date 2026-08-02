@@ -13,21 +13,22 @@ export default function Index(_props: IndexProps) {
         <style
           dangerouslySetInnerHTML={{
             __html: `
-          body {
-            flex-direction: column;
-            padding: 0;
-            color: white;
-            font-weight: bold;
-            font-size: 8em;
-            height: 100%;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            text-align: center;
-          }
-          a {
-            text-underline-offset: 10px;
-          }
+            body {
+              flex-direction: column;
+              color: #111;
+              font-weight: bold;
+              font-size: 4em;
+              height: 100%;
+              display: flex;
+              justify-content: center;
+            }
+            p {
+              padding: 2rem;
+            }
+            a {
+              text-decoration: underline;
+              text-underline-offset: 10px;
+            }
         `,
           }}
         />
