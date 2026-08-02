@@ -1,4 +1,5 @@
-# Build and deploy the Linux version of this to my public bucket.
+# Build binaries for Linux (x86_64) and macOS (arm64), upload to S3, and
+# create a GitHub release with both artifacts.
 
 version: 2.1
 
@@ -6,37 +7,102 @@ orbs:
   aws-s3: circleci/aws-s3@2.0.0
 
 jobs:
-  build:
+  build-linux:
     working_directory: ~/repo
     docker:
-      - image: cimg/go:1.22
+      - image: cimg/go:1.25
     steps:
       - checkout:
           method: full
       - restore_cache:
           keys:
-            - go-mod-v4-{{ checksum "go.sum" }}
+            - go-mod-v5-{{ checksum "go.sum" }}
       - run:
           name: Install Dependencies
           command: go mod download
       - run:
-          name: Compile
+          name: Compile (Linux/x86_64)
           command: ./.scripts/build.sh
+      - persist_to_workspace:
+          root: dist
+          paths:
+            - bock-Linux-x86_64
+      - save_cache:
+          key: go-mod-v5-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+
+  build-macos:
+    working_directory: ~/repo
+    macos:
+      xcode: "16.2.0"
+    resource_class: macos.m1.medium.gen1
+    steps:
+      - checkout:
+          method: full
+      - run:
+          name: Install Go
+          command: brew install go
+          no_output_timeout: 15m
+      - restore_cache:
+          keys:
+            - go-mod-macos-v1-{{ checksum "go.sum" }}
+      - run:
+          name: Install Dependencies
+          command: go mod download
+      - run:
+          name: Compile (Darwin/arm64)
+          command: ./.scripts/build.sh
+      - persist_to_workspace:
+          root: dist
+          paths:
+            - bock-Darwin-arm64
+      - save_cache:
+          key: go-mod-macos-v1-{{ checksum "go.sum" }}
+          paths:
+            - "~/go/pkg/mod"
+
+  release:
+    working_directory: ~/repo
+    docker:
+      - image: cimg/go:1.25
+    steps:
+      - checkout:
+          method: full
+      - attach_workspace:
+          at: dist
       - aws-s3/sync:
           aws-region: AWS_DEFAULT_REGION
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           from: dist/
           to: "s3://public.nikhil.io/"
-      - save_cache:
-          key: go-mod-v4-{{ checksum "go.sum" }}
-          paths:
-            - "/go/pkg/mod"
+      - run:
+          name: Create GitHub Release
+          command: |
+            VERSION=$(cat VERSION)
+            gh release delete "v${VERSION}" --yes --cleanup-tag 2>/dev/null || true
+            gh release create "v${VERSION}" \
+              dist/bock-Linux-x86_64 \
+              dist/bock-Darwin-arm64 \
+              --title "bock v${VERSION}" \
+              --generate-notes
 
 workflows:
   build-and-publish:
     jobs:
-      - build:
+      - build-linux:
+          filters:
+            branches:
+              only: master
+      - build-macos:
+          filters:
+            branches:
+              only: master
+      - release:
+          requires:
+            - build-linux
+            - build-macos
           filters:
             branches:
               only: master
