@@ -1,5 +1,5 @@
 @layer components {
-  article-breadcrumbs {
+  article-hierarchy {
     @apply block opacity-30 hover:opacity-100 mt-6 mb-4 text-sm transition-all;
 
     ul {
@@ -38,7 +38,7 @@
 
         span.single-revision-title::before,
         a[data-entity-type="article"]::before {
-          @apply mask-[url(/img/article-breadcrumb.svg)];
+          @apply mask-[url(/img/article.svg)];
         }
 
         a[data-entity-type="revision"]::before {
@@ -47,8 +47,7 @@
 
         span.multiple-revisions-title::before,
         a[data-entity-type="revision-list"]::before {
-          -webkit-mask-image: url(/img/revisions.svg);
-          mask-image: url(/img/revisions.svg);
+          @apply mask-[url(/img/revisions.svg)];
         }
       }
     }

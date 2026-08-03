@@ -16,20 +16,7 @@ export function Base(props: any) {
         <link rel="icon" href="/img/favicon.png" />
         <link rel="apple-touch-icon" href="/img/logo192.png" />
         <link rel="stylesheet" href="/css/styles.css" />
-        <link rel="stylesheet" href="/css/highlight.css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&display=swap"
-          rel="stylesheet"
-        />
         <title>{title} – Nikhil's Personal Wiki</title>
-        <script
-          type="text/javascript"
-          id="MathJax-script"
-          defer
-          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
-        ></script>
         <script
           defer
           data-domain="wiki.nikhil.io"
@@ -55,17 +42,6 @@ export function Base(props: any) {
           "keypress", (e) => e.key === "f"
           ? window.location.assign("/archive")
           : null);
-        window.MathJax = {
-          tex: {
-            inlineMath: [
-              ['$', '$'],
-              ['\\\\(', '\\\\)']
-            ]
-          },
-          svg: {
-            fontCache: 'global'
-          }
-        };
       `,
             }}
           />
