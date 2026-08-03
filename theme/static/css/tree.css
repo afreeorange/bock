@@ -3,7 +3,7 @@
     @apply my-4;
 
     a {
-      @apply hover:text-red-600 hover:decoration-red-600 underline transition-all;
+      @apply hover:text-red-600 decoration-2 hover:decoration-red-600 underline underline-offset-4 transition-all;
     }
 
     li {

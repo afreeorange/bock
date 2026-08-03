@@ -298,13 +298,17 @@ h1 {
   font-weight: var(--font-weight-bold);
   span:nth-of-type(1) {
     margin-left: var(--spacing);
-    border-radius: var(--radius-lg);
-    border-style: var(--tw-border-style);
-    border-width: 1px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius-md);
     padding-inline: var(--spacing);
+    padding-block: 0px;
     vertical-align: middle;
-    font-size: var(--text-lg);
-    line-height: var(--tw-leading, var(--text-lg--line-height));
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+    --tw-inset-ring-shadow: inset 0 0 0 1px var(--tw-inset-ring-color, currentcolor);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    --tw-inset-ring-color: var(--color-black);
   }
   span:nth-of-type(2) {
     display: block;
@@ -445,6 +449,8 @@ mark {
   }
   article-content a {
     text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
     transition-property: all;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
@@ -947,6 +953,8 @@ mark {
         --tw-font-weight: var(--font-weight-bold);
         font-weight: var(--font-weight-bold);
         text-decoration-line: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 4px;
         &:hover {
           @media (hover: hover) {
             color: var(--color-red-600);
@@ -969,6 +977,8 @@ mark {
     margin-block: calc(var(--spacing) * 4);
     a {
       text-decoration-line: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
       transition-property: all;
       transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
       transition-duration: var(--tw-duration, var(--default-transition-duration));

@@ -181,3 +181,16 @@ npx @tailwindcss/cli \
   -o ./theme/static/css/styles.css \
   --watch
 ```
+
+If it's _just_ CSS editing:
+
+```bash
+npx @tailwindcss/cli \
+  -i ./theme/static/css/main.css \
+  -o ~/Programming/wiki.nikhil.io.articles/build/css/styles.css \
+  --watch
+
+# And then
+cd Programming/wiki.nikhil.io.articles/build
+lr-http-server
+```

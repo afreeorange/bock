@@ -7,7 +7,7 @@
     }
 
     a {
-      @apply hover:text-red-600 underline;
+      @apply hover:text-red-600 decoration-1 underline underline-offset-4;
     }
 
     ul li:last-of-type a::before {

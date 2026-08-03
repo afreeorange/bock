@@ -24,7 +24,7 @@
     }
 
     a {
-      @apply hover:text-red-600 underline transition-all;
+      @apply hover:text-red-600 decoration-2 underline underline-offset-4 transition-all;
     }
 
     p {

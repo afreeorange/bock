@@ -4,7 +4,7 @@
       @apply space-y-4 my-4;
       li {
         a {
-          @apply font-bold hover:text-red-600 text-xl underline;
+          @apply font-bold hover:text-red-600 text-xl decoration-2 underline underline-offset-4;
         }
 
         revision-author {

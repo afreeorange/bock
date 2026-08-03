@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -114,6 +115,16 @@ func main() {
 	}
 
 	opts := parseFlags(flagArgs)
+
+	if opts.ArticleRoot != "" {
+		opts.ArticleRoot, _ = filepath.Abs(opts.ArticleRoot)
+	}
+	if opts.OutputFolder != "" {
+		opts.OutputFolder, _ = filepath.Abs(opts.OutputFolder)
+	}
+	if opts.ThemePath != "" {
+		opts.ThemePath, _ = filepath.Abs(opts.ThemePath)
+	}
 
 	if opts.ArticleRoot == "" {
 		fmt.Println("You must give me an article root (--in=<path>)")
