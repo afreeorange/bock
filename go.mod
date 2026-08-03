@@ -1,6 +1,6 @@
 module afreeorange/bock
 
-go 1.25
+go 1.25.0
 
 require (
 	github.com/alecthomas/chroma v0.10.0
@@ -17,7 +17,7 @@ require (
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/yuin/goldmark v1.7.3
 	github.com/yuin/goldmark-highlighting v0.0.0-20220208100518-594be1970594
-	golang.org/x/net v0.26.0
+	golang.org/x/net v0.57.0
 )
 
 require (
@@ -45,9 +45,9 @@ require (
 	github.com/tklauser/numcpus v0.8.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
-	golang.org/x/crypto v0.24.0 // indirect
-	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
+	golang.org/x/crypto v0.54.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/text v0.40.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )
