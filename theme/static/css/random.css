@@ -17,7 +17,7 @@
     }
 
     main {
-      @apply text-center;
+      @apply my-16 text-center;
 
       h1 {
         @apply mb-8 font-bold text-2xl;

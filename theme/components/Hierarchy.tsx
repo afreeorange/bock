@@ -6,72 +6,46 @@ export function Hierarchy(props: any) {
   return (
     <article-breadcrumbs>
       <ul>
-        {nodes.map((node: HierarchicalEntity) => (
-          <li>
-            <a
-              data-entity-type={node.Type}
-              href={node.Name === "ROOT" ? "/ROOT" : "/" + node.URI}
-              title={node.Name}
-            >
-              {node.Name === "ROOT" ? "Root" : node.Name}
-            </a>
-          </li>
-        ))}
-
-        {type === "raw" && (
-          <li>
-            <span>Raw</span>
-          </li>
-        )}
-
-        {type === "revision" && (
-          <>
-            <li>
-              <a
-                data-entity-type="revision-list"
-                href={uri + "/revisions"}
-                title="Article revisions"
-              >
-                Revisions
-              </a>
-            </li>
-            <li>
-              <span>{"Revision " + (revision && revision.ShortId)}</span>
-            </li>
-          </>
-        )}
-
-        {type === "revision-raw" && (
-          <>
-            <li>
-              <a
-                data-entity-type="revision-list"
-                href={uri + "/revisions"}
-                title="Article revisions"
-              >
-                Revisions
-              </a>
-            </li>
-            <li>
-              <a
-                data-entity-type="revision"
-                href={uri + "/revisions/" + (revision && revision.ShortId)}
-                title={"View revision " + (revision && revision.ShortId)}
-              >
-                {"Revision " + (revision && revision.ShortId)}
-              </a>
-            </li>
-            <li>
-              <span>Raw</span>
-            </li>
-          </>
-        )}
-
-        {type === "revision-list" && (
-          <li>
-            <span>Revisions</span>
-          </li>
-        )}
+        <li>
+          <a data-entity-type="folder" href="/ROOT" title="ROOT">
+            Root
+          </a>
+        </li>
+        <li>
+          <a data-entity-type="folder" href="/Food" title="Food">
+            Food
+          </a>
+        </li>
+        <li>
+          <a
+            data-entity-type="folder"
+            href="/Food/Thai_Curry_Experiments"
+            title="Thai Curry Experiments"
+          >
+            Thai Curry Experiments
+          </a>
+        </li>
+        <li>
+          <a
+            data-entity-type="article"
+            href="/Food/Thai_Curry_Experiments/Thai_Green_Curry_Chicken_-_Instant_Pot"
+            title="Thai Green Curry Chicken - Instant Pot"
+          >
+            Thai Green Curry Chicken - Instant Pot
+          </a>
+        </li>
+        <li>
+          <a
+            data-entity-type="revision-list"
+            href="/Food/Thai_Curry_Experiments/Thai_Green_Curry_Chicken_-_Instant_Pot/revisions"
+            title="Article revisions"
+          >
+            Revisions
+          </a>
+        </li>
+        <li>
+          <span class="single-revision-title">Revision 24364775</span>
+        </li>
       </ul>
     </article-breadcrumbs>
   );

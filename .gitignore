@@ -3,6 +3,7 @@ bock
 node_modules
 .claude
 build-local.sh
+dev.sh
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,go
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,go
