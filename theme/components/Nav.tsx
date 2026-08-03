@@ -67,7 +67,7 @@ export function Nav(props: any) {
               type === "revision-raw" ||
               type === "revision-list") && (
               <li>
-                <a href={uri + "/revisions"} className={type === "revision-list" ? "active" : ""}>
+                <a href={uri + "/revisions"} className={type === "revision-list" ? "active" : ""} title="View revisions">
                   <span>Revisions</span>
                 </a>
               </li>

@@ -5,7 +5,7 @@ interface IndexProps {
 
 export default function Index(_props: IndexProps) {
   return (
-    <html>
+    <html lang="en">
       <head>
         <meta httpEquiv="refresh" content="0; url=/Home" />
         <title>Redirect</title>

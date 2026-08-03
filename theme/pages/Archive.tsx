@@ -34,7 +34,7 @@ export default function Archive(props: ArchiveProps) {
         {"Search " + humanizeNumber(props.meta.ArticleCount) + " articles"}
       </h1>
       <form role="search">
-        <input placeholder="3 or more characters" autofocus />
+        <input type="search" aria-label="Search articles" placeholder="3 or more characters" autofocus />
       </form>
       <ul data-content="results"></ul>
       <ul data-content="tree">
