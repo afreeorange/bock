@@ -2,6 +2,10 @@
   footer {
     @apply opacity-30 hover:opacity-100 my-6 text-sm transition-all;
 
+    p {
+      @apply my-4;
+    }
+
     a {
       @apply hover:text-red-600 underline;
     }

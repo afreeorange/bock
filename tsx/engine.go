@@ -165,16 +165,19 @@ func (e *Engine) Render(pageName string, props map[string]any) (string, error) {
 
 	// Inject helper functions
 	vm.Set("formatDate", func(call goja.FunctionCall) goja.Value {
-		isoStr := call.Argument(0).String()
+		arg := call.Argument(0)
 		layout := call.Argument(1).String()
 
-		t, err := time.Parse(time.RFC3339, isoStr)
+		// Props can carry a real time.Time (e.g. meta.BuildDate) or a
+		// pre-formatted string. Handle the former without stringifying.
+		if t, ok := arg.Export().(time.Time); ok {
+			return vm.ToValue(t.Format(layout))
+		}
+
+		s := arg.String()
+		t, err := parseDate(s)
 		if err != nil {
-			// Try parsing as RFC3339Nano too
-			t, err = time.Parse(time.RFC3339Nano, isoStr)
-			if err != nil {
-				return vm.ToValue(isoStr)
-			}
+			return vm.ToValue(s)
 		}
 		return vm.ToValue(t.Format(layout))
 	})
@@ -203,6 +206,24 @@ func (e *Engine) Render(pageName string, props map[string]any) (string, error) {
 		html = "<!DOCTYPE html>" + html
 	}
 	return html, nil
+}
+
+// dateLayouts are what formatDate accepts as input. The last two are what
+// time.Time.String() emits, which is how a goja-wrapped time.Time stringifies.
+var dateLayouts = []string{
+	time.RFC3339Nano,
+	time.RFC3339,
+	"2006-01-02 15:04:05.999999999 -0700 MST",
+	"2006-01-02 15:04:05 -0700 MST",
+}
+
+func parseDate(s string) (time.Time, error) {
+	for _, layout := range dateLayouts {
+		if t, err := time.Parse(layout, s); err == nil {
+			return t, nil
+		}
+	}
+	return time.Time{}, fmt.Errorf("unrecognized date %q", s)
 }
 
 // Pages returns the list of compiled page names.

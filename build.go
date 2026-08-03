@@ -11,6 +11,7 @@ import (
 
 	"afreeorange/bock/server"
 
+	"github.com/dustin/go-humanize"
 	"github.com/go-git/go-billy/v5/memfs"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/storage/memory"
@@ -165,7 +166,7 @@ func doInitialBuild(opts BuildOptions) *BockConfig {
 	end := time.Now()
 	generationTime := end.Sub(start)
 	config.meta.GenerationTime = generationTime
-	config.meta.GenerationTimeRounded = generationTime.Round(time.Second)
+	config.meta.GenerationTimeRounded = humanizeDuration(start, end)
 
 	fmt.Print("Writing /Home: ")
 	writeHome(config)
@@ -180,6 +181,16 @@ func doInitialBuild(opts BuildOptions) *BockConfig {
 	)
 
 	return config
+}
+
+// humanizeDuration renders start..end as relative time, e.g. "5 seconds".
+// go-humanize says "now" under a second; say something sensible instead.
+func humanizeDuration(start, end time.Time) string {
+	if end.Sub(start) < time.Second {
+		return "less than a second"
+	}
+
+	return strings.TrimSpace(humanize.RelTime(start, end, "", ""))
 }
 
 // resolveThemePath returns the on-disk theme directory to watch.

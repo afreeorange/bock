@@ -79,7 +79,7 @@ type Meta struct {
 	GenerateRaw           bool          `json:"generateRaw"`
 	GenerateRevisions     bool          `json:"generateRevisions"`
 	GenerationTime        time.Duration `json:"generationTime"`
-	GenerationTimeRounded time.Duration `json:"generationTimeRounded"`
+	GenerationTimeRounded string        `json:"generationTimeRounded"`
 	MemoryInGB            int           `json:"memoryInGB"`
 	Platform              string        `json:"platform"`
 	RevisionCount         int           `json:"revisionCount"`

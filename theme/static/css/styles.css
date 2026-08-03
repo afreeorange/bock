@@ -662,6 +662,9 @@ mark {
         opacity: 100%;
       }
     }
+    p {
+      margin-block: calc(var(--spacing) * 4);
+    }
     a {
       text-decoration-line: underline;
       &:hover {

@@ -4,6 +4,7 @@ import (
 	"strings"
 	"testing"
 	"testing/fstest"
+	"time"
 )
 
 func testThemeFS(t *testing.T, pages map[string]string) fstest.MapFS {
@@ -212,6 +213,34 @@ func TestFormatDate(t *testing.T) {
 	}
 
 	if !strings.Contains(html, "2024-03-15") {
+		t.Errorf("expected formatted date, got: %s", html)
+	}
+}
+
+// Props like meta.BuildDate arrive as a real time.Time inside a struct, not a
+// pre-formatted string.
+func TestFormatDateFromStruct(t *testing.T) {
+	theme := testThemeFS(t, map[string]string{
+		"pages/DatePage.tsx": `export default function DatePage(props: any) {
+			return <span>{formatDate(props.meta.BuildDate, "Monday, 2 January 2006 at 15:04 MST")}</span>;
+		}`,
+	})
+
+	engine, err := NewFromFS(theme)
+	if err != nil {
+		t.Fatalf("NewFromFS: %v", err)
+	}
+
+	meta := struct{ BuildDate time.Time }{
+		BuildDate: time.Date(2026, 8, 3, 14, 8, 18, 16349000, time.UTC),
+	}
+
+	html, err := engine.Render("DatePage", map[string]any{"meta": meta})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+
+	if !strings.Contains(html, "Monday, 3 August 2026 at 14:08 UTC") {
 		t.Errorf("expected formatted date, got: %s", html)
 	}
 }
