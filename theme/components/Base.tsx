@@ -10,6 +10,19 @@ export function Base(props: any) {
         <meta charset="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="name" content={"Nikhil's Personal Wiki"} />
+        <meta
+          name="description"
+          content={`${title} – Nikhil's Personal Wiki`}
+        />
+        <meta name="author" content="Nikhil Anand" />
+        <meta name="theme-color" content="#ffe9a00" />
+        <meta property="og:title" content={`Nikhil's Personal Wiki`} />
+        <meta
+          property="og:description"
+          content={`${title} – Nikhil's Personal Wiki`}
+        />
+        <meta property="og:type" content="website" />
         <meta property="og:image" content="/img/logo512.png" />
         <meta property="og:site_name" content="Nikhil's Personal Wiki" />
         <link rel="og:image" href="/img/logo512.png" />
