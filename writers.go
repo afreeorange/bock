@@ -182,7 +182,7 @@ func writeArticle(
 	}
 
 	// Render the article HTML
-	html, raw := renderArticle(contents, article, "article", config)
+	html, raw := renderArticle(contents, &article, "article", config)
 	article.Html = html
 
 	// Start writing things
@@ -434,7 +434,7 @@ func rebuildArticle(config *BockConfig, articlePath string) {
 		config.database.Exec("INSERT INTO articles_fts(articles_fts) VALUES('rebuild')")
 	}
 
-	html, raw := renderArticle(contents, article, "article", config)
+	html, raw := renderArticle(contents, &article, "article", config)
 	article.Html = html
 
 	writeFile(config.outputFolder+uri+"/index.html", []byte(html))

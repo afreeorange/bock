@@ -15,13 +15,14 @@ require (
 	github.com/otiai10/copy v1.14.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil/v3 v3.24.5
-	github.com/yuin/goldmark v1.7.3
+	github.com/yuin/goldmark v1.7.13
 	github.com/yuin/goldmark-highlighting v0.0.0-20220208100518-594be1970594
 	golang.org/x/net v0.57.0
 )
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
+	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.0.0 // indirect
 	github.com/cloudflare/circl v1.3.9 // indirect
@@ -45,9 +46,11 @@ require (
 	github.com/tklauser/numcpus v0.8.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
+	go.abhg.dev/goldmark/frontmatter v0.3.0 // indirect
 	golang.org/x/crypto v0.54.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/text v0.40.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

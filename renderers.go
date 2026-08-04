@@ -14,7 +14,9 @@ import (
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting"
 	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer/html"
+	"go.abhg.dev/goldmark/frontmatter"
 )
 
 var markdown = goldmark.New(
@@ -36,6 +38,7 @@ var markdown = goldmark.New(
 			),
 		),
 		mathjax.MathJax,
+		&frontmatter.Extender{},
 	),
 )
 
@@ -86,17 +89,26 @@ func renderRandom(config *BockConfig) string {
 
 func renderArticle(
 	source []byte,
-	article Article,
+	article *Article,
 	entityType string,
 	config *BockConfig,
 ) (string, string) {
 	var conversionBuffer bytes.Buffer
-	if err := markdown.Convert(source, &conversionBuffer); err != nil {
+	ctx := parser.NewContext()
+	if err := markdown.Convert(source, &conversionBuffer, parser.WithContext(ctx)); err != nil {
 		panic(err)
+	}
+
+	if d := frontmatter.Get(ctx); d != nil {
+		var meta map[string]any
+		if err := d.Decode(&meta); err == nil && len(meta) > 0 {
+			article.Frontmatter = meta
+		}
 	}
 
 	html, _ := engine.Render("Article", map[string]any{
 		"created":      article.Created.Format(time.RFC3339),
+		"frontmatter":  article.Frontmatter,
 		"hierarchy":    article.Hierarchy,
 		"html":         conversionBuffer.String(),
 		"id":           article.ID,

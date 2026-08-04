@@ -30,6 +30,7 @@ type Children struct {
 
 type Article struct {
 	Created      time.Time            `json:"created"`
+	Frontmatter  map[string]any       `json:"frontmatter,omitempty"`
 	Hierarchy    []HierarchicalEntity `json:"hierarchy"`
 	Html         string               `json:"html"`
 	ID           string               `json:"id"`

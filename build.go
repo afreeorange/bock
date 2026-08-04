@@ -360,6 +360,6 @@ func renderToDisk(config *BockConfig, articlePath string) {
 		RelativePath: makeRelativePath(articlePath, config.articleRoot),
 	}
 
-	html, _ := renderArticle(contents, article, "article", config)
+	html, _ := renderArticle(contents, &article, "article", config)
 	writeFile(config.outputFolder+article.URI+"/index.html", []byte(html))
 }
