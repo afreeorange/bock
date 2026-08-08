@@ -78,5 +78,17 @@
         @apply border-b;
       }
     }
+
+
+    a.footnote-ref {
+      @apply inline-block -bottom-1 relative ml-1 py-0.5 border rounded-full min-w-5 text-xs text-center no-underline;
+    }
+    .footnotes {
+      @apply border-t border-dotted text-sm;
+
+      hr {
+        @apply hidden;
+      }
+    }
   }
 }

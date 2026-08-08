@@ -16,6 +16,8 @@
     --color-black: #000;
     --spacing: 0.25rem;
     --container-3xl: 48rem;
+    --text-xs: 0.75rem;
+    --text-xs--line-height: calc(1 / 0.75);
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
     --text-xl: 1.25rem;
@@ -547,6 +549,32 @@ mark {
     tbody tr:not(:last-child) td {
       border-bottom-style: var(--tw-border-style);
       border-bottom-width: 1px;
+    }
+  }
+  article-content a.footnote-ref {
+    position: relative;
+    bottom: calc(var(--spacing) * -1);
+    margin-left: var(--spacing);
+    display: inline-block;
+    min-width: calc(var(--spacing) * 5);
+    border-radius: calc(infinity * 1px);
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+    padding-block: calc(var(--spacing) * 0.5);
+    text-align: center;
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading, var(--text-xs--line-height));
+    text-decoration-line: none;
+  }
+  article-content .footnotes {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 1px;
+    --tw-border-style: dotted;
+    border-style: dotted;
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+    hr {
+      display: none;
     }
   }
 }
