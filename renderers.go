@@ -20,6 +20,9 @@ import (
 )
 
 var markdown = goldmark.New(
+	goldmark.WithParserOptions(
+		parser.WithAutoHeadingID(),
+	),
 	goldmark.WithRendererOptions(
 		html.WithXHTML(),
 		html.WithUnsafe(),
@@ -39,6 +42,7 @@ var markdown = goldmark.New(
 		),
 		mathjax.MathJax,
 		&frontmatter.Extender{},
+		&tocPlaceholderExtension{},
 	),
 )
 

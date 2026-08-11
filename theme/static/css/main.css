@@ -15,7 +15,7 @@ html,
 body {
   height: 100%;
   font-family: "3079CB20-4E74-4746-A318-7B72A06CC701", sans-serif;
-  @apply bg-amber-400;
+  @apply bg-amber-400 scroll-smooth;
 }
 
 code,
@@ -25,6 +25,18 @@ pre {
 
 noscript {
   @apply bg-amber-500 w-full;
+}
+
+::selection {
+  background: #111;
+  color: white;
+  text-shadow: none;
+}
+
+::-moz-selection {
+  background: #111;
+  color: white;
+  text-shadow: none;
 }
 
 h1 {
