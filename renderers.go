@@ -43,6 +43,7 @@ var markdown = goldmark.New(
 		mathjax.MathJax,
 		&frontmatter.Extender{},
 		&tocPlaceholderExtension{},
+		&substitutionExtension{},
 	),
 )
 
