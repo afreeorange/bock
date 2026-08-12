@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html"
 	"strings"
 
 	"github.com/yuin/goldmark"
@@ -42,6 +43,7 @@ func (t *tocPlaceholderTransformer) Transform(doc *ast.Document, reader text.Rea
 	}
 
 	tree, err := toc.Inspect(doc, source, toc.MaxDepth(3), toc.Compact(true))
+	unescapeTitles(tree.Items)
 	if err != nil || len(tree.Items) == 0 {
 		for _, n := range toReplace {
 			n.Parent().RemoveChild(n.Parent(), n)
@@ -64,6 +66,13 @@ func (t *tocPlaceholderTransformer) Transform(doc *ast.Document, reader text.Rea
 
 	for _, n := range toReplace[1:] {
 		n.Parent().RemoveChild(n.Parent(), n)
+	}
+}
+
+func unescapeTitles(items toc.Items) {
+	for _, item := range items {
+		item.Title = []byte(html.UnescapeString(string(item.Title)))
+		unescapeTitles(item.Items)
 	}
 }
 
