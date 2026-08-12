@@ -15,18 +15,30 @@ import (
 	highlighting "github.com/yuin/goldmark-highlighting"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
+	"github.com/yuin/goldmark/util"
 	"go.abhg.dev/goldmark/frontmatter"
 )
 
 var markdown = goldmark.New(
 	goldmark.WithParserOptions(
 		parser.WithAutoHeadingID(),
+		parser.WithBlockParsers(
+			util.Prioritized(mathjax.NewMathJaxBlockParser(), 701),
+		),
+		parser.WithInlineParsers(
+			util.Prioritized(mathjax.NewInlineMathParser(), 501),
+		),
 	),
 	goldmark.WithRendererOptions(
 		html.WithXHTML(),
 		html.WithUnsafe(),
 		html.WithHardWraps(),
+		renderer.WithNodeRenderers(
+			util.Prioritized(mathjax.NewMathBlockRenderer(`\[`, `\]`), 501),
+			util.Prioritized(&safeInlineMathRenderer{`\(`, `\)`}, 502),
+		),
 	),
 	goldmark.WithExtensions(
 		extension.Footnote,
@@ -40,7 +52,6 @@ var markdown = goldmark.New(
 				chroma.WithClasses(true),
 			),
 		),
-		mathjax.MathJax,
 		&frontmatter.Extender{},
 		&tocPlaceholderExtension{},
 		&substitutionExtension{},
