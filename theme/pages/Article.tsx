@@ -32,8 +32,10 @@ export default function Article(props: ArticleProps) {
     </>
   );
 
+  const scripts = <script src="/js/table-sort.js" defer></script>;
+
   return (
-    <Base {...props} footerElements={footerElements}>
+    <Base {...props} footerElements={footerElements} scripts={scripts}>
       <article>
         <Hierarchy nodes={props.hierarchy} type={props.type} uri={props.uri} />
         <header>
