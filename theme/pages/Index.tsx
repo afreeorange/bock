@@ -1,9 +1,4 @@
-interface IndexProps {
-  type: string;
-  version: string;
-}
-
-export default function Index(_props: IndexProps) {
+export default function Index(_props: { type: string; version: string }) {
   return (
     <html lang="en">
       <head>
@@ -24,6 +19,7 @@ export default function Index(_props: IndexProps) {
             }
             p {
               padding: 2rem;
+              margin: 0 auto;
             }
             a {
               text-decoration: underline;

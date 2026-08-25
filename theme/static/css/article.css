@@ -2,6 +2,7 @@
   article {
     header {
       h1 {
+        @apply md:mt-8;
       }
     }
   }
@@ -47,8 +48,16 @@
       @apply bg-amber-500/30 my-2 p-2 rounded-lg overflow-x-auto scrollbar-thin scrollbar-thumb-amber-300 scrollbar-track-transparent;
     }
 
+    del {
+      @apply decoration-2;
+    }
+
+    abbr {
+      @apply decoration-2;
+    }
+
     hr {
-      @apply relative bg-transparent my-6 border-none h-4 text-center;
+      @apply relative bg-transparent my-12 border-none h-4 text-center;
 
       &::before {
         @apply top-0 absolute left-1/2 -translate-x-1/2 text-2xl;
@@ -58,20 +67,47 @@
       }
     }
 
+    details {
+      @apply px-2 border rounded-md;
+      summary {
+        @apply cursor-pointer;
+      }
+    }
+
     kbd {
-      @apply px-1 border border-amber-600 rounded-md bg-amber-500/20 mx-1 shadow;
+      @apply px-1 border border-amber-600 rounded-md bg-amber-500/20 mx-0.5 shadow;
       font-family: "D8C100D5-3273-4B63-8953-984B26A1C2AD", monospace;
     }
 
     table {
-      @apply w-full;
+      @apply w-full overflow-x-auto;
 
-      thead tr th {
-        @apply py-1 border-b-2 font-bold text-left align-top;
+      thead tr {
+        th {
+          @apply p-1 border-b-2 font-bold text-left align-top;
+        }
+
+        th:first-child {
+          @apply pl-0;
+        }
+
+        th:last-child {
+          @apply pr-0;
+        }
       }
 
-      tbody tr td {
-        @apply py-1 align-top;
+      tbody tr {
+        td {
+          @apply p-1 align-top;
+        }
+
+        td:first-child {
+          @apply pl-0;
+        }
+
+        td:last-child {
+          @apply pr-0;
+        }
       }
 
       tbody tr:not(:last-child) td {
@@ -82,8 +118,15 @@
     a.footnote-ref {
       @apply inline-block -bottom-1 relative ml-1 py-0.5 border rounded-full min-w-5 text-xs text-center no-underline;
     }
+
     .footnotes {
       @apply border-t border-dotted text-sm;
+
+      li {
+        p {
+          @apply my-2;
+        }
+      }
 
       hr {
         @apply hidden;
@@ -92,7 +135,7 @@
   }
 
   ul#toc {
-    @apply md:float-right shadow-sm mx-0 md:mt-4 md:ml-4 p-4 pt-3 border border-dotted rounded-md md:max-w-sm;
+    @apply md:float-left shadow-sm mx-0 md:mt-4 md:mr-4 p-4 pt-3 border border-dotted rounded-md md:max-w-sm;
 
     &::before {
       @apply block mb-3 font-bold text-sm text-center;
