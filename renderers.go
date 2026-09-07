@@ -38,6 +38,7 @@ var markdown = goldmark.New(
 		renderer.WithNodeRenderers(
 			util.Prioritized(mathjax.NewMathBlockRenderer(`\[`, `\]`), 501),
 			util.Prioritized(&safeInlineMathRenderer{`\(`, `\)`}, 502),
+			util.Prioritized(&tableWrapperRenderer{}, 499),
 		),
 	),
 	goldmark.WithExtensions(

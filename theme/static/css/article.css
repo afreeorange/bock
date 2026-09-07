@@ -79,39 +79,43 @@
       font-family: "D8C100D5-3273-4B63-8953-984B26A1C2AD", monospace;
     }
 
-    table {
-      @apply w-full overflow-x-auto;
+    table-wrapper {
+      @apply block overflow-x-auto scrollbar-thumb-black;
 
-      thead tr {
-        th {
-          @apply p-1 border-b-2 font-bold text-left align-top;
+      table {
+        @apply my-4 w-max;
+
+        thead tr {
+          th {
+            @apply p-2 border-b-2 font-bold text-left align-top;
+          }
+
+          th:first-child {
+            @apply pl-0;
+          }
+
+          th:last-child {
+            @apply pr-0;
+          }
         }
 
-        th:first-child {
-          @apply pl-0;
+        tbody tr {
+          td {
+            @apply px-2 py-1 align-top;
+          }
+
+          td:first-child {
+            @apply pl-0;
+          }
+
+          td:last-child {
+            @apply pr-0;
+          }
         }
 
-        th:last-child {
-          @apply pr-0;
+        tbody tr:not(:last-child) td {
+          @apply border-b;
         }
-      }
-
-      tbody tr {
-        td {
-          @apply p-1 align-top;
-        }
-
-        td:first-child {
-          @apply pl-0;
-        }
-
-        td:last-child {
-          @apply pr-0;
-        }
-      }
-
-      tbody tr:not(:last-child) td {
-        @apply border-b;
       }
     }
 
