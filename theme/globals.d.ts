@@ -26,6 +26,7 @@ interface Children {
 
 interface Article {
   Created: string;
+  Frontmatter: any;
   Hierarchy: HierarchicalEntity[];
   Html: string;
   ID: string;
@@ -95,6 +96,7 @@ interface RandomProps {
 
 interface ArticleProps {
   created: string;
+  frontmatter: any;
   hierarchy: HierarchicalEntity[];
   html: string;
   id: string;
@@ -106,6 +108,7 @@ interface ArticleProps {
   untracked: boolean;
   uri: string;
   relativePath: string;
+  recentArticles: Entity[];
   meta: Meta;
   type: string;
   version: string;
@@ -161,5 +164,6 @@ interface RevisionRawProps {
 }
 
 // Global helpers injected by the engine
+
 declare function formatDate(date: string, layout: string): string;
 declare function humanizeNumber(n: number): string;

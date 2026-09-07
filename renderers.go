@@ -138,6 +138,8 @@ func renderArticle(
 		"uri":          article.URI,
 		"relativePath": article.RelativePath,
 
+		"recentArticles": config.recentArticles,
+
 		"meta":    config.meta,
 		"type":    entityType,
 		"version": VERSION,

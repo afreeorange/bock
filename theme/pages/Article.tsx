@@ -1,7 +1,14 @@
 import { Base } from "../components/Base";
 import { Hierarchy } from "../components/Hierarchy";
 
+const RECENT_ARTICLES_TO_SHOW = 10;
+
 export default function Article(props: ArticleProps) {
+  const recentArticles = (props.recentArticles || []).slice(
+    0,
+    RECENT_ARTICLES_TO_SHOW,
+  );
+
   const footerElements = (
     <>
       <li>{humanizeNumber(props.sizeInBytes) + " bytes"}</li>
@@ -47,6 +54,20 @@ export default function Article(props: ArticleProps) {
           </h1>
         </header>
         <article-content dangerouslySetInnerHTML={{ __html: props.html }} />
+
+        {props.uri === "/Home" && recentArticles.length > 0 && (
+          <section data-content="recent-articles">
+            <h2>Recently Added or Updated</h2>
+            <ul>
+              {recentArticles.map((entity: Entity) => (
+                <li>
+                  <a href={entity.URI}>{entity.Title}</a>
+                  <time>{formatDate(entity.Modified, "2 January 2006")}</time>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </article>
     </Base>
   );

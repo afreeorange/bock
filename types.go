@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"sync"
 	"time"
 
 	"github.com/go-git/go-git/v5"
@@ -91,6 +92,14 @@ type BockConfig struct {
 	entityTree     *[]Entity
 	listOfArticles *[]Entity
 	listOfFolders  *[]string
+	recentArticles *[]Entity
+
+	// Newest commit date per article, keyed by relative path. Harvested while
+	// writing articles (where git history is already computed) and guarded by
+	// the mutex since articles are written concurrently.
+	gitModifiedMu sync.Mutex
+	gitModified   map[string]time.Time
+
 	database       *sql.DB
 	meta           Meta
 	outputFolder   string

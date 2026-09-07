@@ -255,3 +255,32 @@ func makeListOfEntities(config *BockConfig) (
 
 	return listOfArticles, listOfFolders, err
 }
+
+// makeRecentArticles returns the most recently updated articles, newest first,
+// capped at RECENT_ARTICLES_COUNT. Prefers git commit dates when they were
+// harvested during writeEntities; falls back to filesystem mtime (which is what
+// `serve` mode has, and what it wants). Works on a copy so the ordering of
+// config.listOfArticles -- and hence the entity tree, archive and DB -- is
+// untouched.
+func makeRecentArticles(config *BockConfig) []Entity {
+	articles := make([]Entity, len(*config.listOfArticles))
+	copy(articles, *config.listOfArticles)
+
+	config.gitModifiedMu.Lock()
+	for i := range articles {
+		if t, ok := config.gitModified[articles[i].RelativePath]; ok {
+			articles[i].Modified = t
+		}
+	}
+	config.gitModifiedMu.Unlock()
+
+	sort.SliceStable(articles, func(i, j int) bool {
+		return articles[i].Modified.After(articles[j].Modified)
+	})
+
+	if len(articles) > RECENT_ARTICLES_COUNT {
+		articles = articles[:RECENT_ARTICLES_COUNT]
+	}
+
+	return articles
+}

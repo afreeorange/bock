@@ -31,7 +31,7 @@ export function Footer(props: any) {
             href="https://github.com/afreeorange/bock"
             title="View the project that generates this wiki on Github"
           >
-            {"bock " + version}
+            <span>{`bock ${version}`}</span>
           </a>
         </li>
       </ul>

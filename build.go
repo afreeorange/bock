@@ -88,6 +88,8 @@ func doInitialBuild(opts BuildOptions) *BockConfig {
 		articleRoot:    articleRoot,
 		entityTree:     nil,
 		listOfArticles: nil,
+		recentArticles: &[]Entity{},
+		gitModified:    map[string]time.Time{},
 		database:       nil,
 		outputFolder:   outputFolder,
 		meta: Meta{
@@ -141,6 +143,11 @@ func doInitialBuild(opts BuildOptions) *BockConfig {
 	}
 
 	writeEntities(config)
+
+	// Must happen after writeEntities, which is where git commit dates are
+	// harvested. Home renders last and is the only consumer.
+	recentArticles := makeRecentArticles(config)
+	config.recentArticles = &recentArticles
 	finalizeDatabase(db)
 
 	fmt.Print("Writing index page")
@@ -322,6 +329,9 @@ func reRenderAll(config *BockConfig) {
 		}(e.path)
 	}
 	wg.Wait()
+
+	recent := makeRecentArticles(config)
+	config.recentArticles = &recent
 
 	writeIndex(config)
 	write404(config)

@@ -215,6 +215,10 @@ func inferPropType(key string, value string, structFields map[string]map[string]
 	if value == "config.listOfArticles" {
 		return "Entity[]"
 	}
+	// config.recentArticles
+	if value == "config.recentArticles" {
+		return "Entity[]"
+	}
 	// revisionMap
 	if value == "revisionMap" {
 		return "Revision"

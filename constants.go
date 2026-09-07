@@ -16,6 +16,9 @@ const DATE_LAYOUT string = "2006-01-02 15:04:05 -0700"
 // The name of the SQLite database we will generate from the article repository
 const DATABASE_NAME string = "articles.db"
 
+// Maximum number of recently-updated articles passed to the theme
+const RECENT_ARTICLES_COUNT int = 25
+
 // Where static assets (like images) are placed in the article repository
 const ARTICLE_REPOSITORY_ASSETS_FOLDER = "__assets"
 

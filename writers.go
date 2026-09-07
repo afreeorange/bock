@@ -147,6 +147,13 @@ func writeArticle(
 
 		if historyError == nil {
 			untracked = false
+
+			// NOTE: getArticleHistory's fields are inverted -- `created` holds
+			// the NEWEST commit date (revisions are sorted newest-first). This
+			// is the same value that lands in Article.Modified below.
+			config.gitModifiedMu.Lock()
+			config.gitModified[relativePath] = history.created
+			config.gitModifiedMu.Unlock()
 		}
 	}
 
@@ -405,6 +412,19 @@ func rebuildArticle(config *BockConfig, articlePath string) {
 	uri := makeURI(articlePath, config.articleRoot)
 	relativePath := makeRelativePath(articlePath, config.articleRoot)
 
+	// Keep the flat list fresh so the recent-articles list reflects this edit
+	if config.listOfArticles != nil {
+		for i := range *config.listOfArticles {
+			if (*config.listOfArticles)[i].path == articlePath {
+				(*config.listOfArticles)[i].Modified = entity.Modified
+				(*config.listOfArticles)[i].SizeInBytes = entity.SizeInBytes
+				break
+			}
+		}
+		recent := makeRecentArticles(config)
+		config.recentArticles = &recent
+	}
+
 	contents, err := os.ReadFile(articlePath)
 	if err != nil {
 		fmt.Println("WARN: could not read", articlePath, ":", err)
@@ -446,6 +466,14 @@ func rebuildArticle(config *BockConfig, articlePath string) {
 	if config.meta.GenerateJSON {
 		jsonData, _ := jsonMarshal(article)
 		writeFile(config.outputFolder+uri+"/index.json", jsonData)
+	}
+
+	// Home shows the recent-articles list, so it needs a re-render too
+	homePath := config.articleRoot + "/Home.md"
+	if articlePath != homePath {
+		if _, err := os.Stat(homePath); err == nil {
+			renderToDisk(config, homePath)
+		}
 	}
 
 	fmt.Printf("  %s\n", relativePath)

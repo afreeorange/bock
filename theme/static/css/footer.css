@@ -10,12 +10,18 @@
       @apply hover:text-red-600 decoration-1 underline underline-offset-4;
     }
 
-    ul li:last-of-type a::before {
-      @apply inline-block bg-black mr-1 md:-ml-6 size-5 align-middle;
-      content: "";
+    li:last-of-type a {
+      span {
+        @apply sr-only;
+      }
 
-      -webkit-mask-image: url(/img/bock.svg);
-      mask-image: url(/img/bock.svg);
+      &::after {
+        @apply block bg-black mt-1 size-5 hover:text-red-600 align-middle;
+        content: "";
+
+        -webkit-mask-image: url(/img/bock.svg);
+        mask-image: url(/img/bock.svg);
+      }
     }
   }
 }
