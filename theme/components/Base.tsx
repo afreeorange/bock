@@ -17,7 +17,10 @@ export function Base(props: any) {
         />
         <meta name="author" content="Nikhil Anand" />
         <meta name="theme-color" content="#ffe9a00" />
-        <meta property="og:title" content={`Nikhil's Personal Wiki`} />
+        <meta
+          property="og:title"
+          content={`${title} – Nikhil's Personal Wiki`}
+        />
         <meta
           property="og:description"
           content={`${title} – Nikhil's Personal Wiki`}

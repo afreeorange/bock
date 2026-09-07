@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-echo "Building Docker image for Linux build"
+echo "👷‍♀️ Building Docker image for Linux build"
 pushd .scripts
   docker build --platform linux/amd64 -t bock-builder:latest .
 popd

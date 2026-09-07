@@ -226,6 +226,12 @@
   .hidden {
     display: none;
   }
+  .inline {
+    display: inline;
+  }
+  .table {
+    display: table;
+  }
   .flex-shrink {
     flex-shrink: 1;
   }
@@ -437,6 +443,11 @@ mark {
       }
     }
   }
+  @media (width >= 48rem) {
+    article header h1 {
+      margin-top: calc(var(--spacing) * 8);
+    }
+  }
   article-content h2 {
     margin-block: calc(var(--spacing) * 6);
     font-size: var(--text-2xl);
@@ -518,9 +529,15 @@ mark {
     }
     padding: calc(var(--spacing) * 2);
   }
+  article-content del {
+    text-decoration-thickness: 2px;
+  }
+  article-content abbr {
+    text-decoration-thickness: 2px;
+  }
   article-content hr {
     position: relative;
-    margin-block: calc(var(--spacing) * 6);
+    margin-block: calc(var(--spacing) * 12);
     height: calc(var(--spacing) * 4);
     --tw-border-style: none;
     border-style: none;
@@ -539,8 +556,17 @@ mark {
       letter-spacing: 1rem;
     }
   }
+  article-content details {
+    border-radius: var(--radius-md);
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+    padding-inline: calc(var(--spacing) * 2);
+    summary {
+      cursor: pointer;
+    }
+  }
   article-content kbd {
-    margin-inline: var(--spacing);
+    margin-inline: calc(var(--spacing) * 0.5);
     border-radius: var(--radius-md);
     border-style: var(--tw-border-style);
     border-width: 1px;
@@ -554,24 +580,56 @@ mark {
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     font-family: "D8C100D5-3273-4B63-8953-984B26A1C2AD", monospace;
   }
-  article-content table {
-    width: 100%;
-    thead tr th {
-      border-bottom-style: var(--tw-border-style);
-      border-bottom-width: 2px;
-      padding-block: var(--spacing);
-      text-align: left;
-      vertical-align: top;
-      --tw-font-weight: var(--font-weight-bold);
-      font-weight: var(--font-weight-bold);
-    }
-    tbody tr td {
-      padding-block: var(--spacing);
-      vertical-align: top;
-    }
-    tbody tr:not(:last-child) td {
-      border-bottom-style: var(--tw-border-style);
-      border-bottom-width: 1px;
+  article-content table-wrapper {
+    display: block;
+    --tw-scrollbar-thumb: var(--color-black);
+    scrollbar-color: var(--tw-scrollbar-thumb) var(--tw-scrollbar-track);
+    overflow-x: auto;
+    table {
+      margin-block: calc(var(--spacing) * 4);
+      width: max-content;
+      thead tr {
+        th {
+          border-bottom-style: var(--tw-border-style);
+          border-bottom-width: 2px;
+          padding: calc(var(--spacing) * 2);
+          text-align: left;
+          vertical-align: top;
+          --tw-font-weight: var(--font-weight-bold);
+          font-weight: var(--font-weight-bold);
+        }
+        th:first-child {
+          padding-left: 0px;
+        }
+        th:last-child {
+          padding-right: 0px;
+        }
+      }
+      tbody {
+        tr {
+          td {
+            padding-inline: calc(var(--spacing) * 2);
+            padding-block: var(--spacing);
+            vertical-align: top;
+          }
+          td:first-child {
+            padding-left: 0px;
+          }
+          td:last-child {
+            padding-right: 0px;
+          }
+        }
+        tr:nth-child(even) {
+          background-color: color-mix(in srgb, oklch(76.9% 0.188 70.08) 25%, transparent);
+          @supports (color: color-mix(in lab, red, red)) {
+            background-color: color-mix(in oklab, var(--color-amber-500) 25%, transparent);
+          }
+        }
+      }
+      tbody tr:not(:last-child) td {
+        border-bottom-style: var(--tw-border-style);
+        border-bottom-width: 1px;
+      }
     }
   }
   article-content a.footnote-ref {
@@ -596,6 +654,11 @@ mark {
     border-style: dotted;
     font-size: var(--text-sm);
     line-height: var(--tw-leading, var(--text-sm--line-height));
+    li {
+      p {
+        margin-block: calc(var(--spacing) * 2);
+      }
+    }
     hr {
       display: none;
     }
@@ -612,13 +675,13 @@ mark {
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     @media (width >= 48rem) {
-      float: right;
+      float: left;
     }
     @media (width >= 48rem) {
       margin-top: calc(var(--spacing) * 4);
     }
     @media (width >= 48rem) {
-      margin-left: calc(var(--spacing) * 4);
+      margin-right: calc(var(--spacing) * 4);
     }
     @media (width >= 48rem) {
       max-width: var(--container-sm);
