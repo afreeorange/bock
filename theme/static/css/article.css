@@ -188,21 +188,18 @@
 
     ul {
       @apply text-sm;
+
       li {
         @apply flex justify-between items-baseline gap-4 py-0.5;
 
         a {
-          @apply hover:bg-red-600 hover:text-white decoration-2 hover:decoration-red-600 underline underline-offset-4 transition-all;
+          @apply hover:bg-red-600 hover:text-white decoration-2 hover:decoration-red-600 underline underline-offset-4 truncate transition-all;
         }
 
         time {
-          @apply opacity-50 text-sm text-right whitespace-nowrap;
+          @apply text-right whitespace-nowrap;
         }
       }
     }
-
-    /* @apply mt-12 pt-6 border-t border-dotted;
-
-     */
   }
 }

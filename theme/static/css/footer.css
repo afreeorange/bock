@@ -1,13 +1,19 @@
 @layer components {
   footer {
-    @apply opacity-30 hover:opacity-100 my-6 text-sm transition-all;
+    @apply hover:opacity-100 my-6 text-sm transition-all;
 
     p {
-      @apply my-4;
+      @apply opacity-30 my-4;
     }
 
     a {
       @apply hover:text-red-600 decoration-1 underline underline-offset-4;
+    }
+
+    ul {
+      li:not(:last-of-type) {
+        @apply opacity-30;
+      }
     }
 
     li:last-of-type a {
@@ -16,7 +22,7 @@
       }
 
       &::after {
-        @apply block bg-black mt-1 size-5 hover:text-red-600 align-middle;
+        @apply block bg-red-500 mt-1 size-5 hover:text-red-700 align-middle;
         content: "";
 
         -webkit-mask-image: url(/img/bock.svg);

@@ -62,7 +62,7 @@ export default function Article(props: ArticleProps) {
               {recentArticles.map((entity: Entity) => (
                 <li>
                   <a href={entity.URI}>{entity.Title}</a>
-                  <time>{formatDate(entity.Modified, "2 January 2006")}</time>
+                  <time>{formatDate(entity.Modified, "02 Jan 06")}</time>
                 </li>
               ))}
             </ul>
