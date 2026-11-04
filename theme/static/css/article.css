@@ -8,6 +8,8 @@
   }
 
   article-content {
+    overflow-wrap: break-word;
+
     h2 {
       @apply my-6 font-bold text-2xl;
 
